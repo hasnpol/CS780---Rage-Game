@@ -66,6 +66,7 @@ public class RageGame extends ApplicationAdapter implements InputProcessor, Cont
 	int height, width;
 
 	PlayerModel playerModel;
+	Texture background;
 
 	private void initBodies() {
 		createPlayer();
@@ -76,6 +77,8 @@ public class RageGame extends ApplicationAdapter implements InputProcessor, Cont
 	public void create() {
 		batch = new SpriteBatch();
 		Gdx.input.setInputProcessor(this);
+
+		background = new Texture(Gdx.files.internal("background.png"));
 
 		width = Gdx.graphics.getWidth();
 		height =  Gdx.graphics.getHeight();
@@ -101,12 +104,13 @@ public class RageGame extends ApplicationAdapter implements InputProcessor, Cont
 	public void render () {
 		float dt = Gdx.graphics.getDeltaTime();
 		ScreenUtils.clear(0, 0, 0, 1);
-		orthogonalTiledMapRenderer.render();
-		world.step(1 / 60f, 6, 2);
+		camera.position.set(playerModel.getBody().getPosition(), 0);
+
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 		orthogonalTiledMapRenderer.setView(camera);
 		batch.begin();
+		orthogonalTiledMapRenderer.render();
 		batch.end();
 		world.clearForces();
 		applyForces();
@@ -152,14 +156,14 @@ public class RageGame extends ApplicationAdapter implements InputProcessor, Cont
 
 		Body playerBody = world.createBody(playerBodyDef);
 		PolygonShape playerBox = new PolygonShape();
-		playerBox.setAsBox(0.2f, 0.2f);
+		playerBox.setAsBox(0.25f, 0.5f);
 
 		playerModel = new PlayerModel(playerBody);
 		gameObjects.put(playerModel.getId(), playerModel);
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = playerBox;
-		fixtureDef.density = 10f;  // more density -> bigger mass for the same size
-		fixtureDef.friction = 8;
+		fixtureDef.density = 2f;  // more density -> bigger mass for the same size
+		fixtureDef.friction = 1;
 
 		playerBody.createFixture(fixtureDef).setUserData(playerModel.getId());
 		playerBox.dispose();
@@ -176,6 +180,8 @@ public class RageGame extends ApplicationAdapter implements InputProcessor, Cont
 	@Override
 	public void dispose () {
 		batch.dispose();
+		background.dispose();
+		orthogonalTiledMapRenderer.dispose();
 	}
 
 	@Override

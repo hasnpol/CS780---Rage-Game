@@ -23,7 +23,7 @@ public class Map {
     }
 
     public OrthogonalTiledMapRenderer buildMap() {
-        map = new TmxMapLoader().load("maps/test_map/test_map.tmx");
+        map = new TmxMapLoader().load("maps/map1/map1.tmx");
         buildMapObject(map.getLayers().get("Object Layer 1").getObjects());
         return new OrthogonalTiledMapRenderer(map , 1/32f);
     }
