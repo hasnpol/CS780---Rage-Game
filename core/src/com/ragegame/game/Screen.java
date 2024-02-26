@@ -27,7 +27,7 @@ public class Screen extends ScreenAdapter {
         this.world = new World(new Vector2(0, 0), false);
         this.box2DDebugRenderer = new Box2DDebugRenderer();
 
-        this.map = new Map(this);
+        //this.map = new Map(this);
         this.orthogonalTiledMapRenderer = map.buildMap();
     }
 

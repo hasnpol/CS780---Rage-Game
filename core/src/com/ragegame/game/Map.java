@@ -11,20 +11,21 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
+import com.badlogic.gdx.physics.box2d.World;
 
 public class Map {
 
     public TiledMap map;
-    private Screen screen;
+    private World world;
 
-    public Map(Screen screen) {
-        this.screen = screen;
+    public Map(World world) {
+        this.world = world;
     }
 
     public OrthogonalTiledMapRenderer buildMap() {
         map = new TmxMapLoader().load("maps/test_map/test_map.tmx");
         buildMapObject(map.getLayers().get("Object Layer 1").getObjects());
-        return new OrthogonalTiledMapRenderer(map);
+        return new OrthogonalTiledMapRenderer(map , 1/32f);
     }
 
     private void buildMapObject(MapObjects mapObjects) {
@@ -33,14 +34,12 @@ public class Map {
                 createStaticBody((PolygonMapObject) mapObject);
             }
         }
-
-
     }
 
     private void createStaticBody(PolygonMapObject polygonMapObject) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        Body body = screen.getWorld().createBody(bodyDef);
+        Body body = world.createBody(bodyDef);
         Shape shape = createPolygonShape(polygonMapObject);
         body.createFixture(shape, 10000);
     }
