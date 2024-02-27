@@ -22,9 +22,12 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.sun.org.apache.xpath.internal.operations.Or;
+
+import java.util.ArrayList;
 import java.util.UUID;
 
 //<<<<<<< HEAD
@@ -47,9 +50,7 @@ import java.util.UUID;
 
 public class RageGame extends ApplicationAdapter implements InputProcessor, ContactListener {
 	public static final float TIME_STEP = 1/60F;
-
 	OrthographicCamera camera;
-	Screen screen;
 	SpriteBatch batch;
 	Texture img;
 	World world;
@@ -66,7 +67,7 @@ public class RageGame extends ApplicationAdapter implements InputProcessor, Cont
 	int height, width;
 
 	PlayerModel playerModel;
-	Texture background;
+	ArrayList<Background> background = new ArrayList<>();
 
 	private void initBodies() {
 		createPlayer();
@@ -78,13 +79,14 @@ public class RageGame extends ApplicationAdapter implements InputProcessor, Cont
 		batch = new SpriteBatch();
 		Gdx.input.setInputProcessor(this);
 
-		background = new Texture(Gdx.files.internal("background.png"));
-
 		width = Gdx.graphics.getWidth();
 		height =  Gdx.graphics.getHeight();
 		camera = new OrthographicCamera(14, 14 * ((float) height / width));
 		camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 		camera.update();
+
+		background.add(new Background(new Texture("background.png"), 0.1f, true, true));
+		background.get(0).setCamera(camera);
 
 		world = new World(new Vector2(0, -9.8f), true);world.setContactListener(this);
 		world.setContactListener(this);
@@ -105,18 +107,17 @@ public class RageGame extends ApplicationAdapter implements InputProcessor, Cont
 		float dt = Gdx.graphics.getDeltaTime();
 		ScreenUtils.clear(0, 0, 0, 1);
 		camera.position.set(playerModel.getBody().getPosition(), 0);
-
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 		orthogonalTiledMapRenderer.setView(camera);
 		batch.begin();
+		//background.get(0).render(batch);
 		orthogonalTiledMapRenderer.render();
 		batch.end();
 		world.clearForces();
 		applyForces();
 		doPhysicsStep(dt);
 		debugRenderer.render(world, camera.combined);
-
 	}
 
 	private void doPhysicsStep(float deltaTime) {
@@ -152,11 +153,11 @@ public class RageGame extends ApplicationAdapter implements InputProcessor, Cont
 	private void createPlayer() {
 		BodyDef playerBodyDef = new BodyDef();
 		playerBodyDef.type = BodyDef.BodyType.DynamicBody;
-		playerBodyDef.position.set(new Vector2(0, 10f));
+		playerBodyDef.position.set(new Vector2(2, 10f));
 
 		Body playerBody = world.createBody(playerBodyDef);
 		PolygonShape playerBox = new PolygonShape();
-		playerBox.setAsBox(0.25f, 0.5f);
+		playerBox.setAsBox(0.2499f, 0.499f);
 
 		playerModel = new PlayerModel(playerBody);
 		gameObjects.put(playerModel.getId(), playerModel);
@@ -180,7 +181,6 @@ public class RageGame extends ApplicationAdapter implements InputProcessor, Cont
 	@Override
 	public void dispose () {
 		batch.dispose();
-		background.dispose();
 		orthogonalTiledMapRenderer.dispose();
 	}
 

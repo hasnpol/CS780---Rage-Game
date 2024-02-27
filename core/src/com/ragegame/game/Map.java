@@ -1,5 +1,6 @@
 package com.ragegame.game;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
@@ -25,7 +26,7 @@ public class Map {
     public OrthogonalTiledMapRenderer buildMap() {
         map = new TmxMapLoader().load("maps/map1/map1.tmx");
         buildMapObject(map.getLayers().get("Object Layer 1").getObjects());
-        return new OrthogonalTiledMapRenderer(map , 1/32f);
+        return new OrthogonalTiledMapRenderer(map, 1/32f);
     }
 
     private void buildMapObject(MapObjects mapObjects) {
