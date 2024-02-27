@@ -4,7 +4,6 @@ import static java.lang.Math.min;
 
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.ragegame.game.objects.GameObject;
 import com.ragegame.game.objects.actors.Actors;
 
 import java.util.UUID;
