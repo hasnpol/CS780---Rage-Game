@@ -1,4 +1,4 @@
-package com.ragegame.game;
+package com.ragegame.game.screens;
 
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
