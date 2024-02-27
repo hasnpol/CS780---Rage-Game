@@ -13,13 +13,15 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.ragegame.game.handlers.ContactHandler;
 import com.ragegame.game.handlers.InputHandler;
 import com.ragegame.game.handlers.PhysicsHandler;
 import com.ragegame.game.objects.GameObject;
-import com.ragegame.game.objects.PlayerModel;
+import com.ragegame.game.objects.actors.Actors;
+import com.ragegame.game.objects.actors.PlayerModel;
 import com.ragegame.game.screens.Map;
 
 import java.util.UUID;
@@ -32,8 +34,8 @@ public class RageGame extends ApplicationAdapter {
 	Box2DDebugRenderer debugRenderer;
 	private OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;
 	private Map map;
-	ObjectMap<UUID, GameObject> gameObjectsToDestroy;
-	ObjectMap<UUID, GameObject> gameObjects;
+	ObjectMap<UUID, Actors> gameObjectsToDestroy;
+	ObjectMap<UUID, Actors> gameObjects;
 	int height, width;
 	PlayerModel playerModel;
 	Texture background;

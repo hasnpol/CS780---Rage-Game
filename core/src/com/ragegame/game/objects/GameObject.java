@@ -6,6 +6,8 @@ import com.badlogic.gdx.physics.box2d.Body;
 import java.util.UUID;
 
 public class GameObject {
+
+    /// This class needs more work. I plan to use this as a super class for non-physics objects
     private final Body body;
 
     private UUID id;
@@ -18,19 +20,4 @@ public class GameObject {
         this.id = UUID.randomUUID();
     }
 
-    public void setForce(Vector2 forceVector) {
-        this.force = forceVector;
-    }
-
-    public UUID getId() {
-        return this.id;
-    }
-
-    public Body getBody() {
-        return body;
-    }
-
-    public void applyForces() {
-        this.body.applyForceToCenter(this.force, true);
-    }
 }
