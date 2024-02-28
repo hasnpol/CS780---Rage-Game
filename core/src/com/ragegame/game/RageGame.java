@@ -28,7 +28,7 @@ public class RageGame extends ApplicationAdapter {
 	OrthographicCamera camera;
 	SpriteBatch batch;
 	Texture img;
-	World world;
+	public static World world;
 	Box2DDebugRenderer debugRenderer;
 	private OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;
 	private Map map;
@@ -38,6 +38,8 @@ public class RageGame extends ApplicationAdapter {
 	PlayerModel playerModel;
 	Texture background;
 	PhysicsHandler physicsHandler;
+
+	float max = 0;
 
 	@Override
 	public void create() {
@@ -84,10 +86,15 @@ public class RageGame extends ApplicationAdapter {
 		orthogonalTiledMapRenderer.render();
 		batch.end();
 		world.clearForces();
+		playerModel.update();
 		physicsHandler.applyForces();
 		physicsHandler.doPhysicsStep(dt);
 		debugRenderer.render(world, camera.combined);
 
+		if (Math.abs(playerModel.getBody().getLinearVelocity().x) > max) {
+			max = Math.abs(playerModel.getBody().getLinearVelocity().x);
+			System.out.println(max);
+		}
 	}
 
 	private void createPlayer() {
@@ -104,8 +111,8 @@ public class RageGame extends ApplicationAdapter {
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = playerBox;
 		fixtureDef.density = 2f;  // more density -> bigger mass for the same size
-		fixtureDef.friction = 1;
-
+		fixtureDef.friction = 0;
+		playerBody.setFixedRotation(true);
 		playerBody.createFixture(fixtureDef).setUserData(playerModel.getId());
 		playerBox.dispose();
 	}

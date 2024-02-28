@@ -1,5 +1,7 @@
 package com.ragegame.game.handlers;
 
+import static com.ragegame.game.RageGame.world;
+
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;

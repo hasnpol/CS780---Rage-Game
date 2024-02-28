@@ -16,9 +16,9 @@ public class InputHandler implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.D) {
-            playerModel.setForce(new Vector2(15, 0));
+            playerModel.move(6);
         } else if (keycode == Input.Keys.A) {
-            playerModel.setForce(new Vector2(-15, 0));
+            playerModel.move(4);
         } else if (keycode == Input.Keys.SPACE) {
             chargeStartTime = System.currentTimeMillis();
         }
@@ -26,10 +26,8 @@ public class InputHandler implements InputProcessor {
     }
     @Override
     public boolean keyUp(int keycode) {
-        if (keycode == Input.Keys.D) {
-            playerModel.setForce(new Vector2(0, 0));
-        } else if (keycode == Input.Keys.A) {
-            playerModel.setForce(new Vector2(0, 0));
+        if (keycode == Input.Keys.D || keycode == Input.Keys.A) {
+            playerModel.move(5);
         } else if (keycode == Input.Keys.SPACE) {
             playerModel.getBody().applyLinearImpulse(new Vector2(0, min(8f, System.currentTimeMillis() - chargeStartTime) * 1f),
                     playerModel.getBody().getPosition(), true);
