@@ -57,17 +57,16 @@ public class RageGame extends ApplicationAdapter {
 		world.setGravity(new Vector2(0, -9.8f));
 		debugRenderer = new Box2DDebugRenderer();
 
-		this.map = new Map(world);
-		this.orthogonalTiledMapRenderer = map.buildMap();
-
 		gameObjectsToDestroy = new ObjectMap<>();
 		gameObjects = new ObjectMap<>();
+		this.map = new Map(world, gameObjects);
+		this.orthogonalTiledMapRenderer = map.buildMap();
 		createPlayer();
 
 		// Handle InputProcessor and Contact Listener and Physics Handler
 		InputHandler inputHandler = new InputHandler(playerModel);
 		Gdx.input.setInputProcessor(inputHandler);
-		ContactHandler contactHandler = new ContactHandler();
+		ContactHandler contactHandler = new ContactHandler(world, gameObjects);
 		world.setContactListener(contactHandler);
 		physicsHandler = new PhysicsHandler(world, gameObjects);
 
