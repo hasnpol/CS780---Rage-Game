@@ -1,95 +1,68 @@
 package com.ragegame.game;
 
-import static java.lang.Math.min;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.sun.org.apache.xpath.internal.operations.Or;
+import com.ragegame.game.handlers.ContactHandler;
+import com.ragegame.game.handlers.InputHandler;
+import com.ragegame.game.handlers.PhysicsHandler;
+import com.ragegame.game.objects.actors.Actors;
+import com.ragegame.game.objects.actors.PlayerModel;
+import com.ragegame.game.screens.Map;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
-//<<<<<<< HEAD
-//public class RageGame extends Game {
-//
-//	public static RageGame INSTANCE;
-//	private int width, height;
-//	private OrthographicCamera camera;
-//	private Screen screen;
-//
-//
-//	@Override
-//	public void create() {
-//		this.width = Gdx.graphics.getWidth();
-//		this.height = Gdx.graphics.getHeight();
-//		this.camera = new OrthographicCamera();
-//		this.camera.setToOrtho(false, width, height);
-//		this.screen = new Screen(camera);
-//=======
-
-public class RageGame extends ApplicationAdapter implements InputProcessor, ContactListener {
-	public static final float TIME_STEP = 1/60F;
+public class RageGame extends ApplicationAdapter {
 	OrthographicCamera camera;
 	SpriteBatch batch;
 	Texture img;
 	World world;
 	Box2DDebugRenderer debugRenderer;
-	private float accumulator = 0;
-
 	private OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;
 	private Map map;
-	ObjectMap<UUID, GameObject> gameObjectsToDestroy;
-	ObjectMap<UUID, GameObject> gameObjects;
-
-	long chargeStartTime;
-
+	ObjectMap<UUID, Actors> gameObjectsToDestroy;
+	ObjectMap<UUID, Actors> gameObjects;
 	int height, width;
-
 	PlayerModel playerModel;
-	ArrayList<Background> background = new ArrayList<>();
+	Texture background;
+	PhysicsHandler physicsHandler;
 
-	private void initBodies() {
-		createPlayer();
-		//createGround();
-	}
+	ArrayList<Texture> backgrounds = new ArrayList<>();
+	ArrayList<Float> backgroundOffsets = new ArrayList<>();
+	float backgroundSpeed = 0;
+
 
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
-		Gdx.input.setInputProcessor(this);
+
+//		backgrounds.add(new Texture(Gdx.files.internal("maps/desert/BG.png")));
+		backgrounds.add(new Texture(Gdx.files.internal("backgrounds/donghun-lee-2-01-back.jpg")));
+		backgrounds.add(new Texture(Gdx.files.internal("backgrounds/donghun-lee-2-02-middle.jpg")));
+		backgrounds.add(new Texture(Gdx.files.internal("backgrounds/donghun-lee-2-03-front.jpg")));
+		backgrounds.add(new Texture(Gdx.files.internal("backgrounds/donghun-lee-2-04-floor.jpg")));
 
 		width = Gdx.graphics.getWidth();
 		height =  Gdx.graphics.getHeight();
-		camera = new OrthographicCamera(14, 14 * ((float) height / width));
+		camera = new OrthographicCamera(15 , 15 * ((float) height / width));
 		camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 		camera.update();
 
-		background.add(new Background(new Texture("background.png"), 0.1f, true, true));
-		background.get(0).setCamera(camera);
-
-		world = new World(new Vector2(0, -9.8f), true);world.setContactListener(this);
-		world.setContactListener(this);
+		world = new World(new Vector2(0, -9.8f), true);
 		world.setAutoClearForces(false);
 		world.setGravity(new Vector2(0, -9.8f));
 		debugRenderer = new Box2DDebugRenderer();
@@ -99,65 +72,96 @@ public class RageGame extends ApplicationAdapter implements InputProcessor, Cont
 
 		gameObjectsToDestroy = new ObjectMap<>();
 		gameObjects = new ObjectMap<>();
-		initBodies();
+		createPlayer();
+
+		// Handle InputProcessor and Contact Listener and Physics Handler
+		InputHandler inputHandler = new InputHandler(playerModel);
+		Gdx.input.setInputProcessor(inputHandler);
+		ContactHandler contactHandler = new ContactHandler();
+		world.setContactListener(contactHandler);
+		physicsHandler = new PhysicsHandler(world, gameObjects);
+
 	}
 
 	@Override
 	public void render () {
+
+		float mapHeight = 18;
+		float mapWidth = 120;
+
 		float dt = Gdx.graphics.getDeltaTime();
 		ScreenUtils.clear(0, 0, 0, 1);
-		camera.position.set(playerModel.getBody().getPosition(), 0);
+		Vector2 playerPos = playerModel.getBody().getPosition();
+		camera.position.set(playerPos, 0);
 		camera.update();
+		cameraBoundary(camera, camera.viewportWidth/2f, camera.viewportHeight/2f, mapWidth-camera.viewportWidth/2f*2, mapHeight-camera.viewportHeight/2f*2);
+		camera.update();
+
+
+		batch.begin();
+		renderBackground(dt);
+		batch.end();
+
 		batch.setProjectionMatrix(camera.combined);
 		orthogonalTiledMapRenderer.setView(camera);
+
 		batch.begin();
-		//background.get(0).render(batch);
 		orthogonalTiledMapRenderer.render();
 		batch.end();
+
 		world.clearForces();
-		applyForces();
-		doPhysicsStep(dt);
+		physicsHandler.applyForces();
+		physicsHandler.doPhysicsStep(dt);
 		debugRenderer.render(world, camera.combined);
+
 	}
 
-	private void doPhysicsStep(float deltaTime) {
-		// fixed time step
-		// max frame time to avoid spiral of death (on slow devices)
-		float frameTime = min(deltaTime, 0.25f);
-		accumulator += frameTime;
-		while (accumulator >= TIME_STEP) {
-			world.step(TIME_STEP, 6, 2);
-			accumulator -= TIME_STEP;
+	private void renderBackground(float deltaTime) {
+		float worldHeight = 18 * 32;
+		float worldWidth = 128 * 32;
+
+		backgroundOffsets.clear();
+
+		backgroundOffsets.add(deltaTime * 1);
+		backgroundOffsets.add(deltaTime * 2);
+		backgroundOffsets.add(deltaTime * 3);
+		backgroundOffsets.add(deltaTime * 4);
+
+		for (int i = 0; i < backgroundOffsets.size(); i++) {
+			if (backgroundOffsets.get(i) > worldHeight) {
+				backgroundOffsets.set(i, 0f);
+			}
+			batch.draw(backgrounds.get(i), 0, -backgroundOffsets.get(i), worldWidth/32f, worldHeight/32f);
+			batch.draw(backgrounds.get(i), 0, -backgroundOffsets.get(i) + (worldWidth/32f), worldWidth/32f, worldHeight/32f);
 		}
+
 	}
 
-	private void createGround() {
-		// Create our body definition
-		BodyDef groundBodyDef = new BodyDef();
-		// Set its world position
-		groundBodyDef.position.set(new Vector2(0, 2));
+	public void cameraBoundary(OrthographicCamera camera, float startX, float startY, float width, float height) {
+		Vector3 position = camera.position;
 
-		// Create a body from the definition and add it to the world
-		Body groundBody = world.createBody(groundBodyDef);
-		// Create a polygon shape
-		PolygonShape groundBox = new PolygonShape();
-		// Set the polygon shape as a box
-		groundBox.setAsBox(camera.viewportWidth, 2);
-		// Create a fixture from our polygon shape and add it to our ground body
-		groundBody.createFixture(groundBox, 0.0f).setFriction(0.1f);
-		// Clean up after ourselves
-		groundBox.dispose();
+		if (position.x < startX)
+			position.x = startX;
+		if (position.y < startY)
+			position.y = startY;
+
+		if (position.x > startX + width)
+			position.x = startX + width;
+		if (position.y > startY + height)
+			position.y = startY + height;
+
+		camera.position.set(position);
 
 	}
 
 	private void createPlayer() {
 		BodyDef playerBodyDef = new BodyDef();
 		playerBodyDef.type = BodyDef.BodyType.DynamicBody;
-		playerBodyDef.position.set(new Vector2(2, 10f));
+		playerBodyDef.position.set(new Vector2(0, 10f));
 
 		Body playerBody = world.createBody(playerBodyDef);
 		PolygonShape playerBox = new PolygonShape();
-		playerBox.setAsBox(0.2499f, 0.499f);
+		playerBox.setAsBox(0.25f, 0.5f);
 
 		playerModel = new PlayerModel(playerBody);
 		gameObjects.put(playerModel.getId(), playerModel);
@@ -170,97 +174,11 @@ public class RageGame extends ApplicationAdapter implements InputProcessor, Cont
 		playerBox.dispose();
 	}
 
-	private void applyForces() {
-		for (ObjectMap.Entries<UUID, GameObject> entries = this.gameObjects.iterator(); entries.hasNext(); ) {
-			ObjectMap.Entry<UUID, GameObject> b = entries.next();
-			b.value.applyForces();
-		}
-	}
-
-
 	@Override
 	public void dispose () {
 		batch.dispose();
+		background.dispose();
 		orthogonalTiledMapRenderer.dispose();
 	}
 
-	@Override
-	public boolean keyDown(int keycode) {
-		if (keycode == Input.Keys.D) {
-			playerModel.setForce(new Vector2(15, 0));
-		} else if (keycode == Input.Keys.A) {
-			playerModel.setForce(new Vector2(-15, 0));
-		} else if (keycode == Input.Keys.SPACE) {
-			chargeStartTime = System.currentTimeMillis();
-		}
-		return false;
-	}
-
-	@Override
-	public boolean keyUp(int keycode) {
-		if (keycode == Input.Keys.D) {
-			playerModel.setForce(new Vector2(0, 0));
-		} else if (keycode == Input.Keys.A) {
-			playerModel.setForce(new Vector2(0, 0));
-		} else if (keycode == Input.Keys.SPACE) {
-			playerModel.getBody().applyLinearImpulse(new Vector2(0, min(8f, System.currentTimeMillis() - chargeStartTime) * 1f),
-					playerModel.getBody().getPosition(), true);
-		}
-		return false;
-	}
-
-	@Override
-	public boolean keyTyped(char character) {
-		return false;
-	}
-
-	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		return false;
-	}
-
-	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		return false;
-	}
-
-	@Override
-	public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
-		return false;
-	}
-
-	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		return false;
-	}
-
-	@Override
-	public boolean mouseMoved(int screenX, int screenY) {
-		return false;
-	}
-
-	@Override
-	public boolean scrolled(float amountX, float amountY) {
-		return false;
-	}
-
-	@Override
-	public void beginContact(Contact contact) {
-
-	}
-
-	@Override
-	public void endContact(Contact contact) {
-
-	}
-
-	@Override
-	public void preSolve(Contact contact, Manifold oldManifold) {
-
-	}
-
-	@Override
-	public void postSolve(Contact contact, ContactImpulse impulse) {
-
-	}
 }

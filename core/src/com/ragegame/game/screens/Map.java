@@ -1,4 +1,4 @@
-package com.ragegame.game;
+package com.ragegame.game.screens;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.MapObject;
@@ -24,9 +24,10 @@ public class Map {
     }
 
     public OrthogonalTiledMapRenderer buildMap() {
-        map = new TmxMapLoader().load("maps/map1/map1.tmx");
-        buildMapObject(map.getLayers().get("Object Layer 1").getObjects());
-        return new OrthogonalTiledMapRenderer(map, 1/32f);
+        map = new TmxMapLoader().load("maps/desert/gameart2d-desert.tmx");
+        buildMapObject(map.getLayers().get("ground").getObjects());
+        buildMapObject(map.getLayers().get("walls").getObjects());
+        return new OrthogonalTiledMapRenderer(map, 1/128f);
     }
 
     private void buildMapObject(MapObjects mapObjects) {
@@ -50,7 +51,7 @@ public class Map {
         Vector2[] worldVertices = new Vector2[vertices.length / 2];
 
         for (int i = 0; i < vertices.length / 2; i++) {
-            worldVertices[i] = new Vector2(vertices[i * 2] / 32.0f, vertices[i * 2 + 1] / 32.0f);
+            worldVertices[i] = new Vector2(vertices[i * 2] / 128f, vertices[i * 2 + 1] / 128f);
         }
 
         PolygonShape shape = new PolygonShape();
