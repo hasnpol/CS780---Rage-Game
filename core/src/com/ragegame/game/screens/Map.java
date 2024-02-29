@@ -3,6 +3,7 @@ package com.ragegame.game.screens;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -23,6 +24,9 @@ public class Map {
 
     public TiledMap map;
     private World world;
+    private float width;
+    private float height;
+    private final float TILESIZE = 128f;
 
     public ObjectMap<UUID, Actors> gameObjects;
 
@@ -35,7 +39,10 @@ public class Map {
         map = new TmxMapLoader().load("maps/desert/gameart2d-desert.tmx");
         buildMapObject(map.getLayers().get("ground").getObjects());
         buildMapObject(map.getLayers().get("walls").getObjects());
-        return new OrthogonalTiledMapRenderer(map, 1/128f);
+        MapProperties properties = map.getProperties();
+        this.width = properties.get("width", Integer.class);
+        this.height = properties.get("height", Integer.class);
+        return new OrthogonalTiledMapRenderer(map, 1/TILESIZE);
     }
 
     private void buildMapObject(MapObjects mapObjects) {
@@ -61,12 +68,20 @@ public class Map {
         Vector2[] worldVertices = new Vector2[vertices.length / 2];
 
         for (int i = 0; i < vertices.length / 2; i++) {
-            worldVertices[i] = new Vector2(vertices[i * 2] / 128f, vertices[i * 2 + 1] / 128f);
+            worldVertices[i] = new Vector2(vertices[i * 2] / TILESIZE, vertices[i * 2 + 1] / TILESIZE);
         }
 
         PolygonShape shape = new PolygonShape();
         shape.set(worldVertices);
         return shape;
+    }
+
+    public float getWidth() {
+        return this.width;
+    }
+
+    public float getHeight() {
+        return this.height;
     }
 
 }
