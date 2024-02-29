@@ -17,6 +17,7 @@ public class PlayerModel extends Actors {
 
     public void setGrounded(boolean grounded) {
         DRAG = ((grounded)) ? 3f : 0.5f;
+        System.out.println(DRAG);
         this.grounded = grounded;
     }
 
@@ -61,7 +62,7 @@ public class PlayerModel extends Actors {
 
     public void jumpEnd() {
         if (grounded) {
-            getBody().applyLinearImpulse(new Vector2(0,  Math.min(6f, (System.currentTimeMillis() - jumpPress) * 0.5f)),
+            getBody().applyLinearImpulse(new Vector2(0,  Math.min(6f, (System.currentTimeMillis() - jumpPress) * 0.01f)),
                     getBody().getPosition(), true);
         }
     }

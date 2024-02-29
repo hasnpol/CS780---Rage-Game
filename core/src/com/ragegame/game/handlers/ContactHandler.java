@@ -49,10 +49,14 @@ public class ContactHandler implements ContactListener {
         if (objB instanceof PlayerModel || objA instanceof PlayerModel) {
             if (objB instanceof Platform) {
                 PlayerModel playerModel = (PlayerModel) objA;
-                playerModel.setGrounded(true);
+                if(playerModel.getBody().getPosition().y > objB.getBody().getPosition().y) {
+                    playerModel.setGrounded(true);
+                }
             } else if (objA instanceof  Platform) {
                 PlayerModel playerModel = (PlayerModel) objB;
-                playerModel.setGrounded(true);
+                if(playerModel.getBody().getPosition().y > objA.getBody().getPosition().y) {
+                    playerModel.setGrounded(true);
+                }
             }
         }
     }
