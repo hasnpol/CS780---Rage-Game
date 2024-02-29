@@ -49,8 +49,8 @@ public class Map {
         bodyDef.type = BodyDef.BodyType.StaticBody;
         Body body = world.createBody(bodyDef);
         Shape shape = createPolygonShape(polygonMapObject);
-        body.createFixture(shape, 10000);
         Platform platform = new Platform(body);
+        body.createFixture(shape, 10000).setUserData(platform.getId());
         gameObjects.put(platform.getId(), platform);
     }
 

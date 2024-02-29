@@ -32,7 +32,7 @@ public class ContactHandler implements ContactListener {
         Fixture fixtureB = contact.getFixtureB();
         Actors objA = null;
         Actors objB = null;
-        int x = 0;
+
         if (fixtureA.getUserData() != null && fixtureA.getUserData() instanceof UUID) {
             // destroy the cannon ball on collision'
             UUID objId = (UUID) fixtureA.getUserData();
@@ -44,17 +44,15 @@ public class ContactHandler implements ContactListener {
             UUID objId = (UUID) fixtureB.getUserData();
             objB = gameObjects.get(objId);
         }
-        System.out.println(x);
-
 
 
         if (objB instanceof PlayerModel || objA instanceof PlayerModel) {
             if (objB instanceof Platform) {
                 PlayerModel playerModel = (PlayerModel) objA;
-                playerModel.grounded = true;
+                playerModel.setGrounded(true);
             } else if (objA instanceof  Platform) {
                 PlayerModel playerModel = (PlayerModel) objB;
-                playerModel.grounded = true;
+                playerModel.setGrounded(true);
             }
         }
     }
@@ -82,10 +80,10 @@ public class ContactHandler implements ContactListener {
         if (objB instanceof PlayerModel || objA instanceof PlayerModel) {
             if (objB instanceof Platform) {
                 PlayerModel playerModel = (PlayerModel) objA;
-                playerModel.grounded = false;
+                playerModel.setGrounded(false);
             } else if (objA instanceof Platform) {
                 PlayerModel playerModel = (PlayerModel) objB;
-                playerModel.grounded = false;
+                playerModel.setGrounded(false);
             }
         }
 

@@ -10,16 +10,26 @@ import com.badlogic.gdx.physics.box2d.Body;
 public class PlayerModel extends Actors {
     float DRAG = 3f;
     boolean stop;
+
+    public boolean isGrounded() {
+        return grounded;
+    }
+
+    public void setGrounded(boolean grounded) {
+        DRAG = ((grounded)) ? 3f : 0.5f;
+        this.grounded = grounded;
+    }
+
     public boolean grounded;
     final float MAXSPEED = 8f;
 
-    float jumpPress;
+    long jumpPress;
 
     public PlayerModel(Body body) {
         super(body);
         stop =false;
         grounded = false;
-        jumpPress = 0f;
+        jumpPress = 0L;
     }
 
     //Look at your numpad for values for directions.
@@ -51,7 +61,7 @@ public class PlayerModel extends Actors {
 
     public void jumpEnd() {
         if (grounded) {
-            getBody().applyLinearImpulse(new Vector2(0, min(8f, System.currentTimeMillis() - jumpPress)),
+            getBody().applyLinearImpulse(new Vector2(0,  Math.min(6f, (System.currentTimeMillis() - jumpPress) * 0.5f)),
                     getBody().getPosition(), true);
         }
     }
