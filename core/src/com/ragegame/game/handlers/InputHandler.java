@@ -9,30 +9,26 @@ import com.ragegame.game.objects.actors.PlayerModel;
 
 public class InputHandler implements InputProcessor {
     PlayerModel playerModel;
-    long chargeStartTime;
     public InputHandler(PlayerModel playerModel) {
         this.playerModel = playerModel;
     }
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.D) {
-            playerModel.setForce(new Vector2(15, 0));
+            playerModel.move(6);
         } else if (keycode == Input.Keys.A) {
-            playerModel.setForce(new Vector2(-15, 0));
+            playerModel.move(4);
         } else if (keycode == Input.Keys.SPACE) {
-            chargeStartTime = System.currentTimeMillis();
+            playerModel.jumpStart();
         }
         return false;
     }
     @Override
     public boolean keyUp(int keycode) {
-        if (keycode == Input.Keys.D) {
-            playerModel.setForce(new Vector2(0, 0));
-        } else if (keycode == Input.Keys.A) {
-            playerModel.setForce(new Vector2(0, 0));
+        if (keycode == Input.Keys.D || keycode == Input.Keys.A) {
+            playerModel.move(5);
         } else if (keycode == Input.Keys.SPACE) {
-            playerModel.getBody().applyLinearImpulse(new Vector2(0, min(8f, System.currentTimeMillis() - chargeStartTime) * 1f),
-                    playerModel.getBody().getPosition(), true);
+            playerModel.jumpEnd();
         }
         return false;
     }

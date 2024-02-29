@@ -30,7 +30,7 @@ public class RageGame extends ApplicationAdapter {
 	OrthographicCamera camera;
 	SpriteBatch batch;
 	Texture img;
-	World world;
+	public static World world;
 	Box2DDebugRenderer debugRenderer;
 	private OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;
 	private Map map;
@@ -44,7 +44,6 @@ public class RageGame extends ApplicationAdapter {
 	ArrayList<Texture> backgrounds = new ArrayList<>();
 	ArrayList<Float> backgroundOffsets = new ArrayList<>();
 	float backgroundSpeed = 0;
-
 
 	@Override
 	public void create() {
@@ -67,17 +66,16 @@ public class RageGame extends ApplicationAdapter {
 		world.setGravity(new Vector2(0, -9.8f));
 		debugRenderer = new Box2DDebugRenderer();
 
-		this.map = new Map(world);
-		this.orthogonalTiledMapRenderer = map.buildMap();
-
 		gameObjectsToDestroy = new ObjectMap<>();
 		gameObjects = new ObjectMap<>();
+		this.map = new Map(world, gameObjects);
+		this.orthogonalTiledMapRenderer = map.buildMap();
 		createPlayer();
 
 		// Handle InputProcessor and Contact Listener and Physics Handler
 		InputHandler inputHandler = new InputHandler(playerModel);
 		Gdx.input.setInputProcessor(inputHandler);
-		ContactHandler contactHandler = new ContactHandler();
+		ContactHandler contactHandler = new ContactHandler(world, gameObjects);
 		world.setContactListener(contactHandler);
 		physicsHandler = new PhysicsHandler(world, gameObjects);
 
@@ -110,6 +108,7 @@ public class RageGame extends ApplicationAdapter {
 		batch.end();
 
 		world.clearForces();
+		playerModel.update();
 		physicsHandler.applyForces();
 		physicsHandler.doPhysicsStep(dt);
 		debugRenderer.render(world, camera.combined);
@@ -168,8 +167,8 @@ public class RageGame extends ApplicationAdapter {
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = playerBox;
 		fixtureDef.density = 2f;  // more density -> bigger mass for the same size
-		fixtureDef.friction = 1;
-
+		fixtureDef.friction = 0;
+		playerBody.setFixedRotation(true);
 		playerBody.createFixture(fixtureDef).setUserData(playerModel.getId());
 		playerBox.dispose();
 	}

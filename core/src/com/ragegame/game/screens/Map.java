@@ -13,14 +13,22 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.ObjectMap;
+import com.ragegame.game.objects.actors.Actors;
+import com.ragegame.game.objects.actors.Platform;
+
+import java.util.UUID;
 
 public class Map {
 
     public TiledMap map;
     private World world;
 
-    public Map(World world) {
+    public ObjectMap<UUID, Actors> gameObjects;
+
+    public Map(World world, ObjectMap<UUID, Actors> gameObjects) {
         this.world = world;
+        this.gameObjects = gameObjects;
     }
 
     public OrthogonalTiledMapRenderer buildMap() {
@@ -43,7 +51,9 @@ public class Map {
         bodyDef.type = BodyDef.BodyType.StaticBody;
         Body body = world.createBody(bodyDef);
         Shape shape = createPolygonShape(polygonMapObject);
-        body.createFixture(shape, 10000);
+        Platform platform = new Platform(body);
+        body.createFixture(shape, 10000).setUserData(platform.getId());
+        gameObjects.put(platform.getId(), platform);
     }
 
     private Shape createPolygonShape(PolygonMapObject polygonMapObject) {
