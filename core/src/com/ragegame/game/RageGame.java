@@ -38,9 +38,7 @@ public class RageGame extends ApplicationAdapter {
 	PlayerModel playerModel;
 	Texture background;
 	PhysicsHandler physicsHandler;
-
-	float max = 0;
-
+	
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
@@ -90,10 +88,6 @@ public class RageGame extends ApplicationAdapter {
 		physicsHandler.doPhysicsStep(dt);
 		debugRenderer.render(world, camera.combined);
 
-		if (Math.abs(playerModel.getBody().getLinearVelocity().x) > max) {
-			max = Math.abs(playerModel.getBody().getLinearVelocity().x);
-			System.out.println(max);
-		}
 	}
 
 	private void createPlayer() {

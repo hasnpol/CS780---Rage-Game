@@ -17,7 +17,6 @@ public class PlayerModel extends Actors {
 
     public void setGrounded(boolean grounded) {
         DRAG = ((grounded)) ? 3f : 0.5f;
-        System.out.println(DRAG);
         this.grounded = grounded;
     }
 
