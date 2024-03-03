@@ -3,7 +3,6 @@ package com.ragegame.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -15,6 +14,8 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.ragegame.game.handlers.BackgroundHandler;
+import com.ragegame.game.handlers.CameraHandler;
 import com.ragegame.game.handlers.ContactHandler;
 import com.ragegame.game.handlers.InputHandler;
 import com.ragegame.game.handlers.PhysicsHandler;
@@ -25,47 +26,50 @@ import com.ragegame.game.screens.Map;
 import java.util.UUID;
 
 public class RageGame extends ApplicationAdapter {
-	OrthographicCamera camera;
-	SpriteBatch batch;
-	Texture img;
-	World world;
-	Box2DDebugRenderer debugRenderer;
+	private OrthographicCamera camera;
+	private SpriteBatch batch;
+	public static World world;
+	private Box2DDebugRenderer debugRenderer;
 	private OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;
-	private Map map;
-	ObjectMap<UUID, Actors> gameObjectsToDestroy;
-	ObjectMap<UUID, Actors> gameObjects;
-	int height, width;
-	PlayerModel playerModel;
-	Texture background;
-	PhysicsHandler physicsHandler;
+	private Map gameMap;
+	private ObjectMap<UUID, Actors> gameObjectsToDestroy;
+	private ObjectMap<UUID, Actors> gameObjects;
+	private int screenHeight, screenWidth;
+	private PlayerModel playerModel;
+	private PhysicsHandler physicsHandler;
+	private CameraHandler cameraHandler;
+	private BackgroundHandler backgroundHandler;
 
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
-		background = new Texture(Gdx.files.internal("background.png"));
 
-		width = Gdx.graphics.getWidth();
-		height =  Gdx.graphics.getHeight();
-		camera = new OrthographicCamera(14, 14 * ((float) height / width));
-		camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
-		camera.update();
+		// Init Camera
+		screenWidth = Gdx.graphics.getWidth();
+		screenHeight =  Gdx.graphics.getHeight();
+		camera = new OrthographicCamera(15 , 15 * ((float) screenHeight / screenWidth));
+		cameraHandler = new CameraHandler(camera);
 
+		// Init backgrounds
+		backgroundHandler = new BackgroundHandler();
+
+		// Init the world
 		world = new World(new Vector2(0, -9.8f), true);
 		world.setAutoClearForces(false);
 		world.setGravity(new Vector2(0, -9.8f));
 		debugRenderer = new Box2DDebugRenderer();
 
-		this.map = new Map(world);
-		this.orthogonalTiledMapRenderer = map.buildMap();
-
+		// Init game objects
 		gameObjectsToDestroy = new ObjectMap<>();
 		gameObjects = new ObjectMap<>();
+		this.gameMap = new Map(world, gameObjects);
+		this.orthogonalTiledMapRenderer = gameMap.buildMap();
 		createPlayer();
 
 		// Handle InputProcessor and Contact Listener and Physics Handler
 		InputHandler inputHandler = new InputHandler(playerModel);
 		Gdx.input.setInputProcessor(inputHandler);
-		ContactHandler contactHandler = new ContactHandler();
+		ContactHandler contactHandler = new ContactHandler(world, gameObjects);
 		world.setContactListener(contactHandler);
 		physicsHandler = new PhysicsHandler(world, gameObjects);
 
@@ -73,24 +77,41 @@ public class RageGame extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		float dt = Gdx.graphics.getDeltaTime();
-		ScreenUtils.clear(0, 0, 0, 1);
-		camera.position.set(playerModel.getBody().getPosition(), 0);
 
-		camera.update();
+		float dt = Gdx.graphics.getDeltaTime();
+
+		// Clear previous images drawn to the screen
+		ScreenUtils.clear(0, 0, 0, 1);
+
+		// Handle camera logic so that camera follows player within gameMap bounds
+		cameraHandler.snapToPlayer(playerModel.getBody().getPosition(), gameMap.getWidth(), gameMap.getHeight());
+
+		// Draw the background
+		batch.begin();
+		backgroundHandler.render(dt, batch);
+		batch.end(); // doing this so that the background is drawn before gameMap don't change this
+
+		// Setup for tiled gameMap to be drawn
 		batch.setProjectionMatrix(camera.combined);
 		orthogonalTiledMapRenderer.setView(camera);
+
+		// Draw the tiled gameMap
 		batch.begin();
 		orthogonalTiledMapRenderer.render();
 		batch.end();
+
+		// Physics
 		world.clearForces();
+		playerModel.update();
 		physicsHandler.applyForces();
 		physicsHandler.doPhysicsStep(dt);
 		debugRenderer.render(world, camera.combined);
 
 	}
 
+
 	private void createPlayer() {
+
 		BodyDef playerBodyDef = new BodyDef();
 		playerBodyDef.type = BodyDef.BodyType.DynamicBody;
 		playerBodyDef.position.set(new Vector2(0, 10f));
@@ -104,8 +125,8 @@ public class RageGame extends ApplicationAdapter {
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = playerBox;
 		fixtureDef.density = 2f;  // more density -> bigger mass for the same size
-		fixtureDef.friction = 1;
-
+		fixtureDef.friction = 0;
+		playerBody.setFixedRotation(true);
 		playerBody.createFixture(fixtureDef).setUserData(playerModel.getId());
 		playerBox.dispose();
 	}
@@ -113,7 +134,7 @@ public class RageGame extends ApplicationAdapter {
 	@Override
 	public void dispose () {
 		batch.dispose();
-		background.dispose();
+		backgroundHandler.dispose();
 		orthogonalTiledMapRenderer.dispose();
 	}
 
