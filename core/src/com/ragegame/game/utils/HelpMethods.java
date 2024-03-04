@@ -9,11 +9,7 @@ public class HelpMethods {
             return LoadSave.PLAYER_SPRITE;
         } else if (entityType == EntityType.ENEMY) {
             EnemyType enemyType = (EnemyType) entityType.getSubType();
-            if (enemyType == EnemyType.RUSSIAN) {
-                return LoadSave.RUSSIAN_SPRITE;
-            } else {
-                return LoadSave.RUSSIAN_SPRITE;
-            }
+            return LoadSave.SOLDIER_SPRITE;
         }
         return null;
     }
