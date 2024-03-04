@@ -1,10 +1,9 @@
 package com.ragegame.game.handlers;
 
-import static java.lang.Math.min;
-
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.ragegame.game.objects.DynamicGameObject.PlayerModel;
+import com.badlogic.gdx.math.Vector2;
+import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 
 public class InputHandler implements InputProcessor {
     PlayerModel playerModel;
@@ -15,8 +14,10 @@ public class InputHandler implements InputProcessor {
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.D) {
             playerModel.move(6);
+            playerModel.setMovementVector(new Vector2(1, 0));
         } else if (keycode == Input.Keys.A) {
             playerModel.move(4);
+            playerModel.setMovementVector(new Vector2(-1, 0));
         } else if (keycode == Input.Keys.SPACE) {
             playerModel.jumpStart();
         }
@@ -29,6 +30,7 @@ public class InputHandler implements InputProcessor {
         } else if (keycode == Input.Keys.SPACE) {
             playerModel.jumpEnd();
         }
+        playerModel.setMovementVector(new Vector2(0, 0));
         return false;
     }
 

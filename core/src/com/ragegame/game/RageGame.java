@@ -19,8 +19,11 @@ import com.ragegame.game.handlers.CameraHandler;
 import com.ragegame.game.handlers.ContactHandler;
 import com.ragegame.game.handlers.InputHandler;
 import com.ragegame.game.handlers.PhysicsHandler;
-import com.ragegame.game.objects.DynamicGameObject.PlayerModel;
-import com.ragegame.game.objects.GameObject;
+import com.ragegame.game.objects.DynamicEntity.PlayerModel;
+import com.ragegame.game.objects.Entity;
+import com.ragegame.game.objects.DynamicEntity.EnemyModel;
+import com.ragegame.game.objects.view.View;
+
 import com.ragegame.game.screens.Map;
 
 import java.util.UUID;
@@ -32,10 +35,15 @@ public class RageGame extends ApplicationAdapter {
 	private Box2DDebugRenderer debugRenderer;
 	private OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;
 	private Map gameMap;
-	private ObjectMap<UUID, GameObject> gameObjectsToDestroy;
-	private ObjectMap<UUID, GameObject> gameObjects;
+
+	private ObjectMap<UUID, Entity> gameObjectsToDestroy;
+	private ObjectMap<UUID, Entity> gameObjects;
 	private int screenHeight, screenWidth;
+
 	private PlayerModel playerModel;
+	private View playerView;
+	private EnemyModel enemyModel;
+	private View enemyView;
 	private PhysicsHandler physicsHandler;
 	private CameraHandler cameraHandler;
 	private BackgroundHandler backgroundHandler;
@@ -77,7 +85,6 @@ public class RageGame extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-
 		float dt = Gdx.graphics.getDeltaTime();
 
 		// Clear previous images drawn to the screen
@@ -98,6 +105,11 @@ public class RageGame extends ApplicationAdapter {
 		// Draw the tiled gameMap
 		batch.begin();
 		orthogonalTiledMapRenderer.render();
+		playerView.render(dt);
+		batch.end();
+
+
+		batch.begin();
 		batch.end();
 
 		// Physics
@@ -111,7 +123,6 @@ public class RageGame extends ApplicationAdapter {
 
 
 	private void createPlayer() {
-
 		BodyDef playerBodyDef = new BodyDef();
 		playerBodyDef.type = BodyDef.BodyType.DynamicBody;
 		playerBodyDef.position.set(new Vector2(0, 10f));
@@ -121,6 +132,7 @@ public class RageGame extends ApplicationAdapter {
 		playerBox.setAsBox(0.25f, 0.5f);
 
 		playerModel = new PlayerModel(playerBody);
+		playerView = new View(playerModel, batch);
 		gameObjects.put(playerModel.getId(), playerModel);
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = playerBox;
@@ -131,10 +143,33 @@ public class RageGame extends ApplicationAdapter {
 		playerBox.dispose();
 	}
 
+	private void createEnemy() {
+		BodyDef enemyBodyDef = new BodyDef();
+		enemyBodyDef.type = BodyDef.BodyType.DynamicBody;
+		enemyBodyDef.position.set(new Vector2(10, 10f));
+
+		Body enemyBody = world.createBody(enemyBodyDef);
+		PolygonShape enemyBox = new PolygonShape();
+		enemyBox.setAsBox(0.25f, 0.5f);
+
+		enemyModel = new EnemyModel(enemyBody);
+		enemyView = new View(enemyModel, batch);
+
+		gameObjects.put(enemyModel.getId(), enemyModel);
+		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef.shape = enemyBox;
+		fixtureDef.density = 2f;  // more density -> bigger mass for the same size
+		fixtureDef.friction = 1;
+
+		enemyBody.createFixture(fixtureDef).setUserData(enemyModel.getId());
+		enemyBox.dispose();
+	}
+
 	@Override
 	public void dispose () {
 		batch.dispose();
 		backgroundHandler.dispose();
+		playerView.dispose();
 		orthogonalTiledMapRenderer.dispose();
 	}
 
