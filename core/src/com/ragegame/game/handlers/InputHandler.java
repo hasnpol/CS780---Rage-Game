@@ -4,8 +4,7 @@ import static java.lang.Math.min;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.math.Vector2;
-import com.ragegame.game.objects.actors.PlayerModel;
+import com.ragegame.game.objects.DynamicGameObject.PlayerModel;
 
 public class InputHandler implements InputProcessor {
     PlayerModel playerModel;

@@ -8,17 +8,17 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.ragegame.game.objects.actors.Actors;
-import com.ragegame.game.objects.actors.Platform;
-import com.ragegame.game.objects.actors.PlayerModel;
+import com.ragegame.game.objects.GameObject;
+import com.ragegame.game.objects.StaticGameObject.Platform;
+import com.ragegame.game.objects.DynamicGameObject.PlayerModel;
 
 import java.util.UUID;
 
 public class ContactHandler implements ContactListener {
 
     World world;
-    ObjectMap<UUID, Actors> gameObjects;
-    public ContactHandler(World world, ObjectMap<UUID, Actors> objectMap) {
+    ObjectMap<UUID, GameObject> gameObjects;
+    public ContactHandler(World world, ObjectMap<UUID, GameObject> objectMap) {
         this.world = world;
         this.gameObjects = objectMap;
     }
@@ -30,8 +30,8 @@ public class ContactHandler implements ContactListener {
 
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
-        Actors objA = null;
-        Actors objB = null;
+        GameObject objA = null;
+        GameObject objB = null;
 
         if (fixtureA.getUserData() != null && fixtureA.getUserData() instanceof UUID) {
             // destroy the cannon ball on collision'
@@ -66,8 +66,8 @@ public class ContactHandler implements ContactListener {
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
 
-        Actors objA = null;
-        Actors objB = null;
+        GameObject objA = null;
+        GameObject objB = null;
 
         if (fixtureA.getUserData() != null && fixtureA.getUserData() instanceof UUID) {
             // destroy the cannon ball on collision'

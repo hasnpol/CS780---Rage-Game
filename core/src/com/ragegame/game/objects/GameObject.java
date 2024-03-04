@@ -1,16 +1,16 @@
-package com.ragegame.game.objects.actors;
+package com.ragegame.game.objects;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
 import java.util.UUID;
 
-public class Actors {
+public class GameObject {
     /// This super class is used for game objects that has physics
     private final Body body;
     private UUID id;
     private Vector2 force;
-    public Actors(Body body) {
+    public GameObject(Body body) {
         this.body = body;
         this.force = new Vector2();
         this.id = UUID.randomUUID();

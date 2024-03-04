@@ -1,13 +1,12 @@
-package com.ragegame.game.objects.actors;
+package com.ragegame.game.objects.DynamicGameObject;
 
 import static java.lang.Math.min;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
 
-public class PlayerModel extends Actors {
+public class PlayerModel extends DynamicGameObject {
     float DRAG = 3f;
     boolean stop;
 

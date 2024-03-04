@@ -19,8 +19,8 @@ import com.ragegame.game.handlers.CameraHandler;
 import com.ragegame.game.handlers.ContactHandler;
 import com.ragegame.game.handlers.InputHandler;
 import com.ragegame.game.handlers.PhysicsHandler;
-import com.ragegame.game.objects.actors.Actors;
-import com.ragegame.game.objects.actors.PlayerModel;
+import com.ragegame.game.objects.DynamicGameObject.PlayerModel;
+import com.ragegame.game.objects.GameObject;
 import com.ragegame.game.screens.Map;
 
 import java.util.UUID;
@@ -32,8 +32,8 @@ public class RageGame extends ApplicationAdapter {
 	private Box2DDebugRenderer debugRenderer;
 	private OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;
 	private Map gameMap;
-	private ObjectMap<UUID, Actors> gameObjectsToDestroy;
-	private ObjectMap<UUID, Actors> gameObjects;
+	private ObjectMap<UUID, GameObject> gameObjectsToDestroy;
+	private ObjectMap<UUID, GameObject> gameObjects;
 	private int screenHeight, screenWidth;
 	private PlayerModel playerModel;
 	private PhysicsHandler physicsHandler;

@@ -4,22 +4,22 @@ import static java.lang.Math.min;
 
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.ragegame.game.objects.actors.Actors;
+import com.ragegame.game.objects.GameObject;
 
 import java.util.UUID;
 
 public class PhysicsHandler {
     public static final float TIME_STEP = 1/60F;
     World world;
-    ObjectMap<UUID, Actors> gameObjects;
+    ObjectMap<UUID, GameObject> gameObjects;
     private float accumulator = 0;
 
-    public PhysicsHandler(World world, ObjectMap<UUID, Actors> gameObjects) {
+    public PhysicsHandler(World world, ObjectMap<UUID, GameObject> gameObjects) {
         this.world = world;
         this.gameObjects = gameObjects;
     }
     public void applyForces() {
-        for (ObjectMap.Entry<UUID, Actors> b : this.gameObjects) {
+        for (ObjectMap.Entry<UUID, GameObject> b : this.gameObjects) {
             b.value.applyForces();
         }
     }

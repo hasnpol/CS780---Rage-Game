@@ -1,6 +1,5 @@
 package com.ragegame.game.screens;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapProperties;
@@ -15,8 +14,8 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.ragegame.game.objects.actors.Actors;
-import com.ragegame.game.objects.actors.Platform;
+import com.ragegame.game.objects.GameObject;
+import com.ragegame.game.objects.StaticGameObject.Platform;
 
 import java.util.UUID;
 
@@ -28,9 +27,9 @@ public class Map {
     private float height;
     private final float TILESIZE = 128f;
 
-    public ObjectMap<UUID, Actors> gameObjects;
+    public ObjectMap<UUID, GameObject> gameObjects;
 
-    public Map(World world, ObjectMap<UUID, Actors> gameObjects) {
+    public Map(World world, ObjectMap<UUID, GameObject> gameObjects) {
         this.world = world;
         this.gameObjects = gameObjects;
     }
