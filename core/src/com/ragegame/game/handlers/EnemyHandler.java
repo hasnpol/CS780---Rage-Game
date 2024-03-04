@@ -49,7 +49,7 @@ public class EnemyHandler {
         // 5 different types of russians
         russianArr = new BufferedImage[5][9];
         russianArr_ = new Texture[5][9];
-        BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.RUSSIAN_SPRITE[0]);
+//        BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.RUSSIAN_SPRITE[0]);
 //        Texture temp_ = LoadSave.GetSpriteAtlas(LoadSave.RUSSIAN_SPRITE)
 //        for (int j = 0; j < russianArr.length; j++) {
 //            for (int i = 0; i < russianArr[j].length; i++) {

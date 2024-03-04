@@ -39,6 +39,7 @@ public class Map {
         map = new TmxMapLoader().load("maps/desert/gameart2d-desert.tmx");
         buildMapObject(map.getLayers().get("ground").getObjects());
         buildMapObject(map.getLayers().get("walls").getObjects());
+        buildMapObject(map.getLayers().get("enemy").getObjects());
         MapProperties properties = map.getProperties();
         this.width = properties.get("width", Integer.class);
         this.height = properties.get("height", Integer.class);
@@ -61,6 +62,9 @@ public class Map {
         Platform platform = new Platform(body);
         body.createFixture(shape, 10000).setUserData(platform.getId());
         gameObjects.put(platform.getId(), platform);
+    }
+
+    public void renderObjects() {
     }
 
     private Shape createPolygonShape(PolygonMapObject polygonMapObject) {

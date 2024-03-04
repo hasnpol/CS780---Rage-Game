@@ -8,6 +8,7 @@ import static com.ragegame.game.utils.Constants.EnemyConstants.*;
 
 // https://www.youtube.com/watch?v=N7zib3qm5Oc&t=264s
 
+
 public abstract class Enemy extends Actors {
     public Body b2body;
     private int aniIndex, enemyState, enemyType;
