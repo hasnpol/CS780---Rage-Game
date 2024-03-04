@@ -16,8 +16,10 @@ public class InputHandler implements InputProcessor {
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.D) {
             playerModel.move(6);
+            playerModel.setMovementVector(new Vector2(1, 0));
         } else if (keycode == Input.Keys.A) {
             playerModel.move(4);
+            playerModel.setMovementVector(new Vector2(-1, 0));
         } else if (keycode == Input.Keys.SPACE) {
             playerModel.jumpStart();
         }
@@ -30,6 +32,7 @@ public class InputHandler implements InputProcessor {
         } else if (keycode == Input.Keys.SPACE) {
             playerModel.jumpEnd();
         }
+        playerModel.setMovementVector(new Vector2(0, 0));
         return false;
     }
 
