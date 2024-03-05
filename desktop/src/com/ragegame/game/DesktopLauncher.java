@@ -12,7 +12,6 @@ public class DesktopLauncher {
 		config.setForegroundFPS(60);
 		config.setWindowedMode(1000, 800);
 		config.setTitle("Rage Game");
-		config.setInitialBackgroundColor(Color.BLUE);
 		new Lwjgl3Application(new RageGame(), config);
 	}
 }
