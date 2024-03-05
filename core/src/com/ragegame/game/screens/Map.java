@@ -1,6 +1,5 @@
 package com.ragegame.game.screens;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapProperties;
@@ -26,7 +25,7 @@ public class Map {
     private World world;
     private float width;
     private float height;
-    private final float TILESIZE = 128f;
+    public float PPM = 128f;
 
     public ObjectMap<UUID, Actors> gameObjects;
 
@@ -36,21 +35,23 @@ public class Map {
     }
 
     public OrthogonalTiledMapRenderer buildMap() {
+
         map = new TmxMapLoader().load("maps/desert/gameart2d-desert.tmx");
-        buildMapObject(map.getLayers().get("ground").getObjects());
-        buildMapObject(map.getLayers().get("walls").getObjects());
         MapProperties properties = map.getProperties();
         this.width = properties.get("width", Integer.class);
         this.height = properties.get("height", Integer.class);
-        return new OrthogonalTiledMapRenderer(map, 1/TILESIZE);
+        this.PPM = (float) properties.get("tilewidth", Integer.class);
+
+        buildStaticBoundaries(map.getLayers().get("ground").getObjects());
+        buildStaticBoundaries(map.getLayers().get("walls").getObjects());
+
+        return new OrthogonalTiledMapRenderer(map, 1/PPM);
     }
 
-    private void buildMapObject(MapObjects mapObjects) {
-        for (MapObject mapObject : mapObjects) {
-            if (mapObject instanceof PolygonMapObject) {
+    private void buildStaticBoundaries(MapObjects mapObjects) {
+        for (MapObject mapObject : mapObjects)
+            if (mapObject instanceof PolygonMapObject)
                 createStaticBody((PolygonMapObject) mapObject);
-            }
-        }
     }
 
     private void createStaticBody(PolygonMapObject polygonMapObject) {
@@ -66,11 +67,9 @@ public class Map {
     private Shape createPolygonShape(PolygonMapObject polygonMapObject) {
         float[] vertices = polygonMapObject.getPolygon().getTransformedVertices();
         Vector2[] worldVertices = new Vector2[vertices.length / 2];
-
         for (int i = 0; i < vertices.length / 2; i++) {
-            worldVertices[i] = new Vector2(vertices[i * 2] / TILESIZE, vertices[i * 2 + 1] / TILESIZE);
+            worldVertices[i] = new Vector2(vertices[i * 2] / PPM, vertices[i * 2 + 1] / PPM);
         }
-
         PolygonShape shape = new PolygonShape();
         shape.set(worldVertices);
         return shape;
@@ -83,5 +82,7 @@ public class Map {
     public float getHeight() {
         return this.height;
     }
+
+    public float getPPM() {return this.PPM; }
 
 }

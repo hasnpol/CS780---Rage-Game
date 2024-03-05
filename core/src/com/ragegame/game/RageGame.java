@@ -76,7 +76,7 @@ public class RageGame extends ApplicationAdapter {
 	}
 
 	@Override
-	public void render () {
+	public void render() {
 
 		float dt = Gdx.graphics.getDeltaTime();
 
@@ -88,7 +88,7 @@ public class RageGame extends ApplicationAdapter {
 
 		// Draw the background
 		batch.begin();
-		backgroundHandler.render(dt, batch);
+		backgroundHandler.render(dt, batch, gameMap.getWidth(), gameMap.getHeight(), gameMap.getPPM());
 		batch.end(); // doing this so that the background is drawn before gameMap don't change this
 
 		// Setup for tiled gameMap to be drawn

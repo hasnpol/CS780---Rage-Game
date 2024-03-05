@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="120" height="18" tilewidth="128" tileheight="128" infinite="0" nextlayerid="9" nextobjectid="65">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="120" height="18" tilewidth="128" tileheight="128" infinite="0" nextlayerid="10" nextobjectid="72">
  <tileset firstgid="1" name="gameart2d-desert" tilewidth="128" tileheight="128" tilecount="40" columns="5">
   <image source="gameart2d-desert.png" width="640" height="1024"/>
   <tile id="2">
@@ -113,6 +113,20 @@
   </object>
   <object id="64" x="2816" y="1280">
    <polygon points="0,0 384,0 386,52 340,56 294,88 98,94 54,72 2,54"/>
+  </object>
+ </objectgroup>
+ <objectgroup id="9" name="coin">
+  <object id="67" x="1374" y="1821.33" width="18.6667" height="19.3333">
+   <ellipse/>
+  </object>
+  <object id="69" x="1320.67" y="1968.67">
+   <ellipse/>
+  </object>
+  <object id="70" x="1418.67" y="1969.33">
+   <ellipse/>
+  </object>
+  <object id="71" x="1553" y="1971">
+   <ellipse/>
   </object>
  </objectgroup>
  <objectgroup id="8" name="walls">
