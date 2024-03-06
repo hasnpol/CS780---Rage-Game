@@ -61,8 +61,13 @@ public class Map {
             case "player":
                 System.out.println("Today is Saturday");
                 break;
+            case "enemy":
+                System.out.println("Today is Saturday");
+                break;
             case "platform":
-                createPlatform((PolygonMapObject) mapObject);
+                if (mapObject instanceof PolygonMapObject) {
+                    createPlatform((PolygonMapObject) mapObject);
+                }
                 break;
             default:
                 break;
@@ -71,21 +76,20 @@ public class Map {
 
     private void createPlatform(PolygonMapObject polygonMapObject) {
 
-        Shape shape = createPolygonShape(polygonMapObject);
         BodyDef bodyDef = new BodyDef();
+        Shape shape = createPolygonShape(polygonMapObject, bodyDef);
 
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        //bodyDef.position = polygonMapObject.getPolygon().getVertex(1, new Vector2());
         Body body = world.createBody(bodyDef);
 
-        Platform platform = new Platform(body);
+        Platform platform = new Platform(body, polygonMapObject.getPolygon().getX() / PPM, polygonMapObject.getPolygon().getY()/ PPM);
 
         body.createFixture(shape, 10000).setUserData(platform.getId());
 
         gameObjects.put(platform.getId(), platform);
     }
 
-    private Shape createPolygonShape(PolygonMapObject polygonMapObject) {
+    private Shape createPolygonShape(PolygonMapObject polygonMapObject, BodyDef bodyDef) {
         float[] vertices = polygonMapObject.getPolygon().getTransformedVertices();
         Vector2[] worldVertices = new Vector2[vertices.length / 2];
         for (int i = 0; i < vertices.length / 2; i++) {
@@ -104,6 +108,6 @@ public class Map {
         return this.height;
     }
 
-    public float getPPM() {return this.PPM; }
+    public float getPPM() { return this.PPM; }
 
 }

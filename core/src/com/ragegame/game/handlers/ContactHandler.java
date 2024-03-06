@@ -52,11 +52,17 @@ public class ContactHandler implements ContactListener {
                 if(playerModel.getBody().getPosition().y > objB.getBody().getPosition().y) {
                     playerModel.setGrounded(true);
                 }
+                Platform platform = (Platform) objB;
+                System.out.printf("\n" + playerModel.getBody().getPosition().y);
+                System.out.printf("\t" + platform.y);
             } else if (objA instanceof  Platform) {
                 PlayerModel playerModel = (PlayerModel) objB;
                 if(playerModel.getBody().getPosition().y > objA.getBody().getPosition().y) {
                     playerModel.setGrounded(true);
                 }
+                Platform platform = (Platform) objA;
+                System.out.printf("\n" + playerModel.getBody().getPosition().y);
+                System.out.printf("\t" + platform.y);
             }
         }
     }
