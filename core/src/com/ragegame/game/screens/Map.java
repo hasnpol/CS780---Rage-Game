@@ -1,7 +1,9 @@
 package com.ragegame.game.screens;
 
+
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -25,7 +27,7 @@ public class Map {
     private World world;
     private float width;
     private float height;
-    private final float TILESIZE = 128f;
+    public float PPM = 128f;
 
     public ObjectMap<UUID, Entity> gameObjects;
 
@@ -35,41 +37,65 @@ public class Map {
     }
 
     public OrthogonalTiledMapRenderer buildMap() {
+
         map = new TmxMapLoader().load("maps/desert/gameart2d-desert.tmx");
-        buildMapObject(map.getLayers().get("ground").getObjects());
-        buildMapObject(map.getLayers().get("walls").getObjects());
+
+        createMapLayers(map.getLayers());
+
         MapProperties properties = map.getProperties();
         this.width = properties.get("width", Integer.class);
         this.height = properties.get("height", Integer.class);
-        return new OrthogonalTiledMapRenderer(map, 1/TILESIZE);
+
+        return new OrthogonalTiledMapRenderer(map, 1/PPM);
     }
 
-    private void buildMapObject(MapObjects mapObjects) {
-        for (MapObject mapObject : mapObjects) {
-            if (mapObject instanceof PolygonMapObject) {
-                createStaticBody((PolygonMapObject) mapObject);
+    private void createMapLayers(MapLayers layers) {
+        for (MapLayer mapLayer : layers) {
+            for (MapObject mapObject : mapLayer.getObjects()) {
+                createMapObject(mapObject, mapLayer.getName());
             }
         }
     }
 
-    private void createStaticBody(PolygonMapObject polygonMapObject) {
+    private void createMapObject(MapObject mapObject, String layer) {
+        switch (layer) {
+            case "player":
+                System.out.println("Today is Saturday");
+                break;
+            case "enemy":
+                System.out.println("Today is Saturday");
+                break;
+            case "platform":
+                if (mapObject instanceof PolygonMapObject) {
+                    createPlatform((PolygonMapObject) mapObject);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void createPlatform(PolygonMapObject polygonMapObject) {
+
         BodyDef bodyDef = new BodyDef();
+        Shape shape = createPolygonShape(polygonMapObject, bodyDef);
+
         bodyDef.type = BodyDef.BodyType.StaticBody;
         Body body = world.createBody(bodyDef);
-        Shape shape = createPolygonShape(polygonMapObject);
-        Platform platform = new Platform(body);
+
+        Platform platform = new Platform(body, polygonMapObject.getPolygon().getX() / PPM, polygonMapObject.getPolygon().getY()/ PPM);
+
         body.createFixture(shape, 10000).setUserData(platform.getId());
+
         gameObjects.put(platform.getId(), platform);
     }
 
-    private Shape createPolygonShape(PolygonMapObject polygonMapObject) {
+    private Shape createPolygonShape(PolygonMapObject polygonMapObject, BodyDef bodyDef) {
         float[] vertices = polygonMapObject.getPolygon().getTransformedVertices();
         Vector2[] worldVertices = new Vector2[vertices.length / 2];
-
         for (int i = 0; i < vertices.length / 2; i++) {
-            worldVertices[i] = new Vector2(vertices[i * 2] / TILESIZE, vertices[i * 2 + 1] / TILESIZE);
+            worldVertices[i] = new Vector2(vertices[i * 2] / PPM, vertices[i * 2 + 1] / PPM);
         }
-
         PolygonShape shape = new PolygonShape();
         shape.set(worldVertices);
         return shape;
@@ -82,5 +108,7 @@ public class Map {
     public float getHeight() {
         return this.height;
     }
+
+    public float getPPM() { return this.PPM; }
 
 }

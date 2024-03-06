@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="120" height="18" tilewidth="128" tileheight="128" infinite="0" nextlayerid="10" nextobjectid="71">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="120" height="18" tilewidth="128" tileheight="128" infinite="0" nextlayerid="11" nextobjectid="73">
  <tileset firstgid="1" name="gameart2d-desert" tilewidth="128" tileheight="128" tilecount="40" columns="5">
   <image source="gameart2d-desert.png" width="640" height="1024"/>
   <tile id="2">
@@ -38,10 +38,13 @@
  </layer>
  <objectgroup id="9" name="enemy">
   <object id="70" x="1280" y="2048">
-   <polygon points="0,0 0,-256 128,-256 128,0"/>
+   <polygon points="0,0 0,-128 128,-128 128,0"/>
+  </object>
+  <object id="71" x="126.667" y="2174.67">
+   <polygon points="0,0 0,-128 128,-128 128,0"/>
   </object>
  </objectgroup>
- <objectgroup id="3" name="ground">
+ <objectgroup id="3" name="platform">
   <object id="19" x="1536" y="1920">
    <polygon points="0,0 768,0 768,384 0,384"/>
   </object>
@@ -115,7 +118,7 @@
    <polygon points="0,0 256,0 256,56 132,94 -2,56"/>
   </object>
   <object id="48" x="2050" y="1152">
-   <polygon points="0,0 256,0 256,56 132,94 -2,56"/>
+   <polygon points="0,0 256,0 256,56 126.333,92.6667 -2,56"/>
   </object>
   <object id="49" x="2434" y="1280">
    <polygon points="0,0 256,0 256,56 132,94 -2,56"/>
@@ -141,7 +144,11 @@
   <object id="64" x="2816" y="1280">
    <polygon points="0,0 384,0 386,52 340,56 294,88 98,94 54,72 2,54"/>
   </object>
+  <object id="72" x="512" y="2048">
+   <polygon points="0,0 128,0 128,128 0,128"/>
+  </object>
  </objectgroup>
+ <objectgroup id="10" name="player"/>
  <objectgroup id="8" name="walls">
   <object id="60" x="0" y="2304">
    <polygon points="0,0 -128,0 -128,-3328 0,-3328"/>
