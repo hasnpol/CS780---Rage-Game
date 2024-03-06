@@ -27,7 +27,7 @@ public class PlayerModel extends Actors {
 
     public PlayerModel(Body body) {
         super(body);
-        stop =false;
+        stop = false;
         grounded = false;
         jumpPress = 0L;
     }

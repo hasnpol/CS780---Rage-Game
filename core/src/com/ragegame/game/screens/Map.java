@@ -1,6 +1,8 @@
 package com.ragegame.game.screens;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapProperties;
@@ -36,30 +38,56 @@ public class Map {
     }
 
     public OrthogonalTiledMapRenderer buildMap() {
+
         map = new TmxMapLoader().load("maps/desert/gameart2d-desert.tmx");
+
+
+        createMapLayers(map.getLayers());
+
         buildMapObject(map.getLayers().get("ground").getObjects());
         buildMapObject(map.getLayers().get("walls").getObjects());
+
         MapProperties properties = map.getProperties();
         this.width = properties.get("width", Integer.class);
         this.height = properties.get("height", Integer.class);
+
         return new OrthogonalTiledMapRenderer(map, 1/TILESIZE);
     }
 
-    private void buildMapObject(MapObjects mapObjects) {
-        for (MapObject mapObject : mapObjects) {
-            if (mapObject instanceof PolygonMapObject) {
-                createStaticBody((PolygonMapObject) mapObject);
+    private void createMapLayers(MapLayers layers) {
+        for (MapLayer mapLayer : layers) {
+            for (MapObject mapObject : mapLayer.getObjects()) {
+                createMapObject(mapObject, mapLayer.getName());
             }
         }
     }
 
-    private void createStaticBody(PolygonMapObject polygonMapObject) {
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.StaticBody;
-        Body body = world.createBody(bodyDef);
+    private void createMapObject(MapObject mapObject, String layer) {
+        switch (layer) {
+            case "player":
+                System.out.println("Today is Saturday");
+                break;
+            case "platform":
+                createPlatform((PolygonMapObject) mapObject);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void createPlatform(PolygonMapObject polygonMapObject) {
+
         Shape shape = createPolygonShape(polygonMapObject);
+        BodyDef bodyDef = new BodyDef();
+
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        //bodyDef.position = polygonMapObject.getPolygon().getVertex(1, new Vector2());
+        Body body = world.createBody(bodyDef);
+
         Platform platform = new Platform(body);
+
         body.createFixture(shape, 10000).setUserData(platform.getId());
+
         gameObjects.put(platform.getId(), platform);
     }
 
