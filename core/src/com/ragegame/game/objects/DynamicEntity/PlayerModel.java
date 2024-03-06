@@ -26,6 +26,7 @@ public class PlayerModel extends DynamicEntity {
 
     long jumpPress;
     boolean sprint;
+    boolean dead;
 
     public PlayerContactHandler playerContactHandler;
     public PlayerModel(Body body) {
@@ -34,6 +35,7 @@ public class PlayerModel extends DynamicEntity {
         grounded = false;
         jumpPress = 0L;
         sprint = false;
+        dead = false;
 
         playerContactHandler = new PlayerContactHandler(this);
     }
@@ -41,6 +43,7 @@ public class PlayerModel extends DynamicEntity {
     //Look at your numpad for values for directions.
     // This is called numpad notation btw and is common in fighting game discourse
     public void move(int direction) {
+        if (dead) return;
         switch (direction) {
             case 6:
                 stop = false;
@@ -62,10 +65,12 @@ public class PlayerModel extends DynamicEntity {
     }
 
     public void jumpStart() {
+        if (dead) return;
         jumpPress = System.currentTimeMillis();
     }
 
     public void jumpEnd() {
+        if (dead) return;
         if (grounded) {
             getBody().applyLinearImpulse(new Vector2(0,  Math.min(8f, (System.currentTimeMillis() - jumpPress) * 0.01f)),
                     getBody().getPosition(), true);
@@ -82,6 +87,10 @@ public class PlayerModel extends DynamicEntity {
             } else if (velocity.x < -MAXSPEED) {
                 getBody().setLinearVelocity(-MAXSPEED, velocity.y);
             }
+        }
+
+        if (getBody().getPosition().y < 0) {
+            dead = true;
         }
     }
 
