@@ -17,12 +17,16 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.ragegame.game.handlers.BackgroundHandler;
 import com.ragegame.game.handlers.CameraHandler;
 import com.ragegame.game.handlers.ContactHandler;
+import com.ragegame.game.handlers.EnemyHandler;
 import com.ragegame.game.handlers.InputHandler;
 import com.ragegame.game.handlers.PhysicsHandler;
 import com.ragegame.game.objects.actors.Actors;
 import com.ragegame.game.objects.actors.PlayerModel;
+import com.ragegame.game.objects.actors.EnemyModel;
+import com.ragegame.game.objects.view.View;
 import com.ragegame.game.screens.Map;
 
+import java.awt.Graphics;
 import java.util.UUID;
 
 public class RageGame extends ApplicationAdapter {
@@ -34,8 +38,13 @@ public class RageGame extends ApplicationAdapter {
 	private Map gameMap;
 	private ObjectMap<UUID, Actors> gameObjectsToDestroy;
 	private ObjectMap<UUID, Actors> gameObjects;
-	private int screenHeight, screenWidth;
+	public int screenHeight, screenWidth;
 	private PlayerModel playerModel;
+	private View playerView;
+	private EnemyModel enemyModel;
+	private View enemyView;
+
+	private EnemyHandler enemyHandler;
 	private PhysicsHandler physicsHandler;
 	private CameraHandler cameraHandler;
 	private BackgroundHandler backgroundHandler;
@@ -64,7 +73,9 @@ public class RageGame extends ApplicationAdapter {
 		gameObjects = new ObjectMap<>();
 		this.gameMap = new Map(world, gameObjects);
 		this.orthogonalTiledMapRenderer = gameMap.buildMap();
+		enemyHandler = new EnemyHandler();
 		createPlayer();
+		createEnemy();
 
 		// Handle InputProcessor and Contact Listener and Physics Handler
 		InputHandler inputHandler = new InputHandler(playerModel);
@@ -76,8 +87,7 @@ public class RageGame extends ApplicationAdapter {
 	}
 
 	@Override
-	public void render () {
-
+	public void render() {
 		float dt = Gdx.graphics.getDeltaTime();
 
 		// Clear previous images drawn to the screen
@@ -88,7 +98,7 @@ public class RageGame extends ApplicationAdapter {
 
 		// Draw the background
 		batch.begin();
-		backgroundHandler.render(dt, batch);
+		backgroundHandler.render(dt, batch, gameMap.getWidth(), gameMap.getHeight(), gameMap.getPPM());
 		batch.end(); // doing this so that the background is drawn before gameMap don't change this
 
 		// Setup for tiled gameMap to be drawn
@@ -98,6 +108,8 @@ public class RageGame extends ApplicationAdapter {
 		// Draw the tiled gameMap
 		batch.begin();
 		orthogonalTiledMapRenderer.render();
+		enemyView.render(dt);
+		playerView.render(dt);
 		batch.end();
 
 		// Physics
@@ -111,7 +123,6 @@ public class RageGame extends ApplicationAdapter {
 
 
 	private void createPlayer() {
-
 		BodyDef playerBodyDef = new BodyDef();
 		playerBodyDef.type = BodyDef.BodyType.DynamicBody;
 		playerBodyDef.position.set(new Vector2(0, 10f));
@@ -121,6 +132,7 @@ public class RageGame extends ApplicationAdapter {
 		playerBox.setAsBox(0.25f, 0.5f);
 
 		playerModel = new PlayerModel(playerBody);
+		playerView = new View(playerModel, batch);
 		gameObjects.put(playerModel.getId(), playerModel);
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = playerBox;
@@ -131,10 +143,34 @@ public class RageGame extends ApplicationAdapter {
 		playerBox.dispose();
 	}
 
+	private void createEnemy() {
+		BodyDef enemyBodyDef = new BodyDef();
+		enemyBodyDef.type = BodyDef.BodyType.DynamicBody;
+		enemyBodyDef.position.set(new Vector2(10, 10f));
+
+		Body enemyBody = world.createBody(enemyBodyDef);
+		PolygonShape enemyBox = new PolygonShape();
+		enemyBox.setAsBox(0.25f, 0.5f);
+
+		enemyModel = new EnemyModel(enemyBody);
+		enemyView = new View(enemyModel, batch);
+
+		gameObjects.put(enemyModel.getId(), enemyModel);
+		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef.shape = enemyBox;
+		fixtureDef.density = 2f;  // more density -> bigger mass for the same size
+		fixtureDef.friction = 1;
+
+		enemyBody.createFixture(fixtureDef).setUserData(enemyModel.getId());
+		enemyBox.dispose();
+	}
+
 	@Override
 	public void dispose () {
 		batch.dispose();
 		backgroundHandler.dispose();
+		enemyView.dispose();
+		playerView.dispose();
 		orthogonalTiledMapRenderer.dispose();
 	}
 

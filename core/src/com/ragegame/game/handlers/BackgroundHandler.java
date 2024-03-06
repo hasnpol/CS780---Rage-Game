@@ -15,20 +15,19 @@ public class BackgroundHandler {
         backgrounds.add(new Texture(Gdx.files.internal("maps/desert/BG.png")));
     }
 
-    public void render(float deltaTime, SpriteBatch batch) {
-        float worldHeight = 18 * 32;
-        float worldWidth = 128 * 32;
+    public void render(float deltaTime, SpriteBatch batch, float worldWidth, float worldHeight, float PPM) {
+        worldHeight *= PPM;
+        worldWidth *= PPM;
 
         backgroundOffsets.clear();
-
         backgroundOffsets.add(deltaTime * 1);
 
         for (int i = 0; i < backgroundOffsets.size(); i++) {
             if (backgroundOffsets.get(i) > worldHeight) {
                 backgroundOffsets.set(i, 0f);
             }
-            batch.draw(backgrounds.get(i), 0, -backgroundOffsets.get(i), worldWidth/32f, worldHeight/32f);
-            batch.draw(backgrounds.get(i), 0, -backgroundOffsets.get(i) + (worldWidth/32f), worldWidth/32f, worldHeight/32f);
+            batch.draw(backgrounds.get(i), 0, -backgroundOffsets.get(i), worldWidth/PPM, worldHeight/PPM);
+            batch.draw(backgrounds.get(i), 0, -backgroundOffsets.get(i) + (worldWidth/PPM), worldWidth/PPM, worldHeight/PPM);
         }
 
     }
@@ -38,6 +37,5 @@ public class BackgroundHandler {
             backgrounds.get(i).dispose();
         }
     }
-
 
 }

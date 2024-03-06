@@ -2,10 +2,9 @@ package com.ragegame.game.objects.actors;
 
 import static java.lang.Math.min;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-
+import static com.ragegame.game.utils.Constants.EntityType.*;
 
 public class PlayerModel extends Actors {
     float DRAG = 3f;
@@ -26,7 +25,7 @@ public class PlayerModel extends Actors {
     long jumpPress;
 
     public PlayerModel(Body body) {
-        super(body);
+        super(body, PLAYER);
         stop = false;
         grounded = false;
         jumpPress = 0L;

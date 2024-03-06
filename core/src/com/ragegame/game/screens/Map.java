@@ -1,10 +1,8 @@
 package com.ragegame.game.screens;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -28,7 +26,7 @@ public class Map {
     private World world;
     private float width;
     private float height;
-    private final float TILESIZE = 128f;
+    public float PPM = 128f;
 
     public ObjectMap<UUID, Actors> gameObjects;
 
@@ -41,17 +39,13 @@ public class Map {
 
         map = new TmxMapLoader().load("maps/desert/gameart2d-desert.tmx");
 
-
         createMapLayers(map.getLayers());
-
-        buildMapObject(map.getLayers().get("ground").getObjects());
-        buildMapObject(map.getLayers().get("walls").getObjects());
 
         MapProperties properties = map.getProperties();
         this.width = properties.get("width", Integer.class);
         this.height = properties.get("height", Integer.class);
 
-        return new OrthogonalTiledMapRenderer(map, 1/TILESIZE);
+        return new OrthogonalTiledMapRenderer(map, 1/PPM);
     }
 
     private void createMapLayers(MapLayers layers) {
@@ -94,11 +88,9 @@ public class Map {
     private Shape createPolygonShape(PolygonMapObject polygonMapObject) {
         float[] vertices = polygonMapObject.getPolygon().getTransformedVertices();
         Vector2[] worldVertices = new Vector2[vertices.length / 2];
-
         for (int i = 0; i < vertices.length / 2; i++) {
-            worldVertices[i] = new Vector2(vertices[i * 2] / TILESIZE, vertices[i * 2 + 1] / TILESIZE);
+            worldVertices[i] = new Vector2(vertices[i * 2] / PPM, vertices[i * 2 + 1] / PPM);
         }
-
         PolygonShape shape = new PolygonShape();
         shape.set(worldVertices);
         return shape;
@@ -111,5 +103,7 @@ public class Map {
     public float getHeight() {
         return this.height;
     }
+
+    public float getPPM() {return this.PPM; }
 
 }
