@@ -1,4 +1,4 @@
-package com.ragegame.game.objects.actors;
+package com.ragegame.game.objects.DynamicEntity;
 
 import static java.lang.Math.min;
 
@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import static com.ragegame.game.utils.Constants.EntityType.*;
 
-public class PlayerModel extends Actors {
+public class PlayerModel extends DynamicEntity {
     float DRAG = 3f;
     boolean stop;
 

@@ -15,8 +15,8 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.ragegame.game.objects.actors.Actors;
-import com.ragegame.game.objects.actors.Platform;
+import com.ragegame.game.objects.Entity;
+import com.ragegame.game.objects.StaticEntity.Platform;
 
 import java.util.UUID;
 
@@ -28,9 +28,9 @@ public class Map {
     private float height;
     public float PPM = 128f;
 
-    public ObjectMap<UUID, Actors> gameObjects;
+    public ObjectMap<UUID, Entity> gameObjects;
 
-    public Map(World world, ObjectMap<UUID, Actors> gameObjects) {
+    public Map(World world, ObjectMap<UUID, Entity> gameObjects) {
         this.world = world;
         this.gameObjects = gameObjects;
     }

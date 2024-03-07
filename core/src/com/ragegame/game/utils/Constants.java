@@ -14,10 +14,10 @@ public class Constants {
         public Object getSubType() {return subType;}
     }
 
-    public enum EnemyType {RUSSIAN, SOLDIER, SNIPER;}
+    public enum EnemyType {SOLDIER, SNIPER;}
     public static class EnemyConstants {
         // Enum Enemy Type
-        public static final int RUSSIAN = 0;
+        public static final int SOLDIER = 0;
 
         // Enemy State
         public static final int IDLE = 0;
@@ -26,16 +26,16 @@ public class Constants {
         public static final int HIT = 3;
         public static final int DEAD = 4;
 
-        // Values for RUSSIAN
-        public static final int RUSSIAN_WIDTH_DEFAULT = 72;
-        public static final int RUSSIAN_HEIGHT_DEFAULT = 32;
+        // Values for SOLDIER
+        public static final int SOLDIER_WIDTH_DEFAULT = 72;
+        public static final int SOLDIER_HEIGHT_DEFAULT = 32;
 
-        public static final int RUSSIAN_WIDTH = (int) (RUSSIAN_WIDTH_DEFAULT * Game.SCALE);
-        public static final int RUSSIAN_HEIGHT = (int) (RUSSIAN_HEIGHT_DEFAULT * Game.SCALE);
+        public static final int SOLDIER_WIDTH = (int) (SOLDIER_WIDTH_DEFAULT * Game.SCALE);
+        public static final int SOLDIER_HEIGHT = (int) (SOLDIER_HEIGHT_DEFAULT * Game.SCALE);
 
         public static int GetSpriteAmount(int enemy_type, int enemy_state) {
             switch(enemy_type) {
-                case RUSSIAN:
+                case SOLDIER:
                     switch (enemy_type) {
                         case IDLE:
                             return 9;
