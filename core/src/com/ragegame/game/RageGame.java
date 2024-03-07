@@ -14,13 +14,17 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ScreenUtils;
+
 import com.ragegame.game.handlers.BackgroundHandler;
 import com.ragegame.game.handlers.CameraHandler;
 import com.ragegame.game.handlers.ContactHandler;
 import com.ragegame.game.handlers.InputHandler;
 import com.ragegame.game.handlers.PhysicsHandler;
-import com.ragegame.game.objects.actors.Actors;
-import com.ragegame.game.objects.actors.PlayerModel;
+import com.ragegame.game.objects.DynamicEntity.PlayerModel;
+import com.ragegame.game.objects.Entity;
+import com.ragegame.game.objects.DynamicEntity.EnemyModel;
+import com.ragegame.game.objects.view.View;
+
 import com.ragegame.game.screens.Map;
 
 import java.util.UUID;
@@ -30,12 +34,16 @@ public class RageGame extends ApplicationAdapter {
 	private SpriteBatch batch;
 	public static World world;
 	private Box2DDebugRenderer debugRenderer;
-	private OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;
 	private Map gameMap;
-	private ObjectMap<UUID, Actors> gameObjectsToDestroy;
-	private ObjectMap<UUID, Actors> gameObjects;
+
+	private ObjectMap<UUID, Entity> gameObjectsToDestroy;
+	private ObjectMap<UUID, Entity> gameObjects;
 	private int screenHeight, screenWidth;
-	private PlayerModel playerModel;
+
+	//private PlayerModel playerModel;
+	//private View playerView;
+	////private EnemyModel enemyModel;
+	//private View enemyView;
 	private PhysicsHandler physicsHandler;
 	private CameraHandler cameraHandler;
 	private BackgroundHandler backgroundHandler;
@@ -62,12 +70,10 @@ public class RageGame extends ApplicationAdapter {
 		// Init game objects
 		gameObjectsToDestroy = new ObjectMap<>();
 		gameObjects = new ObjectMap<>();
-		this.gameMap = new Map(world, gameObjects);
-		this.orthogonalTiledMapRenderer = gameMap.buildMap();
-		createPlayer();
+		this.gameMap = new Map(world, gameObjects, batch, camera);
 
 		// Handle InputProcessor and Contact Listener and Physics Handler
-		InputHandler inputHandler = new InputHandler(playerModel);
+		InputHandler inputHandler = new InputHandler(gameMap.playerModel);
 		Gdx.input.setInputProcessor(inputHandler);
 		ContactHandler contactHandler = new ContactHandler(world, gameObjects);
 		world.setContactListener(contactHandler);
@@ -76,66 +82,42 @@ public class RageGame extends ApplicationAdapter {
 	}
 
 	@Override
-	public void render () {
-
+	public void render() {
 		float dt = Gdx.graphics.getDeltaTime();
 
 		// Clear previous images drawn to the screen
 		ScreenUtils.clear(0, 0, 0, 1);
 
 		// Handle camera logic so that camera follows player within gameMap bounds
-		cameraHandler.snapToPlayer(playerModel.getBody().getPosition(), gameMap.getWidth(), gameMap.getHeight());
+		cameraHandler.snapToPlayer(gameMap.playerModel.getBody().getPosition(), gameMap.getWidth(), gameMap.getHeight());
 
 		// Draw the background
 		batch.begin();
-		backgroundHandler.render(dt, batch);
+		backgroundHandler.render(dt, batch, gameMap.getWidth(), gameMap.getHeight(), gameMap.getPPM());
 		batch.end(); // doing this so that the background is drawn before gameMap don't change this
 
 		// Setup for tiled gameMap to be drawn
 		batch.setProjectionMatrix(camera.combined);
-		orthogonalTiledMapRenderer.setView(camera);
 
 		// Draw the tiled gameMap
 		batch.begin();
-		orthogonalTiledMapRenderer.render();
+		gameMap.render(dt);
 		batch.end();
 
 		// Physics
 		world.clearForces();
-		playerModel.update();
+		gameMap.playerModel.update();
 		physicsHandler.applyForces();
 		physicsHandler.doPhysicsStep(dt);
-		debugRenderer.render(world, camera.combined);
+		//debugRenderer.render(world, camera.combined);
 
-	}
-
-
-	private void createPlayer() {
-
-		BodyDef playerBodyDef = new BodyDef();
-		playerBodyDef.type = BodyDef.BodyType.DynamicBody;
-		playerBodyDef.position.set(new Vector2(0, 10f));
-
-		Body playerBody = world.createBody(playerBodyDef);
-		PolygonShape playerBox = new PolygonShape();
-		playerBox.setAsBox(0.25f, 0.5f);
-
-		playerModel = new PlayerModel(playerBody);
-		gameObjects.put(playerModel.getId(), playerModel);
-		FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.shape = playerBox;
-		fixtureDef.density = 2f;  // more density -> bigger mass for the same size
-		fixtureDef.friction = 0;
-		playerBody.setFixedRotation(true);
-		playerBody.createFixture(fixtureDef).setUserData(playerModel.getId());
-		playerBox.dispose();
 	}
 
 	@Override
 	public void dispose () {
 		batch.dispose();
 		backgroundHandler.dispose();
-		orthogonalTiledMapRenderer.dispose();
+		gameMap.dispose();
 	}
 
 }
