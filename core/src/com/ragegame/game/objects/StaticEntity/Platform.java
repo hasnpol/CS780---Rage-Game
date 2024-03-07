@@ -12,4 +12,5 @@ public class Platform extends StaticEntity {
         this.x = x;
         this.y = y;
     }
+
 }

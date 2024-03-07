@@ -6,13 +6,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
+import com.ragegame.game.objects.DynamicEntity.DynamicEntity;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.utils.HelpMethods;
 
 import java.util.Arrays;
 
 public class View {
-    private final Entity model;
+    private final DynamicEntity model;
     private final SpriteBatch batch;
     private final Array<Array<Sprite>> animationFrames;
     TextureAtlas textureAtlas;
@@ -23,7 +24,7 @@ public class View {
 
     final float animationFrameDuration= 0.5F;
 
-    public View(Entity model, SpriteBatch batch) {
+    public View(DynamicEntity model, SpriteBatch batch) {
         this.model = model;
         this.batch = batch;
         String[] texturePaths = HelpMethods.GetTextureAtlas(model.type);

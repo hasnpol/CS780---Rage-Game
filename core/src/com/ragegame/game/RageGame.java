@@ -34,17 +34,16 @@ public class RageGame extends ApplicationAdapter {
 	private SpriteBatch batch;
 	public static World world;
 	private Box2DDebugRenderer debugRenderer;
-	private OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;
 	private Map gameMap;
 
 	private ObjectMap<UUID, Entity> gameObjectsToDestroy;
 	private ObjectMap<UUID, Entity> gameObjects;
 	private int screenHeight, screenWidth;
 
-	private PlayerModel playerModel;
-	private View playerView;
-	private EnemyModel enemyModel;
-	private View enemyView;
+	//private PlayerModel playerModel;
+	//private View playerView;
+	////private EnemyModel enemyModel;
+	//private View enemyView;
 	private PhysicsHandler physicsHandler;
 	private CameraHandler cameraHandler;
 	private BackgroundHandler backgroundHandler;
@@ -71,14 +70,10 @@ public class RageGame extends ApplicationAdapter {
 		// Init game objects
 		gameObjectsToDestroy = new ObjectMap<>();
 		gameObjects = new ObjectMap<>();
-		this.gameMap = new Map(world, gameObjects);
-		this.orthogonalTiledMapRenderer = gameMap.buildMap();
-
-		createPlayer();
-		createEnemy();
+		this.gameMap = new Map(world, gameObjects, batch, camera);
 
 		// Handle InputProcessor and Contact Listener and Physics Handler
-		InputHandler inputHandler = new InputHandler(playerModel);
+		InputHandler inputHandler = new InputHandler(gameMap.playerModel);
 		Gdx.input.setInputProcessor(inputHandler);
 		ContactHandler contactHandler = new ContactHandler(world, gameObjects);
 		world.setContactListener(contactHandler);
@@ -94,7 +89,7 @@ public class RageGame extends ApplicationAdapter {
 		ScreenUtils.clear(0, 0, 0, 1);
 
 		// Handle camera logic so that camera follows player within gameMap bounds
-		cameraHandler.snapToPlayer(playerModel.getBody().getPosition(), gameMap.getWidth(), gameMap.getHeight());
+		cameraHandler.snapToPlayer(gameMap.playerModel.getBody().getPosition(), gameMap.getWidth(), gameMap.getHeight());
 
 		// Draw the background
 		batch.begin();
@@ -103,74 +98,26 @@ public class RageGame extends ApplicationAdapter {
 
 		// Setup for tiled gameMap to be drawn
 		batch.setProjectionMatrix(camera.combined);
-		orthogonalTiledMapRenderer.setView(camera);
 
 		// Draw the tiled gameMap
 		batch.begin();
-		orthogonalTiledMapRenderer.render();
-		playerView.render(dt);
-		enemyView.render(dt);
+		gameMap.render(dt);
 		batch.end();
 
 		// Physics
 		world.clearForces();
-		playerModel.update();
+		gameMap.playerModel.update();
 		physicsHandler.applyForces();
 		physicsHandler.doPhysicsStep(dt);
-		debugRenderer.render(world, camera.combined);
+		//debugRenderer.render(world, camera.combined);
 
-	}
-
-
-	private void createPlayer() {
-		BodyDef playerBodyDef = new BodyDef();
-		playerBodyDef.type = BodyDef.BodyType.DynamicBody;
-		playerBodyDef.position.set(new Vector2(0, 10f));
-
-		Body playerBody = world.createBody(playerBodyDef);
-		PolygonShape playerBox = new PolygonShape();
-		playerBox.setAsBox(0.25f, 0.5f);
-
-		playerModel = new PlayerModel(playerBody);
-		playerView = new View(playerModel, batch);
-		gameObjects.put(playerModel.getId(), playerModel);
-		FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.shape = playerBox;
-		fixtureDef.density = 2f;  // more density -> bigger mass for the same size
-		fixtureDef.friction = 0;
-		playerBody.setFixedRotation(true);
-		playerBody.createFixture(fixtureDef).setUserData(playerModel.getId());
-		playerBox.dispose();
-	}
-
-	private void createEnemy() {
-		BodyDef enemyBodyDef = new BodyDef();
-		enemyBodyDef.type = BodyDef.BodyType.DynamicBody;
-		enemyBodyDef.position.set(new Vector2(10, 10f));
-
-		Body enemyBody = world.createBody(enemyBodyDef);
-		PolygonShape enemyBox = new PolygonShape();
-		enemyBox.setAsBox(0.25f, 0.5f);
-
-		enemyModel = new EnemyModel(enemyBody);
-		enemyView = new View(enemyModel, batch);
-
-		gameObjects.put(enemyModel.getId(), enemyModel);
-		FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.shape = enemyBox;
-		fixtureDef.density = 2f;  // more density -> bigger mass for the same size
-		fixtureDef.friction = 1;
-
-		enemyBody.createFixture(fixtureDef).setUserData(enemyModel.getId());
-		enemyBox.dispose();
 	}
 
 	@Override
 	public void dispose () {
 		batch.dispose();
 		backgroundHandler.dispose();
-		playerView.dispose();
-		orthogonalTiledMapRenderer.dispose();
+		gameMap.dispose();
 	}
 
 }
