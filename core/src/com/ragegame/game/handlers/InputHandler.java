@@ -20,6 +20,8 @@ public class InputHandler implements InputProcessor {
             playerModel.setMovementVector(new Vector2(-1, 0));
         } else if (keycode == Input.Keys.SPACE) {
             playerModel.jumpStart();
+        } else if (keycode == Input.Keys.SHIFT_LEFT) {
+            playerModel.sprint();
         }
         return false;
     }
@@ -29,6 +31,8 @@ public class InputHandler implements InputProcessor {
             playerModel.move(5);
         } else if (keycode == Input.Keys.SPACE) {
             playerModel.jumpEnd();
+        } else if (keycode == Input.Keys.SHIFT_LEFT) {
+            playerModel.sprint();
         }
         playerModel.setMovementVector(new Vector2(0, 0));
         return false;
