@@ -14,15 +14,13 @@ import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import java.util.UUID;
 
 public class ContactHandler implements ContactListener {
-
     World world;
     ObjectMap<UUID, Entity> gameObjects;
+
     public ContactHandler(World world, ObjectMap<UUID, Entity> objectMap) {
         this.world = world;
         this.gameObjects = objectMap;
     }
-
-
 
     @Override
     public void beginContact(Contact contact) {
@@ -46,15 +44,13 @@ public class ContactHandler implements ContactListener {
 
         if (objB instanceof PlayerModel) {
             PlayerModel playerModel = (PlayerModel) objB;
-            playerModel.playerContactHandler.startContact(objA);
+            playerModel.playerContactHandler.startContact(objA, world);
         }
 
         if (objA instanceof PlayerModel) {
             PlayerModel playerModel = (PlayerModel) objA;
-            playerModel.playerContactHandler.startContact(objB);
+            playerModel.playerContactHandler.startContact(objB, world);
         }
-
-
 
     }
 
@@ -80,12 +76,12 @@ public class ContactHandler implements ContactListener {
 
         if (objB instanceof PlayerModel) {
             PlayerModel playerModel = (PlayerModel) objB;
-            playerModel.playerContactHandler.endContact(objA);
+            playerModel.playerContactHandler.endContact(objA, world);
         }
 
         if (objA instanceof PlayerModel) {
             PlayerModel playerModel = (PlayerModel) objA;
-            playerModel.playerContactHandler.endContact(objB);
+            playerModel.playerContactHandler.endContact(objB, world);
         }
 
     }

@@ -107,7 +107,7 @@ public class GameScreen implements Screen {
 		this.gameMap.playerModel.update();
 		this.physicsHandler.applyForces();
 		this.physicsHandler.doPhysicsStep(dt);
-		//debugRenderer.render(world, camera.combined);
+		debugRenderer.render(world, camera.combined);
     }
 
     @Override

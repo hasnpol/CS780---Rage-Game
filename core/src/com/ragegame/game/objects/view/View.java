@@ -7,9 +7,12 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.ragegame.game.objects.DynamicEntity.DynamicEntity;
+import com.ragegame.game.objects.DynamicEntity.EnemyModel;
+import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.utils.HelpMethods;
 
+import java.text.BreakIterator;
 import java.util.Arrays;
 
 public class View {
@@ -40,6 +43,22 @@ public class View {
     }
 
     public void render(float dt) {
+        if (model instanceof PlayerModel) {
+            PlayerModel playerModel;
+            playerModel = (PlayerModel) model;
+            if (playerModel.isDead()) {
+                return;
+            }
+        }
+
+        if (model instanceof EnemyModel) {
+            EnemyModel enemyModel;
+            enemyModel = (EnemyModel) model;
+            if (enemyModel.isDead()) {
+                return;
+            }
+        }
+
         int nextAnimationSequence = getAnimationSequenceFromMovementDirection();
         if (currentAnimationSequence != nextAnimationSequence) {
             Array<Sprite> spriteList = animationFrames.get(nextAnimationSequence);
