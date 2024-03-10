@@ -54,7 +54,6 @@ public class RageGame extends Game {
 
 	@Override
 	public void dispose () {
-
 	}
 
 }

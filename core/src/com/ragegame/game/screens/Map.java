@@ -51,7 +51,7 @@ public class Map {
         this.batch = batch;
         this.camera = camera;
 
-        map = new TmxMapLoader().load("maps/desert/gameart2d-desert.tmx");
+        map = new TmxMapLoader().load("maps/level_1/level_1.tmx");
 
         MapProperties properties = map.getProperties();
         this.width = properties.get("width", Integer.class);
@@ -108,7 +108,7 @@ public class Map {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = playerBox;
         fixtureDef.density = 2f;  // more density -> bigger mass for the same size
-        fixtureDef.friction = 0;
+        fixtureDef.friction = 1;
         playerBody.setFixedRotation(true);
         playerBody.createFixture(fixtureDef).setUserData(playerModel.getId());
         playerBox.dispose();
@@ -128,7 +128,7 @@ public class Map {
 		View enemyView = new View(enemyModel, batch);
         enemyModel.setView(enemyView);
 
-		gameObjects.put(enemyModel.getId(), enemyModel);
+        gameObjects.put(enemyModel.getId(), enemyModel);
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = enemyBox;
 		fixtureDef.density = 2f;  // more density -> bigger mass for the same size
@@ -189,7 +189,6 @@ public class Map {
     public void dispose() {
         this.orthogonalTiledMapRenderer.dispose();
         disposeDynamicEntities();
-
     }
 
     public float getWidth() {

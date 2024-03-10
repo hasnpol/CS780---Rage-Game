@@ -86,6 +86,6 @@ public class Constants {
     }
 
     public static class Game {
-        public static final int SCALE = 1/128;
+        public static final int SCALE = 1/16;
     }
 }
