@@ -1,12 +1,13 @@
-package com.ragegame.game.objects.actors;
-
-import static java.lang.Math.min;
-
+package com.ragegame.game.objects.DynamicEntity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import static com.ragegame.game.utils.Constants.EntityType.*;
+import com.ragegame.game.utils.Constants;
 
-public class PlayerModel extends Actors {
+import static com.ragegame.game.utils.Constants.EntityType.*;
+import static com.ragegame.game.utils.Constants.PlayerConstants.*;
+import static com.ragegame.game.utils.Constants.*;
+
+public class PlayerModel extends DynamicEntity {
     float DRAG = 3f;
     boolean stop;
 
@@ -20,9 +21,14 @@ public class PlayerModel extends Actors {
     }
 
     public boolean grounded;
-    final float MAXSPEED = 8f;
 
     long jumpPress;
+
+    private Direction direction = Direction.RIGHT;
+
+    public Direction getDirection() {
+        return this.direction;
+    }
 
     public PlayerModel(Body body) {
         super(body, PLAYER);
@@ -38,11 +44,13 @@ public class PlayerModel extends Actors {
             case 6:
                 stop = false;
                 setForce(new Vector2(15, 0));
+                this.direction = Direction.LEFT;
                 break;
 
             case 4:
                 stop = false;
                 setForce(new Vector2(-15, 0));
+                this.direction = Direction.RIGHT;
                 break;
 
             case 5:
@@ -60,7 +68,7 @@ public class PlayerModel extends Actors {
 
     public void jumpEnd() {
         if (grounded) {
-            getBody().applyLinearImpulse(new Vector2(0,  Math.min(6f, (System.currentTimeMillis() - jumpPress) * 0.01f)),
+            getBody().applyLinearImpulse(new Vector2(0,  Math.min(8f, (System.currentTimeMillis() - jumpPress) * 0.01f)),
                     getBody().getPosition(), true);
         }
     }
@@ -68,7 +76,7 @@ public class PlayerModel extends Actors {
     public void update() {
         Vector2 velocity = getBody().getLinearVelocity();
         if (stop) {
-            setForce(velocity.set(velocity.x * -DRAG, velocity.y));
+            setForce(velocity.set(velocity.x * -DRAG, 0));
         } else {
             if (velocity.x > MAXSPEED) {
                 getBody().setLinearVelocity(MAXSPEED, velocity.y);

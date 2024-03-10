@@ -1,22 +1,23 @@
-package com.ragegame.game.objects.actors;
+package com.ragegame.game.objects;
+
 import java.awt.Graphics;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.ragegame.game.utils.Constants.*;
-
 import java.awt.Color;
 import java.awt.geom.Rectangle2D;
 import java.util.UUID;
 
-public class Actors {
+public class Entity {
     /// This super class is used for game objects that has physics
     public final EntityType type;
     private final Body body;
     protected Rectangle2D.Float hitbox;
     private UUID id;
     private Vector2 force;
+
     private Vector2 movementVector = new Vector2(0, 0);
-    public Actors(Body body, EntityType type) {
+    public Entity(Body body, EntityType type) {
         this.body = body;
         this.force = new Vector2();
         this.id = UUID.randomUUID();
@@ -57,11 +58,6 @@ public class Actors {
     protected void initHitbox(float x, float y, int width, int height) {
         hitbox = new Rectangle2D.Float(x, y, width, height);
     }
-
-    //	protected void updateHitbox() {
-    //		hitbox.x = (int) x;
-    //		hitbox.y = (int) y;
-    //	}
 
     public Rectangle2D.Float getHitbox() {
         return hitbox;

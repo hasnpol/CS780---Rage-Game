@@ -1,68 +1,89 @@
 human_walk_sheet_directional.png
-size: 200, 100
+size: 250, 100
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-human_0
+human_left
   rotate: false
   xy: 0, 0
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 0
-human_0
+human_left
   rotate: false
   xy: 50, 0
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 1
-human_0
+human_left
   rotate: false
   xy: 100, 0
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 2
-human_0
+human_left
   rotate: false
   xy: 150, 0
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 3
-human_1
+human_left_idle
   rotate: false
   xy: 50, 0
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 0
-human_2
+human_left_jump
+  rotate: false
+  xy: 200, 0
+  size: 50, 50
+  orig: 50, 50
+  offset: 0, 0
+  index: 0
+human_right
   rotate: false
   xy: 0, 50
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 0
-human_2
+human_right
   rotate: false
   xy: 50, 50
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 1
-human_2
+human_right
   rotate: false
   xy: 100, 50
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 2
-human_2
+human_right
   rotate: false
   xy: 150, 50
   size: 50, 50
   orig: 50, 50
   offset: 0, 0
   index: 3
+human_right_idle
+  rotate: false
+  xy: 50, 50
+  size: 50, 50
+  orig: 50, 50
+  offset: 0, 0
+  index: 0
+human_right_jump
+  rotate: false
+  xy: 200, 50
+  size: 50, 50
+  orig: 50, 50
+  offset: 0, 0
+  index: 0

@@ -1,7 +1,9 @@
-package com.ragegame.game.objects.actors;
+package com.ragegame.game.objects.DynamicEntity;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.ragegame.game.objects.Entity;
+
 import static com.ragegame.game.utils.Constants.EntityType.*;
 
 import static com.ragegame.game.utils.Constants.EnemyConstants.*;
@@ -9,7 +11,7 @@ import static com.ragegame.game.utils.Constants.EnemyConstants.*;
 // https://www.youtube.com/watch?v=N7zib3qm5Oc&t=264s
 
 
-public abstract class Enemy extends Actors {
+public abstract class Enemy extends Entity {
     public Body b2body;
     private int aniIndex, enemyState, enemyType;
     private int aniTick, aniSpeed = 25;

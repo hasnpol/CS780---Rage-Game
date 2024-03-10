@@ -1,10 +1,10 @@
-package com.ragegame.game.objects.actors;
+package com.ragegame.game.objects.DynamicEntity;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import static com.ragegame.game.utils.Constants.EntityType.*;
 
-public class EnemyModel extends Actors {
+public class EnemyModel extends DynamicEntity {
 
     private Vector2 position;
     private int health;

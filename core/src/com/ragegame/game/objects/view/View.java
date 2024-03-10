@@ -5,17 +5,17 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
-import com.ragegame.game.objects.actors.Actors;
-import com.ragegame.game.objects.actors.EnemyModel;
+import com.ragegame.game.objects.DynamicEntity.EnemyModel;
+import com.ragegame.game.objects.DynamicEntity.PlayerModel;
+import com.ragegame.game.objects.Entity;
+import com.ragegame.game.utils.Constants;
 import com.ragegame.game.utils.HelpMethods;
-import com.ragegame.game.utils.LoadSave;
 
 import java.util.Arrays;
 
 public class View {
-    private final Actors model;
+    private final Entity model;
     private final SpriteBatch batch;
     private final Array<Array<Sprite>> animationFrames;
     TextureAtlas textureAtlas;
@@ -26,7 +26,7 @@ public class View {
 
     final float animationFrameDuration= 0.5F;
 
-    public View(Actors model, SpriteBatch batch) {
+    public View(Entity model, SpriteBatch batch) {
         this.model = model;
         this.batch = batch;
         String[] texturePaths = HelpMethods.GetTextureAtlas(model.type);
@@ -34,7 +34,7 @@ public class View {
         this.textureAtlas = new TextureAtlas(texturePaths[0]);
         this.animationFrames = new Array<>();
         String[] textures = Arrays.copyOfRange(texturePaths, 1, texturePaths.length);
-        for (String texture : textures) {
+        for (String texture : textures) { // Gets array excluding texturePath
             animationFrames.add(textureAtlas.createSprites(texture));
         }
         currentAnimation = new Animation<>(this.animationFrameDuration, animationFrames.get(0));
@@ -56,10 +56,18 @@ public class View {
     }
 
     public int getAnimationSequenceFromMovementDirection() {
-        if (this.model.getMovementVector().x == 0) {
-            return 1;
+        if (this.model.getMovementVector().x < 0) {
+            return 2 - ((this.model.getMovementVector().y > 0)? 1:0);
         } else if (this.model.getMovementVector().x > 0) {
-            return 2;
+            return 5 - ((this.model.getMovementVector().y > 0)? 1:0);
+        }
+        // Can expect this.model.getMovementVector().x == 0
+        if (this.model.type == Constants.EntityType.ENEMY) {
+            EnemyModel temp = (EnemyModel) this.model;
+            return (temp.getDirection() == Constants.Direction.LEFT)? 3:0;
+        } else if (this.model.type == Constants.EntityType.PLAYER) {
+            PlayerModel temp = (PlayerModel) this.model;
+            return (temp.getDirection() == Constants.Direction.LEFT)? 3:0;
         }
         return 0;
     }

@@ -1,49 +1,45 @@
 package com.ragegame.game.handlers;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.ragegame.game.objects.actors.Enemy;
-import com.ragegame.game.objects.actors.Russian;
+import com.ragegame.game.objects.DynamicEntity.Enemy;
 import com.ragegame.game.utils.LoadSave;
 
 //import com.badlogic.gdx.Graphics;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-
-import static com.ragegame.game.utils.Constants.EnemyConstants.*;
+import java.util.Objects;
 
 public class EnemyHandler {
     private BufferedImage[][] russianArr;
     private Texture[][] russianArr_;
-    private ArrayList<Russian> russians = new ArrayList<>();
+    private ArrayList<Object> enemies = new ArrayList<>();
     public EnemyHandler() {
         loadEnemyImages();
         addEnemies();
     }
 
     private void addEnemies() {
-        russians = LoadSave.GetRussians();
+//        enemies = LoadSave.GetEnemies();
     }
 
-    public void update() {
-        for (Russian r : russians) {
-            r.update();
-        }
-    }
+//    public void update() {
+//        for (Object e : enemies) {
+//            (e (Enemy)).update();
+//        }
+//    }
 
-    public void draw(Graphics g) {
-        drawRussians(g);
-    }
-
-    private void drawRussians(Graphics g) {
+//    public void draw(Graphics g) {
+//        drawRussians(g);
+//    }
+//
+//    private void drawRussians(Graphics g) {
 //        float dt = g.getDeltaTime();
-        for (Russian r : russians) {
+//        for (Russian r : russians) {
 //            batch.draw(russianArr[r.getEnemyState()][r.getAniIndex()], (int) r.getHitbox().x, -1, RUSSIAN_WIDTH, RUSSIAN_HEIGHT);
-            g.drawImage(russianArr[r.getEnemyState()][r.getAniIndex()], (int) r.getHitbox().x, RUSSIAN, RUSSIAN_WIDTH, RUSSIAN_HEIGHT, null);
-        }
-    }
+//            g.drawImage(russianArr[r.getEnemyState()][r.getAniIndex()], (int) r.getHitbox().x, RUSSIAN, RUSSIAN_WIDTH, RUSSIAN_HEIGHT, null);
+//        }
+//    }
 
     private void loadEnemyImages() {
         // 5 different types of russians

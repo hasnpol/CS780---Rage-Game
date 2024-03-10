@@ -17,17 +17,15 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.ragegame.game.handlers.BackgroundHandler;
 import com.ragegame.game.handlers.CameraHandler;
 import com.ragegame.game.handlers.ContactHandler;
-import com.ragegame.game.handlers.EnemyHandler;
 import com.ragegame.game.handlers.InputHandler;
 import com.ragegame.game.handlers.PhysicsHandler;
-import com.ragegame.game.objects.actors.Actors;
-import com.ragegame.game.objects.actors.PlayerModel;
-import com.ragegame.game.objects.actors.EnemyModel;
-import com.ragegame.game.objects.view.EnemyView;
+import com.ragegame.game.objects.DynamicEntity.PlayerModel;
+import com.ragegame.game.objects.Entity;
+import com.ragegame.game.objects.DynamicEntity.EnemyModel;
 import com.ragegame.game.objects.view.View;
+
 import com.ragegame.game.screens.Map;
 
-import java.awt.Graphics;
 import java.util.UUID;
 
 public class RageGame extends ApplicationAdapter {
@@ -37,15 +35,15 @@ public class RageGame extends ApplicationAdapter {
 	private Box2DDebugRenderer debugRenderer;
 	private OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;
 	private Map gameMap;
-	private ObjectMap<UUID, Actors> gameObjectsToDestroy;
-	private ObjectMap<UUID, Actors> gameObjects;
-	public int screenHeight, screenWidth;
+
+	private ObjectMap<UUID, Entity> entitiesToDestroy;
+	private ObjectMap<UUID, Entity> gameObjects;
+	private int screenHeight, screenWidth;
+
 	private PlayerModel playerModel;
 	private View playerView;
 	private EnemyModel enemyModel;
 	private View enemyView;
-
-	private EnemyHandler enemyHandler;
 	private PhysicsHandler physicsHandler;
 	private CameraHandler cameraHandler;
 	private BackgroundHandler backgroundHandler;
@@ -70,11 +68,10 @@ public class RageGame extends ApplicationAdapter {
 		debugRenderer = new Box2DDebugRenderer();
 
 		// Init game objects
-		gameObjectsToDestroy = new ObjectMap<>();
+		entitiesToDestroy = new ObjectMap<>();
 		gameObjects = new ObjectMap<>();
 		this.gameMap = new Map(world, gameObjects);
 		this.orthogonalTiledMapRenderer = gameMap.buildMap();
-		enemyHandler = new EnemyHandler();
 		createPlayer();
 		createEnemy();
 
@@ -109,13 +106,13 @@ public class RageGame extends ApplicationAdapter {
 		// Draw the tiled gameMap
 		batch.begin();
 		orthogonalTiledMapRenderer.render();
-		enemyView.render(dt);
 		playerView.render(dt);
+
+		enemyView.render(dt);
 		batch.end();
 
 
 		batch.begin();
-		gameMap.renderObjects();
 		batch.end();
 
 		// Physics
@@ -175,8 +172,8 @@ public class RageGame extends ApplicationAdapter {
 	public void dispose () {
 		batch.dispose();
 		backgroundHandler.dispose();
-		enemyView.dispose();
 		playerView.dispose();
+		enemyView.dispose();
 		orthogonalTiledMapRenderer.dispose();
 	}
 
