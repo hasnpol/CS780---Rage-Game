@@ -9,6 +9,12 @@ import com.ragegame.game.objects.DynamicEntity.Enemy;
 import java.util.ArrayList;
 import java.util.Objects;
 
+
+/** DESCRIPTION:
+ * This file is intended to be used for loading potentially saved data such as Textures and GameData
+ * DOES NOT INCLUDE LOADING VARIABLE CONSTANTS!!
+ * */
+
 public class LoadSave {
     public static class SPRITES {
         public String resPath, leftIdle, leftAnim, rightIdle, rightAnim;
@@ -35,19 +41,9 @@ public class LoadSave {
             "enemy_left_idle", "enemy_left_jump", "enemy_left",
             "enemy_right_idle", "enemy_right_jump", "enemy_right"};
 
-//    public static ArrayList<Object> GetEnemies() {
-//        ArrayList<Enemy> list = new ArrayList<>();
-//        for (int j = 0; j < Gdx.graphics.getHeight(); j++)
-//            for (int i = 0; i < Gdx.graphics.getWidth(); i++) {
-//                Color color = new Color(Gdx.graphics.);
-//                int value = color.getGreen();
-//            }
-//        BodyDef enemyBodyDef = new BodyDef();
-//        enemyBodyDef.type = BodyDef.BodyType.DynamicBody;
-//        enemyBodyDef.position.set(new Vector2(0, 10f));
-//        Body russianBody = RageGame.world.createBody(enemyBodyDef);
-//        list.add(new Russian(russianBody));
-//        return list;
-//    }
+    public static ArrayList<Object> GetEnemies() {  // TODO use for tileMap loading enemies
+        // TODO should call on the enemyhandler
+        return new ArrayList<>();
+    }
 
 }

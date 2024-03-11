@@ -1,89 +1,89 @@
 human_walk_sheet_directional.png
-size: 250, 100
+size: 240, 96
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
+human_left_idle
+  rotate: false
+  xy: 48, 0
+  size: 46, 46
+  orig: 48, 48
+  offset: 0, 2
+  index: 0
+human_right_idle
+  rotate: false
+  xy: 48, 48
+  size: 46, 46
+  orig: 48, 48
+  offset: 0, 2
+  index: 0
 human_left
   rotate: false
   xy: 0, 0
-  size: 50, 50
-  orig: 50, 50
-  offset: 0, 0
+  size: 46, 46
+  orig: 48, 48
+  offset: 0, 2
   index: 0
 human_left
   rotate: false
-  xy: 50, 0
-  size: 50, 50
-  orig: 50, 50
-  offset: 0, 0
+  xy: 48, 0
+  size: 46, 46
+  orig: 48, 48
+  offset: 0, 2
   index: 1
 human_left
   rotate: false
-  xy: 100, 0
-  size: 50, 50
-  orig: 50, 50
-  offset: 0, 0
+  xy: 96, 0
+  size: 46, 46
+  orig: 48, 48
+  offset: 0, 2
   index: 2
 human_left
   rotate: false
-  xy: 150, 0
-  size: 50, 50
-  orig: 50, 50
-  offset: 0, 0
+  xy: 144, 0
+  size: 46, 46
+  orig: 48, 48
+  offset: 0, 2
   index: 3
-human_left_idle
-  rotate: false
-  xy: 50, 0
-  size: 50, 50
-  orig: 50, 50
-  offset: 0, 0
-  index: 0
 human_left_jump
   rotate: false
-  xy: 200, 0
-  size: 50, 50
-  orig: 50, 50
+  xy: 192, 0
+  size: 48, 48
+  orig: 48, 48
   offset: 0, 0
   index: 0
 human_right
   rotate: false
-  xy: 0, 50
-  size: 50, 50
-  orig: 50, 50
-  offset: 0, 0
+  xy: 0, 48
+  size: 46, 46
+  orig: 48, 48
+  offset: 0, 2
   index: 0
 human_right
   rotate: false
-  xy: 50, 50
-  size: 50, 50
-  orig: 50, 50
-  offset: 0, 0
+  xy: 48, 48
+  size: 46, 46
+  orig: 48, 48
+  offset: 0, 2
   index: 1
 human_right
   rotate: false
-  xy: 100, 50
-  size: 50, 50
-  orig: 50, 50
-  offset: 0, 0
+  xy: 96, 48
+  size: 46, 46
+  orig: 48, 48
+  offset: 0, 2
   index: 2
 human_right
   rotate: false
-  xy: 150, 50
-  size: 50, 50
-  orig: 50, 50
-  offset: 0, 0
+  xy: 144, 48
+  size: 46, 46
+  orig: 48, 48
+  offset: 0, 2
   index: 3
-human_right_idle
-  rotate: false
-  xy: 50, 50
-  size: 50, 50
-  orig: 50, 50
-  offset: 0, 0
-  index: 0
 human_right_jump
   rotate: false
-  xy: 200, 50
-  size: 50, 50
-  orig: 50, 50
+  xy: 192, 48
+  size: 48, 48
+  orig: 48, 48
   offset: 0, 0
   index: 0

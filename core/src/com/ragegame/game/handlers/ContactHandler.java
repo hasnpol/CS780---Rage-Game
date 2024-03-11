@@ -9,7 +9,6 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.ragegame.game.objects.Entity;
-import com.ragegame.game.objects.StaticEntity.Platform;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 
 import java.util.UUID;
@@ -45,20 +44,18 @@ public class ContactHandler implements ContactListener {
             objB = gameObjects.get(objId);
         }
 
-
-        if (objB instanceof PlayerModel || objA instanceof PlayerModel) {
-            if (objB instanceof Platform) {
-                PlayerModel playerModel = (PlayerModel) objA;
-                if(playerModel.getBody().getPosition().y > objB.getBody().getPosition().y) {
-                    playerModel.setGrounded(true);
-                }
-            } else if (objA instanceof  Platform) {
-                PlayerModel playerModel = (PlayerModel) objB;
-                if(playerModel.getBody().getPosition().y > objA.getBody().getPosition().y) {
-                    playerModel.setGrounded(true);
-                }
-            }
+        if (objB instanceof PlayerModel) {
+            PlayerModel playerModel = (PlayerModel) objB;
+            playerModel.playerContactHandler.startContact(objA);
         }
+
+        if (objA instanceof PlayerModel) {
+            PlayerModel playerModel = (PlayerModel) objA;
+            playerModel.playerContactHandler.startContact(objB);
+        }
+
+
+
     }
 
     @Override
@@ -81,14 +78,14 @@ public class ContactHandler implements ContactListener {
             objB = gameObjects.get(objId);
         }
 
-        if (objB instanceof PlayerModel || objA instanceof PlayerModel) {
-            if (objB instanceof Platform) {
-                PlayerModel playerModel = (PlayerModel) objA;
-                playerModel.setGrounded(false);
-            } else if (objA instanceof Platform) {
-                PlayerModel playerModel = (PlayerModel) objB;
-                playerModel.setGrounded(false);
-            }
+        if (objB instanceof PlayerModel) {
+            PlayerModel playerModel = (PlayerModel) objB;
+            playerModel.playerContactHandler.endContact(objA);
+        }
+
+        if (objA instanceof PlayerModel) {
+            PlayerModel playerModel = (PlayerModel) objA;
+            playerModel.playerContactHandler.endContact(objB);
         }
 
     }

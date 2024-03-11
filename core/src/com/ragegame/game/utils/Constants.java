@@ -1,7 +1,11 @@
 package com.ragegame.game.utils;
 
-import com.ragegame.game.objects.DynamicEntity.PlayerModel;
-import com.ragegame.game.objects.Entity;
+/** DESCRIPTION:
+ * This file is intended to be used for constants that entities use
+ * DOES NOT INCLUDE LOADING TEXTURES!!
+ *  Texture and data loading should be done in the loadSave file
+ * */
+
 
 public class Constants {
     // TODO make an abstract GetSpriteAmount() for each standard state
@@ -9,12 +13,6 @@ public class Constants {
         LEFT(6), RIGHT(4), UP(0);
         private final int num;
         Direction(int code) {this.num = code;}
-        public int getDirectionFromModel(Entity model) {
-            float x = model.getMovementVector().x;
-            return (model.type == Constants.EntityType.OBSTACLE)? 0 :
-                    (x == 0)? ((((PlayerModel) model).getDirection() == Direction.LEFT)? 1:0)
-                            : (x < 0)? 3: 2;
-        }
         public int getNum() {return this.num;}
     }
     public enum State { IDLE, RUNNING, JUMPING, HIT, DEAD };
@@ -45,8 +43,8 @@ public class Constants {
         public static final int SOLDIER_WIDTH_DEFAULT = 72;
         public static final int SOLDIER_HEIGHT_DEFAULT = 32;
 
-        public static final int SOLDIER_WIDTH = (int) (SOLDIER_WIDTH_DEFAULT * Game.SCALE);
-        public static final int SOLDIER_HEIGHT = (int) (SOLDIER_HEIGHT_DEFAULT * Game.SCALE);
+        public static final int SOLDIER_WIDTH = (int) (SOLDIER_WIDTH_DEFAULT * GameConstants.SCALE);
+        public static final int SOLDIER_HEIGHT = (int) (SOLDIER_HEIGHT_DEFAULT * GameConstants.SCALE);
 
         public static int GetSpriteAmount(int enemy_type, int enemy_state) {
             switch(enemy_type) {
@@ -101,7 +99,11 @@ public class Constants {
         }
     }
 
-    public static class Game {
+    public static class GameConstants {
+
+        public static final int HEIGHT = 800;
+        public static final int WIDTH = 1000;
+
         public static final int SCALE = 1/128;
     }
 }
