@@ -156,7 +156,7 @@ public class Map {
 
         enemyBody.setFixedRotation(true);
         enemyBody.createFixture(fixtureDef).setUserData(enemyModel.getId());
-		enemyBox.dispose();
+        enemyBox.dispose();
         dynamicEntities.add(enemyModel);
     }
 
