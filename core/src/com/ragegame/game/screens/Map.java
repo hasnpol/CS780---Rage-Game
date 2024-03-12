@@ -24,6 +24,7 @@ import com.ragegame.game.objects.DynamicEntity.DynamicEntity;
 import com.ragegame.game.objects.DynamicEntity.EnemyModel;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.Entity;
+import com.ragegame.game.objects.StaticEntity.FakePlatform;
 import com.ragegame.game.objects.StaticEntity.Platform;
 import com.ragegame.game.objects.view.View;
 
@@ -87,9 +88,28 @@ public class Map {
                     createPlatform((PolygonMapObject) mapObject);
                 }
                 break;
+            case "fake":
+                if (mapObject instanceof PolygonMapObject) {
+                    createFakePlatform((PolygonMapObject) mapObject);
+                }
+                break;
             default:
                 break;
         }
+    }
+
+    public void createFakePlatform(PolygonMapObject mapObject) {
+        MapLayer tiledLayer = map.getLayers().get(mapObject.getName());
+
+        BodyDef bodyDef = new BodyDef();
+        Shape shape = createPolygonShape(mapObject, bodyDef);
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        Body body = world.createBody(bodyDef);
+
+
+        FakePlatform platform = new FakePlatform(body, tiledLayer);
+        body.createFixture(shape, 0).setUserData(platform.getId());
+        gameObjects.put(platform.getId(), platform);
     }
 
     public void createPlayerModel(PolygonMapObject mapObject) {
@@ -135,7 +155,7 @@ public class Map {
 		fixtureDef.friction = 1;
 
         enemyBody.setFixedRotation(true);
-		enemyBody.createFixture(fixtureDef).setUserData(enemyModel.getId());
+        enemyBody.createFixture(fixtureDef).setUserData(enemyModel.getId());
 		enemyBox.dispose();
         dynamicEntities.add(enemyModel);
     }
