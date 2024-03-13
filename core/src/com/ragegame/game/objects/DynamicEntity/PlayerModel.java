@@ -1,5 +1,6 @@
 package com.ragegame.game.objects.DynamicEntity;
 
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.ragegame.game.handlers.contactHandlers.PlayerContactHandler;
@@ -15,14 +16,16 @@ public class PlayerModel extends DynamicEntity {
     public PlayerContactHandler playerContactHandler;
     private int health = 100;
     private int coins = 100;
+    MapLayer tileLayer;
 
-    public PlayerModel(Body body) {
+    public PlayerModel(Body body, MapLayer tileLayer) {
         super(body, PLAYER);
         stop = false;
         grounded = false;
         jumpPress = 0L;
         sprint = false;
         playerContactHandler = new PlayerContactHandler(this);
+        this.tileLayer = tileLayer;
     }
 
     // Look at your numpad for values for directions.
@@ -113,4 +116,10 @@ public class PlayerModel extends DynamicEntity {
         */
         this.coins += value;
     }
+
+    public void rugPull() {
+        this.tileLayer.setVisible(false);
+        this.markedForDelete = true;
+    }
+
 }

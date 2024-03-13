@@ -44,12 +44,12 @@ public class ContactHandler implements ContactListener {
 
         if (objB instanceof PlayerModel) {
             PlayerModel playerModel = (PlayerModel) objB;
-            playerModel.playerContactHandler.startContact(objA, world);
+            playerModel.playerContactHandler.startContact(objA);
         }
 
         if (objA instanceof PlayerModel) {
             PlayerModel playerModel = (PlayerModel) objA;
-            playerModel.playerContactHandler.startContact(objB, world);
+            playerModel.playerContactHandler.startContact(objB);
         }
 
         if (objA instanceof FakePlatform) {

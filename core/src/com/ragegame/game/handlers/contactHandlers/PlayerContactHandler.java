@@ -14,15 +14,15 @@ public class PlayerContactHandler {
         this.playerModel = playerModel;
     }
 
-    public void startContact(Entity entity, World world) {
+    public void startContact(Entity entity) {
 
         if (entity instanceof Platform) {
             platformStartContact((Platform) entity);
         }
 
-//        if (entity instanceof EnemyModel) {
-//            playerEnemyContact((EnemyModel) entity, world);
-//        }
+        if (entity instanceof EnemyModel) {
+            playerEnemyContact((EnemyModel) entity);
+        }
     }
 
     public void endContact(Entity entity, World world) {
@@ -43,19 +43,24 @@ public class PlayerContactHandler {
         }
     }
 
-//    public void playerEnemyContact(EnemyModel enemyModel, World world) {
-//        if (playerModel.getBody().getPosition().y > enemyModel.getBody().getPosition().y) {
-//            playerModel.setGrounded(true);
-//            enemyModel.setHealth(-100);
-//            world.destroyBody(enemyModel.getBody());
-//            System.out.println("Enemy Health: " + enemyModel.getHealth());
-//        } else {
-//            playerModel.setCoins((int) (-playerModel.getCoins()*.1));
-//            playerModel.setHealth(-10);
-//            playerModel.getBody().getPosition().y = -10;
-//            System.out.println("Player Coin: " + playerModel.getCoins());
-//            System.out.println("Player Health: " + playerModel.getHealth());
-//        }
-//    }
+    public void playerEnemyContact(EnemyModel enemyModel) {
+        if (playerModel.getBody().getPosition().y > enemyModel.getBody().getPosition().y) {
+            playerModel.setGrounded(true);
+            enemyModel.setHealth(-100);
+            System.out.println("Enemy Health: " + enemyModel.getHealth());
+            if (enemyModel.isDead()) {
+                enemyModel.rugPull();
+            }
+        } else {
+            playerModel.setCoins((int) (-playerModel.getCoins()*.1));
+            playerModel.setHealth(-50);
+            playerModel.getBody().getPosition().y = -10;
+            System.out.println("Player Coin: " + playerModel.getCoins());
+            System.out.println("Player Health: " + playerModel.getHealth());
+            if (playerModel.isDead()) {
+                playerModel.rugPull();
+            }
+        }
+    }
 
 }
