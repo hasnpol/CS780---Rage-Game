@@ -1,6 +1,5 @@
 package com.ragegame.game.handlers;
 
-
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -15,7 +14,6 @@ import com.ragegame.game.objects.StaticEntity.FakePlatform;
 import java.util.UUID;
 
 public class ContactHandler implements ContactListener {
-
     World world;
     ObjectMap<UUID, Entity> gameObjects;
 
@@ -23,8 +21,6 @@ public class ContactHandler implements ContactListener {
         this.world = world;
         this.gameObjects = objectMap;
     }
-
-
 
     @Override
     public void beginContact(Contact contact) {
@@ -56,7 +52,6 @@ public class ContactHandler implements ContactListener {
             playerModel.playerContactHandler.startContact(objB);
         }
 
-
         if (objA instanceof FakePlatform) {
             FakePlatform fakePlatform = (FakePlatform) objA;
             fakePlatform.rugPull();
@@ -66,8 +61,6 @@ public class ContactHandler implements ContactListener {
             FakePlatform fakePlatform = (FakePlatform) objB;
             fakePlatform.rugPull();
         }
-
-
 
     }
 
@@ -93,12 +86,12 @@ public class ContactHandler implements ContactListener {
 
         if (objB instanceof PlayerModel) {
             PlayerModel playerModel = (PlayerModel) objB;
-            playerModel.playerContactHandler.endContact(objA);
+            playerModel.playerContactHandler.endContact(objA, world);
         }
 
         if (objA instanceof PlayerModel) {
             PlayerModel playerModel = (PlayerModel) objA;
-            playerModel.playerContactHandler.endContact(objB);
+            playerModel.playerContactHandler.endContact(objB, world);
         }
 
     }
