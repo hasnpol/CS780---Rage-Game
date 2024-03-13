@@ -16,16 +16,14 @@ public class PlayerModel extends DynamicEntity {
     public PlayerContactHandler playerContactHandler;
     private int health = 100;
     private int coins = 100;
-    MapLayer tileLayer;
 
-    public PlayerModel(Body body, MapLayer tileLayer) {
+    public PlayerModel(Body body) {
         super(body, PLAYER);
         stop = false;
         grounded = false;
         jumpPress = 0L;
         sprint = false;
         playerContactHandler = new PlayerContactHandler(this);
-        this.tileLayer = tileLayer;
     }
 
     // Look at your numpad for values for directions.
@@ -117,8 +115,7 @@ public class PlayerModel extends DynamicEntity {
         this.coins += value;
     }
 
-    public void rugPull() {
-        this.tileLayer.setVisible(false);
+    public void kill() {
         this.markedForDelete = true;
     }
 

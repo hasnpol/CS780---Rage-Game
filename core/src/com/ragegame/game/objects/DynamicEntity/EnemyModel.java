@@ -10,12 +10,10 @@ public class EnemyModel extends DynamicEntity {
     private int health = 100;
     private float speed = 120F;
     private Vector2 movementVector = new Vector2(0, 0);
-    MapLayer tileLayer;
 
-    public EnemyModel(Body body, MapLayer tileLayer) {
+    public EnemyModel(Body body) {
         super(body, ENEMY);
         this.position = body.getPosition();
-        this.tileLayer = tileLayer;
     }
 
     public Vector2 getPosition() {
@@ -50,8 +48,7 @@ public class EnemyModel extends DynamicEntity {
         return getHealth() <= 0 || getBody().getPosition().y < 0;
     }
 
-    public void rugPull() {
-        this.tileLayer.setVisible(false);
+    public void kill() {
         this.markedForDelete = true;
     }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="git" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="103">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="108">
  <tileset firstgid="1" source="level 1.tsx"/>
  <layer id="1" name="background" width="30" height="20">
   <data encoding="csv">
@@ -140,6 +140,23 @@
  </objectgroup>
  <objectgroup id="3" name="player">
   <object id="67" x="32" y="192">
+   <polygon points="0,0 0,16 6.43478,16.0435 6.43478,-0.0434783"/>
+  </object>
+ </objectgroup>
+ <objectgroup id="9" name="enemy">
+  <object id="103" x="272" y="48">
+   <polygon points="0,0 0,16 6.43478,16.0435 6.43478,-0.0434783"/>
+  </object>
+  <object id="104" x="448" y="112">
+   <polygon points="0,0 0,16 6.43478,16.0435 6.43478,-0.0434783"/>
+  </object>
+  <object id="105" x="208" y="192">
+   <polygon points="0,0 0,16 6.43478,16.0435 6.43478,-0.0434783"/>
+  </object>
+  <object id="106" x="96" y="192">
+   <polygon points="0,0 0,16 6.43478,16.0435 6.43478,-0.0434783"/>
+  </object>
+  <object id="107" x="128" y="192">
    <polygon points="0,0 0,16 6.43478,16.0435 6.43478,-0.0434783"/>
   </object>
  </objectgroup>

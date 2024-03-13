@@ -111,7 +111,6 @@ public class Map {
     }
 
     public void createPlayerModel(PolygonMapObject mapObject) {
-        MapLayer tiledLayer = map.getLayers().get(mapObject.getName());
         BodyDef playerBodyDef = new BodyDef();
         playerBodyDef.type = BodyDef.BodyType.DynamicBody;
         playerBodyDef.position.set(mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM);
@@ -120,7 +119,7 @@ public class Map {
         PolygonShape playerBox = new PolygonShape();
         playerBox.setAsBox(0.25f, 0.5f);
 
-        this.playerModel = new PlayerModel(playerBody, tiledLayer);
+        this.playerModel = new PlayerModel(playerBody);
         View playerView = new View(playerModel, batch);
         playerModel.setView(playerView);
         gameObjects.put(playerModel.getId(), playerModel);
@@ -135,7 +134,6 @@ public class Map {
     }
 
     public void createEnemyModel(PolygonMapObject mapObject) {
-        MapLayer tiledLayer = map.getLayers().get(mapObject.getName());
 		BodyDef enemyBodyDef = new BodyDef();
 		enemyBodyDef.type = BodyDef.BodyType.DynamicBody;
 		enemyBodyDef.position.set(mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM);
@@ -144,7 +142,7 @@ public class Map {
 		PolygonShape enemyBox = new PolygonShape();
 		enemyBox.setAsBox(0.25f, 0.5f);
 
-		EnemyModel enemyModel = new EnemyModel(enemyBody, tiledLayer);
+		EnemyModel enemyModel = new EnemyModel(enemyBody);
 		View enemyView = new View(enemyModel, batch);
         enemyModel.setView(enemyView);
 
