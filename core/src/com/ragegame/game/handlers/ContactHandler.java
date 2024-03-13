@@ -1,6 +1,5 @@
 package com.ragegame.game.handlers;
 
-
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -10,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
+import com.ragegame.game.objects.StaticEntity.FakePlatform;
 
 import java.util.UUID;
 
@@ -50,6 +50,16 @@ public class ContactHandler implements ContactListener {
         if (objA instanceof PlayerModel) {
             PlayerModel playerModel = (PlayerModel) objA;
             playerModel.playerContactHandler.startContact(objB, world);
+        }
+
+        if (objA instanceof FakePlatform) {
+            FakePlatform fakePlatform = (FakePlatform) objA;
+            fakePlatform.rugPull();
+        }
+
+        if (objB instanceof FakePlatform) {
+            FakePlatform fakePlatform = (FakePlatform) objB;
+            fakePlatform.rugPull();
         }
 
     }
