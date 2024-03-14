@@ -49,7 +49,7 @@ public class PlayerContactHandler {
             enemyModel.setHealth(-100);
             System.out.println("Enemy Health: " + enemyModel.getHealth());
             if (enemyModel.isDead()) {
-                enemyModel.rugPull();
+                enemyModel.kill();
             }
         } else {
             playerModel.setCoins((int) (-playerModel.getCoins()*.1));
@@ -58,7 +58,7 @@ public class PlayerContactHandler {
             System.out.println("Player Coin: " + playerModel.getCoins());
             System.out.println("Player Health: " + playerModel.getHealth());
             if (playerModel.isDead()) {
-                playerModel.rugPull();
+                playerModel.kill();
             }
         }
     }
