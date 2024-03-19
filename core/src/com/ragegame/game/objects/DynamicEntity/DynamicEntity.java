@@ -25,4 +25,8 @@ public class DynamicEntity extends Entity {
         view.dispose();
     }
 
+    public void update() {
+
+    }
+
 }
