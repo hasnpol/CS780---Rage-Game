@@ -6,7 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.ragegame.game.RageGame;
-import com.ragegame.game.utils.Constants.GameConstants;
+import com.ragegame.game.utils.Constants.Game;
 
 public class MainMenu implements Screen {
 
@@ -31,8 +31,8 @@ public class MainMenu implements Screen {
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
                 //Play game button
-                int x = GameConstants.WIDTH / 2 - PLAY_BUTTON_WIDTH / 2;
-                if (Gdx.input.getX() < x + PLAY_BUTTON_WIDTH && Gdx.input.getX() > x && GameConstants.HEIGHT - Gdx.input.getY() < PLAY_BUTTON_Y + PLAY_BUTTON_HEIGHT && GameConstants.HEIGHT - Gdx.input.getY() > PLAY_BUTTON_Y) {
+                int x = Game.WIDTH / 2 - PLAY_BUTTON_WIDTH / 2;
+                if (Gdx.input.getX() < x + PLAY_BUTTON_WIDTH && Gdx.input.getX() > x && Game.HEIGHT - Gdx.input.getY() < PLAY_BUTTON_Y + PLAY_BUTTON_HEIGHT && Game.HEIGHT - Gdx.input.getY() > PLAY_BUTTON_Y) {
                     mainMenuScreen.dispose();
                     game.setScreen(new GameScreen(game));
                 }
@@ -55,8 +55,8 @@ public class MainMenu implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         game.batch.begin();
 
-        int x = GameConstants.WIDTH / 2 - PLAY_BUTTON_WIDTH / 2;
-        if (Gdx.input.getX() < x + PLAY_BUTTON_WIDTH && Gdx.input.getX() > x && GameConstants.HEIGHT - Gdx.input.getY() < PLAY_BUTTON_Y + PLAY_BUTTON_HEIGHT && GameConstants.HEIGHT - Gdx.input.getY() > PLAY_BUTTON_Y) {
+        int x = Game.WIDTH / 2 - PLAY_BUTTON_WIDTH / 2;
+        if (Gdx.input.getX() < x + PLAY_BUTTON_WIDTH && Gdx.input.getX() > x && Game.HEIGHT - Gdx.input.getY() < PLAY_BUTTON_Y + PLAY_BUTTON_HEIGHT && Game.HEIGHT - Gdx.input.getY() > PLAY_BUTTON_Y) {
             game.batch.draw(playButtonActive, x, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
         } else {
             game.batch.draw(playButtonInactive, x, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
