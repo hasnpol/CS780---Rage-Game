@@ -6,13 +6,13 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ragegame.game.utils.Constants;
 
-public class FakePlatform extends StaticEntity {
+public class FakePlatform extends Platform {
 
     Body body;
     MapLayer tileLayer;
 
-    public FakePlatform(Body body, MapLayer tileLayer) {
-        super(body, Constants.EntityType.OBSTACLE);
+    public FakePlatform(Body body, float x, float y, MapLayer tileLayer) {
+        super(body, x, y);
         this.body = body;
         this.tileLayer = tileLayer;
     }

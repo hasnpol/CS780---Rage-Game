@@ -24,6 +24,7 @@ import com.ragegame.game.objects.DynamicEntity.EnemyModel;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.StaticEntity.FakePlatform;
+import com.ragegame.game.objects.StaticEntity.HiddenPlatform;
 import com.ragegame.game.objects.StaticEntity.Platform;
 import com.ragegame.game.objects.view.View;
 
@@ -97,6 +98,12 @@ public class Map {
                 if (mapObject instanceof PolygonMapObject) {
                     createBoar((PolygonMapObject) mapObject);
                 }
+                break;
+            case "hidden":
+                if (mapObject instanceof PolygonMapObject) {
+                    createHiddenPlatform((PolygonMapObject) mapObject);
+                }
+                break;
             default:
                 break;
         }
@@ -135,7 +142,21 @@ public class Map {
         Body body = world.createBody(bodyDef);
 
 
-        FakePlatform platform = new FakePlatform(body, tiledLayer);
+        FakePlatform platform = new FakePlatform(body, mapObject.getPolygon().getX() / PPM,
+                mapObject.getPolygon().getY()/ PPM, tiledLayer);
+        body.createFixture(shape, 0).setUserData(platform.getId());
+        gameObjects.put(platform.getId(), platform);
+    }
+
+    public void createHiddenPlatform(PolygonMapObject mapObject) {
+        MapLayer tiledLayer = map.getLayers().get(mapObject.getName());
+
+        BodyDef bodyDef = new BodyDef();
+        Shape shape = createPolygonShape(mapObject, bodyDef);
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        Body body = world.createBody(bodyDef);
+
+        HiddenPlatform platform = new HiddenPlatform(body, mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM, tiledLayer);
         body.createFixture(shape, 0).setUserData(platform.getId());
         gameObjects.put(platform.getId(), platform);
     }
@@ -187,8 +208,6 @@ public class Map {
         enemyBox.dispose();
         dynamicEntities.add(enemyModel);
     }
-
-
 
     private void createPlatform(PolygonMapObject polygonMapObject) {
 

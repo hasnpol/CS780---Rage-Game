@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.StaticEntity.FakePlatform;
+import com.ragegame.game.objects.StaticEntity.HiddenPlatform;
 
 import java.util.UUID;
 
@@ -62,6 +63,17 @@ public class ContactHandler implements ContactListener {
             fakePlatform.rugPull();
         }
 
+        if (objA instanceof HiddenPlatform) {
+            HiddenPlatform hiddenPlatform = (HiddenPlatform) objA;
+            hiddenPlatform.reveal();
+        }
+
+        if (objB instanceof HiddenPlatform) {
+            HiddenPlatform hiddenPlatform = (HiddenPlatform) objB;
+            hiddenPlatform.reveal();
+        }
+
+
     }
 
     @Override
@@ -92,6 +104,16 @@ public class ContactHandler implements ContactListener {
         if (objA instanceof PlayerModel) {
             PlayerModel playerModel = (PlayerModel) objA;
             playerModel.playerContactHandler.endContact(objB, world);
+        }
+
+        if (objA instanceof HiddenPlatform) {
+            HiddenPlatform hiddenPlatform = (HiddenPlatform) objA;
+            hiddenPlatform.hide();
+        }
+
+        if (objB instanceof HiddenPlatform) {
+            HiddenPlatform hiddenPlatform = (HiddenPlatform) objB;
+            hiddenPlatform.hide();
         }
 
     }
