@@ -50,9 +50,7 @@ public class Map {
         this.gameObjects = gameObjects;
         this.batch = batch;
         this.camera = camera;
-
         map = new TmxMapLoader().load("maps/level_1/level_1.tmx");
-
         MapProperties properties = map.getProperties();
         this.width = properties.get("width", Integer.class);
         this.height = properties.get("height", Integer.class);

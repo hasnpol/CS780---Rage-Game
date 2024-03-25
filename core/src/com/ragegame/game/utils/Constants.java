@@ -1,7 +1,20 @@
 package com.ragegame.game.utils;
 
+/** DESCRIPTION:
+ * This file is intended to be used for constants that entities use
+ * DOES NOT INCLUDE LOADING TEXTURES!!
+ *  Texture and data loading should be done in the loadSave file
+ * */
+
+
 public class Constants {
     // TODO make an abstract GetSpriteAmount() for each standard state
+    public enum Direction {
+        LEFT(6), RIGHT(4), UP(0);
+        private final int num;
+        Direction(int code) {this.num = code;}
+        public int getNum() {return this.num;}
+    }
     public enum State { IDLE, RUNNING, JUMPING, HIT, DEAD };
     public enum EntityType {
         PLAYER(null), ENEMY(null), OBSTACLE(null);
@@ -63,6 +76,7 @@ public class Constants {
         public static final int HIT = 5;
         public static final int ATTACK = 6;
 
+        public static final float MAXSPEED = 8f;
         public static float speed = 120F;
 
         public static int GetSpriteAmount(int player_action) {
@@ -86,6 +100,10 @@ public class Constants {
     }
 
     public static class Game {
+
+        public static final int HEIGHT = 800;
+        public static final int WIDTH = 1000;
+
         public static final int SCALE = 1/16;
     }
 }
