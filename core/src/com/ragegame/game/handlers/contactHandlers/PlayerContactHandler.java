@@ -1,6 +1,5 @@
 package com.ragegame.game.handlers.contactHandlers;
 
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ragegame.game.objects.DynamicEntity.EnemyModel;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
@@ -44,7 +43,7 @@ public class PlayerContactHandler {
     }
 
     public void playerEnemyContact(EnemyModel enemyModel) {
-        if (playerModel.getBody().getPosition().y > enemyModel.getBody().getPosition().y) {
+        if ((playerModel.getBody().getPosition().y - 0.5) > enemyModel.getBody().getPosition().y) {
             playerModel.setGrounded(true);
             enemyModel.setHealth(-100);
             System.out.println("Enemy Health: " + enemyModel.getHealth());
