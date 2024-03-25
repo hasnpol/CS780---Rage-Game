@@ -11,15 +11,15 @@ import java.util.UUID;
 public class PhysicsHandler {
     public static final float TIME_STEP = 1/60F;
     World world;
-    ObjectMap<UUID, Entity> gameObjects;
+    ObjectMap<UUID, Entity> entities;
     private float accumulator = 0;
 
-    public PhysicsHandler(World world, ObjectMap<UUID, Entity> gameObjects) {
+    public PhysicsHandler(World world, ObjectMap<UUID, Entity> entities) {
         this.world = world;
-        this.gameObjects = gameObjects;
+        this.entities = entities;
     }
     public void applyForces() {
-        for (ObjectMap.Entry<UUID, Entity> b : this.gameObjects) {
+        for (ObjectMap.Entry<UUID, Entity> b : this.entities) {
             b.value.applyForces();
         }
     }

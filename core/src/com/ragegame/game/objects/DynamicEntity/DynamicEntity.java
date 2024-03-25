@@ -6,6 +6,7 @@ import com.ragegame.game.objects.view.View;
 import com.ragegame.game.utils.Constants;
 
 public class DynamicEntity extends Entity {
+    private Constants.Direction direction = Constants.Direction.RIGHT;
 
     private View view;
 
@@ -13,6 +14,9 @@ public class DynamicEntity extends Entity {
         super(body, type);
     }
 
+    public Constants.Direction getDirection() {
+        return this.direction;
+    }
     public void setView(View view) {
         this.view = view;
     }

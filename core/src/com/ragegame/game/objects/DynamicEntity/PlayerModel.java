@@ -1,20 +1,28 @@
 package com.ragegame.game.objects.DynamicEntity;
 
-import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.ragegame.game.handlers.contactHandlers.PlayerContactHandler;
 import static com.ragegame.game.utils.Constants.EntityType.*;
+import static com.ragegame.game.utils.Constants.PlayerConstants.*;
+import static com.ragegame.game.utils.Constants.*;
 
 public class PlayerModel extends DynamicEntity {
     private static PlayerModel playerModel = null;
     float DRAG = 3f;
     boolean stop;
     public boolean grounded;
-    final float MAXSPEED = 8f;
+
     long jumpPress;
     boolean sprint;
+    boolean dead;
+
+    private Direction direction = Direction.RIGHT;
+
+    public Direction getDirection() {
+        return this.direction;
+    }
+
     public PlayerContactHandler playerContactHandler;
     private int health = 100;
     private int coins = 100;
@@ -40,11 +48,15 @@ public class PlayerModel extends DynamicEntity {
         switch (direction) {
             case 6:
                 stop = false;
+                setForce(new Vector2(15, 0));
+                this.direction = Direction.LEFT;
                 setForce(new Vector2(((sprint)) ? 15 : 7, 0));
                 break;
 
             case 4:
                 stop = false;
+                setForce(new Vector2(-15, 0));
+                this.direction = Direction.RIGHT;
                 setForce(new Vector2(((sprint)) ? -15 : -7, 0));
                 break;
 

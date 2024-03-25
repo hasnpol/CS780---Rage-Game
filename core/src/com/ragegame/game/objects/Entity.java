@@ -21,7 +21,6 @@ public class Entity {
 
     public boolean markedForDelete = false;
     public Entity(Body body, EntityType type) {
-
         this.body = body;
         this.force = new Vector2();
         this.id = UUID.randomUUID();
