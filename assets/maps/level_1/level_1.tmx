@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="100" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="19" nextobjectid="173">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="100" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="20" nextobjectid="179">
  <tileset firstgid="1" source="level 1.tsx"/>
  <layer id="1" name="background" width="100" height="50">
   <data encoding="csv">
@@ -596,6 +596,20 @@
   </object>
   <object id="107" x="128" y="672">
    <polygon points="0,0 0,16 6.43478,16.0435 6.43478,-0.0434783"/>
+  </object>
+ </objectgroup>
+ <objectgroup id="19" name="boar">
+  <object id="175" x="320" y="688">
+   <polygon points="0,0 16,0 16,-6.5 0,-6.5"/>
+  </object>
+  <object id="176" x="368" y="656">
+   <polygon points="0,0 16,0 16,-6.5 0,-6.5"/>
+  </object>
+  <object id="177" x="672" y="736">
+   <polygon points="0,0 16,0 16,-6.5 0,-6.5"/>
+  </object>
+  <object id="178" x="176" y="688">
+   <polygon points="0,0 16,0 16,-6.5 0,-6.5"/>
   </object>
  </objectgroup>
  <objectgroup id="12" name="hidden">

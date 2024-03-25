@@ -1,4 +1,4 @@
-package com.ragegame.game.screens;
+package com.ragegame.game.map;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -123,7 +123,7 @@ public class Map {
         gameObjects.put(enemyModel.getId(), enemyModel);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = enemyBox;
-        fixtureDef.density = 2f;  // more density -> bigger mass for the same size
+        fixtureDef.density = 1f;  // more density -> bigger mass for the same size
 
         enemyBody.setFixedRotation(true);
         enemyBody.createFixture(fixtureDef).setUserData(enemyModel.getId());
@@ -166,7 +166,7 @@ public class Map {
 
         Body playerBody = world.createBody(playerBodyDef);
         PolygonShape playerBox = new PolygonShape();
-        playerBox.setAsBox(0.25f, 0.5f);
+        playerBox.setAsBox(0.20f, 0.46f);
 
         this.playerModel = new PlayerModel(playerBody);
         View playerView = new View(playerModel, batch);
@@ -174,7 +174,7 @@ public class Map {
         gameObjects.put(playerModel.getId(), playerModel);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = playerBox;
-        fixtureDef.density = 2f;  // more density -> bigger mass for the same size
+        fixtureDef.density = 2.2f;  // more density -> bigger mass for the same size
         fixtureDef.friction = 1;
         playerBody.setFixedRotation(true);
         playerBody.createFixture(fixtureDef).setUserData(playerModel.getId());

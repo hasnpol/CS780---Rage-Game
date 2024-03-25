@@ -3,7 +3,6 @@ package com.ragegame.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -15,10 +14,9 @@ import com.ragegame.game.handlers.CameraHandler;
 import com.ragegame.game.handlers.ContactHandler;
 import com.ragegame.game.handlers.InputHandler;
 import com.ragegame.game.handlers.PhysicsHandler;
+import com.ragegame.game.map.Map;
 import com.ragegame.game.objects.Entity;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class GameScreen implements Screen {
