@@ -1,15 +1,14 @@
 package com.ragegame.game.objects.DynamicEntity;
 
-import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.ragegame.game.utils.Constants;
 import com.ragegame.game.handlers.contactHandlers.PlayerContactHandler;
 import static com.ragegame.game.utils.Constants.EntityType.*;
 import static com.ragegame.game.utils.Constants.PlayerConstants.*;
 import static com.ragegame.game.utils.Constants.*;
 
 public class PlayerModel extends DynamicEntity {
+    private static PlayerModel playerModel = null;
     float DRAG = 3f;
     boolean stop;
     public boolean grounded;
@@ -35,6 +34,11 @@ public class PlayerModel extends DynamicEntity {
         jumpPress = 0L;
         sprint = false;
         playerContactHandler = new PlayerContactHandler(this);
+        playerModel = this;
+    }
+
+    public static PlayerModel getPlayerModel() {
+        return playerModel;
     }
 
     // Look at your numpad for values for directions.

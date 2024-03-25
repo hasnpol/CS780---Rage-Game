@@ -17,6 +17,8 @@ import com.ragegame.game.handlers.InputHandler;
 import com.ragegame.game.handlers.PhysicsHandler;
 import com.ragegame.game.objects.Entity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class GameScreen implements Screen {
@@ -104,7 +106,7 @@ public class GameScreen implements Screen {
 
 		// Physics
 		world.clearForces();
-		this.gameMap.playerModel.update();
+        this.gameMap.updateDynamic();
 		this.physicsHandler.applyForces();
 		this.physicsHandler.doPhysicsStep(dt);
         deleteMarkedObjects();
