@@ -3,6 +3,7 @@ package com.ragegame.game.objects;
 import java.awt.Graphics;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.World;
 import com.ragegame.game.utils.Constants.*;
 import java.awt.Color;
 import java.awt.geom.Rectangle2D;
@@ -17,6 +18,8 @@ public class Entity {
     private Vector2 force;
 
     private Vector2 movementVector = new Vector2(0, 0);
+
+    public boolean markedForDelete = false;
     public Entity(Body body, EntityType type) {
         this.body = body;
         this.force = new Vector2();
@@ -63,6 +66,12 @@ public class Entity {
         return hitbox;
     }
 
+    public boolean needsDeletion() {
+        return this.markedForDelete;
+    }
 
+    public void delete(World world) {
+        world.destroyBody(body);
+    }
 
 }

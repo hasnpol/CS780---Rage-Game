@@ -43,8 +43,8 @@ public class Constants {
         public static final int SOLDIER_WIDTH_DEFAULT = 72;
         public static final int SOLDIER_HEIGHT_DEFAULT = 32;
 
-        public static final int SOLDIER_WIDTH = (int) (SOLDIER_WIDTH_DEFAULT * GameConstants.SCALE);
-        public static final int SOLDIER_HEIGHT = (int) (SOLDIER_HEIGHT_DEFAULT * GameConstants.SCALE);
+        public static final int SOLDIER_WIDTH = (int) (SOLDIER_WIDTH_DEFAULT * Game.SCALE);
+        public static final int SOLDIER_HEIGHT = (int) (SOLDIER_HEIGHT_DEFAULT * Game.SCALE);
 
         public static int GetSpriteAmount(int enemy_type, int enemy_state) {
             switch(enemy_type) {
@@ -99,11 +99,11 @@ public class Constants {
         }
     }
 
-    public static class GameConstants {
+    public static class Game {
 
         public static final int HEIGHT = 800;
         public static final int WIDTH = 1000;
 
-        public static final int SCALE = 1/128;
+        public static final int SCALE = 1/16;
     }
 }

@@ -1,6 +1,5 @@
 package com.ragegame.game.screens;
 
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapLayer;
@@ -10,7 +9,6 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -24,6 +22,8 @@ import com.ragegame.game.objects.DynamicEntity.DynamicEntity;
 import com.ragegame.game.objects.DynamicEntity.EnemyModel;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.Entity;
+import com.ragegame.game.objects.StaticEntity.FakePlatform;
+import com.ragegame.game.objects.StaticEntity.HiddenPlatform;
 import com.ragegame.game.objects.StaticEntity.Platform;
 import com.ragegame.game.objects.view.View;
 
@@ -50,8 +50,7 @@ public class Map {
         this.gameObjects = gameObjects;
         this.batch = batch;
         this.camera = camera;
-
-        map = new TmxMapLoader().load("maps/desert/gameart2d-desert.tmx");
+        map = new TmxMapLoader().load("maps/level_1/level_1.tmx");
         MapProperties properties = map.getProperties();
         this.width = properties.get("width", Integer.class);
         this.height = properties.get("height", Integer.class);
@@ -86,9 +85,47 @@ public class Map {
                     createPlatform((PolygonMapObject) mapObject);
                 }
                 break;
+            case "fake":
+                if (mapObject instanceof PolygonMapObject) {
+                    createFakePlatform((PolygonMapObject) mapObject);
+                }
+                break;
+            case "hidden":
+                if (mapObject instanceof PolygonMapObject) {
+                    createHiddenPlatform((PolygonMapObject) mapObject);
+                }
+                break;
             default:
                 break;
         }
+    }
+
+    public void createFakePlatform(PolygonMapObject mapObject) {
+        MapLayer tiledLayer = map.getLayers().get(mapObject.getName());
+
+        BodyDef bodyDef = new BodyDef();
+        Shape shape = createPolygonShape(mapObject, bodyDef);
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        Body body = world.createBody(bodyDef);
+
+
+        FakePlatform platform = new FakePlatform(body, mapObject.getPolygon().getX() / PPM,
+                mapObject.getPolygon().getY()/ PPM, tiledLayer);
+        body.createFixture(shape, 0).setUserData(platform.getId());
+        gameObjects.put(platform.getId(), platform);
+    }
+
+    public void createHiddenPlatform(PolygonMapObject mapObject) {
+        MapLayer tiledLayer = map.getLayers().get(mapObject.getName());
+
+        BodyDef bodyDef = new BodyDef();
+        Shape shape = createPolygonShape(mapObject, bodyDef);
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        Body body = world.createBody(bodyDef);
+
+        HiddenPlatform platform = new HiddenPlatform(body, mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM, tiledLayer);
+        body.createFixture(shape, 0).setUserData(platform.getId());
+        gameObjects.put(platform.getId(), platform);
     }
 
     public void createPlayerModel(PolygonMapObject mapObject) {
@@ -107,7 +144,7 @@ public class Map {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = playerBox;
         fixtureDef.density = 2f;  // more density -> bigger mass for the same size
-        fixtureDef.friction = 0;
+        fixtureDef.friction = 1;
         playerBody.setFixedRotation(true);
         playerBody.createFixture(fixtureDef).setUserData(playerModel.getId());
         playerBox.dispose();
@@ -127,19 +164,17 @@ public class Map {
 		View enemyView = new View(enemyModel, batch);
         enemyModel.setView(enemyView);
 
-		gameObjects.put(enemyModel.getId(), enemyModel);
+        gameObjects.put(enemyModel.getId(), enemyModel);
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = enemyBox;
 		fixtureDef.density = 2f;  // more density -> bigger mass for the same size
 		fixtureDef.friction = 1;
 
         enemyBody.setFixedRotation(true);
-		enemyBody.createFixture(fixtureDef).setUserData(enemyModel.getId());
-		enemyBox.dispose();
+        enemyBody.createFixture(fixtureDef).setUserData(enemyModel.getId());
+        enemyBox.dispose();
         dynamicEntities.add(enemyModel);
     }
-
-
 
     private void createPlatform(PolygonMapObject polygonMapObject) {
 
@@ -188,7 +223,6 @@ public class Map {
     public void dispose() {
         this.orthogonalTiledMapRenderer.dispose();
         disposeDynamicEntities();
-
     }
 
     public float getWidth() {

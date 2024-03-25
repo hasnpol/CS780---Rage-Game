@@ -107,7 +107,21 @@ public class GameScreen implements Screen {
 		this.gameMap.playerModel.update();
 		this.physicsHandler.applyForces();
 		this.physicsHandler.doPhysicsStep(dt);
-		//debugRenderer.render(world, camera.combined);
+        deleteMarkedObjects();
+		debugRenderer.render(world, camera.combined);
+    }
+
+    public void deleteMarkedObjects() {
+        for (ObjectMap.Entry<UUID, Entity> entry : gameObjects) {
+            Entity entity = entry.value;
+            if (entity.needsDeletion())
+                gameObjectsToDestroy.put(entry.key, entity);
+        }
+        for (ObjectMap.Entry<UUID, Entity> entry : gameObjectsToDestroy) {
+            entry.value.delete(world);
+            gameObjects.remove(entry.key);
+        }
+        gameObjectsToDestroy.clear();
     }
 
     @Override
