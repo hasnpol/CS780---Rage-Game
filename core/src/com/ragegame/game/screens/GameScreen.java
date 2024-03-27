@@ -23,7 +23,7 @@ import java.util.UUID;
 
 public class GameScreen implements Screen {
 
-    private RageGame game;
+    final RageGame game;
     public OrthographicCamera camera;
 
     public static World world;
@@ -94,10 +94,8 @@ public class GameScreen implements Screen {
 		// Draw the background
 		game.batch.begin();
 		this.backgroundHandler.render(dt, game.batch, gameMap.getWidth(), gameMap.getHeight(), gameMap.getPPM());
-		game.batch.end(); // doing this so that the background is drawn before gameMap don't change this
-
-		// Setup for tiled gameMap to be drawn
-		game.batch.setProjectionMatrix(camera.combined);
+        game.batch.setProjectionMatrix(camera.combined);
+        game.batch.end(); // doing this so that the background is drawn before gameMap don't change this
 
 		// Draw the tiled gameMap
 		game.batch.begin();
@@ -111,6 +109,11 @@ public class GameScreen implements Screen {
 		this.physicsHandler.doPhysicsStep(dt);
         deleteMarkedObjects();
 		debugRenderer.render(world, camera.combined);
+
+        if (gameMap.playerModel.isDead()) {
+            game.changeScreen(new GameOver(game));
+            this.dispose();
+        }
     }
 
     public void deleteMarkedObjects() {
@@ -148,8 +151,9 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        game.batch.dispose();
         this.backgroundHandler.dispose();
         this.gameMap.dispose();
+        world.dispose();
+        this.debugRenderer.dispose();
     }
 }
