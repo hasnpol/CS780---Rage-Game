@@ -1,8 +1,8 @@
 package com.ragegame.game.objects.DynamicEntity;
 
-import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import static com.ragegame.game.utils.Constants.*;
 import static com.ragegame.game.utils.Constants.EntityType.*;
 
 public class EnemyModel extends DynamicEntity {
@@ -10,9 +10,10 @@ public class EnemyModel extends DynamicEntity {
     private int health = 100;
     private float speed = 120F;
     private Vector2 movementVector = new Vector2(0, 0);
+    private int enemyState;
 
-    public EnemyModel(Body body) {
-        super(body, ENEMY);
+    public EnemyModel(Body body, EnemyType enemyType) {
+        super(body, ENEMY.ENEMY(enemyType));
         this.position = body.getPosition();
     }
 
