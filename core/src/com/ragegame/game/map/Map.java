@@ -1,4 +1,4 @@
-package com.ragegame.game.screens;
+package com.ragegame.game.map;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -152,7 +152,8 @@ public class Map {
         gameObjects.put(enemyModel.getId(), enemyModel);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = enemyBox;
-        fixtureDef.density = 2f;  // more density -> bigger mass for the same size
+        fixtureDef.density = 1f;  // more density -> bigger mass for the same size
+        fixtureDef.friction = 0;
 
         enemyBody.setFixedRotation(true);
         enemyBody.createFixture(fixtureDef).setUserData(enemyModel.getId());
@@ -168,10 +169,12 @@ public class Map {
         bodyDef.type = BodyDef.BodyType.StaticBody;
         Body body = world.createBody(bodyDef);
 
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.isSensor = true;
 
-        FakePlatform platform = new FakePlatform(body, mapObject.getPolygon().getX() / PPM,
-                mapObject.getPolygon().getY()/ PPM, tiledLayer);
-        body.createFixture(shape, 0).setUserData(platform.getId());
+        FakePlatform platform = new FakePlatform(body, mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM, tiledLayer);
+        body.createFixture(fixtureDef).setUserData(platform.getId());
         gameObjects.put(platform.getId(), platform);
     }
 
@@ -195,7 +198,7 @@ public class Map {
 
         Body playerBody = world.createBody(playerBodyDef);
         PolygonShape playerBox = new PolygonShape();
-        playerBox.setAsBox(0.25f, 0.5f);
+        playerBox.setAsBox(0.18f, 0.45f);
 
         this.playerModel = new PlayerModel(playerBody);
         View playerView = new View(playerModel, batch);
@@ -203,7 +206,7 @@ public class Map {
         gameObjects.put(playerModel.getId(), playerModel);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = playerBox;
-        fixtureDef.density = 2f;  // more density -> bigger mass for the same size
+        fixtureDef.density = 2.3f;  // more density -> bigger mass for the same size
         fixtureDef.friction = 1;
         playerBody.setFixedRotation(true);
         playerBody.createFixture(fixtureDef).setUserData(playerModel.getId());
@@ -218,7 +221,7 @@ public class Map {
 
 		Body enemyBody = world.createBody(enemyBodyDef);
 		PolygonShape enemyBox = new PolygonShape();
-		enemyBox.setAsBox(0.25f, 0.5f);
+        enemyBox.setAsBox(0.18f, 0.45f);
 
 		EnemyModel enemyModel = new EnemyModel(enemyBody);
 		View enemyView = new View(enemyModel, batch);

@@ -23,7 +23,6 @@ public class BoarModel extends EnemyModel {
         super(body);
         charging = 0;
         playerDirection = 0;
-        
     }
 
     @Override
@@ -56,6 +55,7 @@ public class BoarModel extends EnemyModel {
             }
             setMovementVector(chargeVector);
             getBody().setLinearVelocity(chargeVector);
+            charging = 2;
         }
     }
 }
