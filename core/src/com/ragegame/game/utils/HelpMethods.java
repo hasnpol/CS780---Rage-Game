@@ -10,6 +10,8 @@ public class HelpMethods {
         } else if (entityType == EntityType.ENEMY) {
             EnemyType enemyType = (EnemyType) entityType.getSubType();
             return LoadSave.SOLDIER_SPRITE;
+        } else if (entityType == EntityType.COIN) {
+            return LoadSave.COIN_SPRITE;
         }
         return null;
     }
