@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.ragegame.game.objects.DynamicEntity.BoarModel;
 import com.ragegame.game.objects.DynamicEntity.DynamicEntity;
 import com.ragegame.game.objects.DynamicEntity.EnemyModel;
+import com.ragegame.game.objects.DynamicEntity.Enemies.Gunmen;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.StaticEntity.FakePlatform;
@@ -29,7 +30,6 @@ import com.ragegame.game.objects.StaticEntity.Platform;
 import com.ragegame.game.objects.view.View;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class Map {
@@ -45,6 +45,7 @@ public class Map {
     public ObjectMap<UUID, Entity> gameObjects;
     public ArrayList<DynamicEntity> dynamicEntities = new ArrayList<>();
     public PlayerModel playerModel;
+
 
     public Map(World world, ObjectMap<UUID, Entity> gameObjects, SpriteBatch batch, OrthographicCamera camera) {
 
@@ -102,6 +103,10 @@ public class Map {
                     createHiddenPlatform((PolygonMapObject) mapObject);
                 }
                 break;
+            case "gunmen":
+                if (mapObject instanceof PolygonMapObject) {
+                    createGunmenModel((PolygonMapObject) mapObject);
+                }
             default:
                 break;
         }
@@ -200,6 +205,31 @@ public class Map {
 		fixtureDef.shape = enemyBox;
 		fixtureDef.density = 2f;  // more density -> bigger mass for the same size
 		fixtureDef.friction = 1;
+
+        enemyBody.setFixedRotation(true);
+        enemyBody.createFixture(fixtureDef).setUserData(enemyModel.getId());
+        enemyBox.dispose();
+        dynamicEntities.add(enemyModel);
+    }
+
+    public void createGunmenModel(PolygonMapObject mapObject) {
+        BodyDef enemyBodyDef = new BodyDef();
+        enemyBodyDef.type = BodyDef.BodyType.DynamicBody;
+        enemyBodyDef.position.set(mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM);
+
+        Body enemyBody = world.createBody(enemyBodyDef);
+        PolygonShape enemyBox = new PolygonShape();
+        enemyBox.setAsBox(0.25f, 0.5f);
+
+        EnemyModel enemyModel = new Gunmen(enemyBody);
+        View enemyView = new View(enemyModel, batch);
+        enemyModel.setView(enemyView);
+
+        gameObjects.put(enemyModel.getId(), enemyModel);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = enemyBox;
+        fixtureDef.density = 2f;  // more density -> bigger mass for the same size
+        fixtureDef.friction = 1;
 
         enemyBody.setFixedRotation(true);
         enemyBody.createFixture(fixtureDef).setUserData(enemyModel.getId());

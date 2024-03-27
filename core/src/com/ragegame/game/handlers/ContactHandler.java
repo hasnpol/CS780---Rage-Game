@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
+import com.ragegame.game.objects.StaticEntity.Bullet;
 import com.ragegame.game.objects.StaticEntity.FakePlatform;
 import com.ragegame.game.objects.StaticEntity.HiddenPlatform;
 
@@ -51,6 +52,16 @@ public class ContactHandler implements ContactListener {
         if (objA instanceof PlayerModel) {
             PlayerModel playerModel = (PlayerModel) objA;
             playerModel.playerContactHandler.startContact(objB);
+        }
+
+        if (objB instanceof Bullet) {
+            Bullet bullet = (Bullet) objB;
+            bullet.markedForDelete = true;
+        }
+
+        if (objA instanceof Bullet) {
+            Bullet bullet = (Bullet) objA;
+            bullet.markedForDelete = true;
         }
 
         if (objA instanceof FakePlatform) {

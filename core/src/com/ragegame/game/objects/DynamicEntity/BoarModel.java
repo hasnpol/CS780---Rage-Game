@@ -29,17 +29,10 @@ public class BoarModel extends EnemyModel {
     @Override
     public void update() {
         if (charging == 0) {
-            PlayerModel playerModel = PlayerModel.getPlayerModel();
-            if (playerModel != null) {
-                if (Math.abs(playerModel.getBody().getPosition().x - getPosition().x) < BOARHORIZONTALSIGHT && Math.abs(playerModel.getBody().getPosition().y - getPosition().y) < BOARVERTICALSIGHT) {
-                    charging = 1;
-                    chargeFinishTime = System.currentTimeMillis() + CHARGETIME;
-                    if (playerModel.getBody().getPosition().x > getPosition().x) {
-                        playerDirection = 6;
-                    } else {
-                        playerDirection = 4;
-                    }
-                }
+            playerDirection = EnemyModel.isPlayerInRange(BOARHORIZONTALSIGHT, BOARVERTICALSIGHT, getPosition());
+            if (playerDirection != 0) {
+                chargeFinishTime = System.currentTimeMillis() + CHARGETIME;
+                charging = 1;
             }
         } else {
             charge();
