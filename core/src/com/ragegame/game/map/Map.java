@@ -167,7 +167,7 @@ public class Map {
 
         Body playerBody = world.createBody(playerBodyDef);
         PolygonShape playerBox = new PolygonShape();
-        playerBox.setAsBox(0.20f, 0.46f);
+        playerBox.setAsBox(0.18f, 0.45f);
 
         this.playerModel = new PlayerModel(playerBody);
         View playerView = new View(playerModel, batch);
@@ -175,7 +175,7 @@ public class Map {
         gameObjects.put(playerModel.getId(), playerModel);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = playerBox;
-        fixtureDef.density = 2.2f;  // more density -> bigger mass for the same size
+        fixtureDef.density = 2.3f;  // more density -> bigger mass for the same size
         fixtureDef.friction = 1;
         playerBody.setFixedRotation(true);
         playerBody.createFixture(fixtureDef).setUserData(playerModel.getId());
@@ -190,7 +190,7 @@ public class Map {
 
 		Body enemyBody = world.createBody(enemyBodyDef);
 		PolygonShape enemyBox = new PolygonShape();
-		enemyBox.setAsBox(0.25f, 0.5f);
+        enemyBox.setAsBox(0.18f, 0.45f);
 
 		EnemyModel enemyModel = new EnemyModel(enemyBody);
 		View enemyView = new View(enemyModel, batch);

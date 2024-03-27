@@ -106,7 +106,7 @@ public class GameScreen implements Screen {
 		this.physicsHandler.applyForces();
 		this.physicsHandler.doPhysicsStep(dt);
         deleteMarkedObjects();
-		debugRenderer.render(world, camera.combined);
+		// debugRenderer.render(world, camera.combined);
 
         if (gameMap.playerModel.isDead()) {
             game.changeScreen(new GameOver(game));
