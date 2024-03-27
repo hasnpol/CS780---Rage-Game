@@ -140,10 +140,12 @@ public class Map {
         bodyDef.type = BodyDef.BodyType.StaticBody;
         Body body = world.createBody(bodyDef);
 
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.isSensor = true;
 
-        FakePlatform platform = new FakePlatform(body, mapObject.getPolygon().getX() / PPM,
-                mapObject.getPolygon().getY()/ PPM, tiledLayer);
-        body.createFixture(shape, 0).setUserData(platform.getId());
+        FakePlatform platform = new FakePlatform(body, mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM, tiledLayer);
+        body.createFixture(fixtureDef).setUserData(platform.getId());
         gameObjects.put(platform.getId(), platform);
     }
 
