@@ -6,16 +6,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
+import com.ragegame.game.objects.DynamicEntity.Coin;
 import com.ragegame.game.objects.DynamicEntity.EnemyModel;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.DynamicEntity.DynamicEntity;
-import com.ragegame.game.objects.DynamicEntity.EnemyModel;
-import com.ragegame.game.objects.DynamicEntity.PlayerModel;
-import com.ragegame.game.objects.Entity;
 import com.ragegame.game.utils.Constants;
 import com.ragegame.game.utils.HelpMethods;
 
-import java.text.BreakIterator;
 import java.util.Arrays;
 
 public class View {
@@ -62,6 +59,14 @@ public class View {
             }
         }
 
+        if (model instanceof Coin) {
+            Coin coin;
+            coin = (Coin) model;
+            if (coin.isCollected) {
+                return;
+            }
+        }
+
         int nextAnimationSequence = getAnimationSequenceFromMovementDirection();
         if (currentAnimationSequence != nextAnimationSequence) {
             Array<Sprite> spriteList = animationFrames.get(nextAnimationSequence);
@@ -87,6 +92,9 @@ public class View {
             return (temp.getDirection() == Constants.Direction.LEFT)? 3:0;
         } else if (this.model.type == Constants.EntityType.PLAYER) {
             PlayerModel temp = (PlayerModel) this.model;
+            return (temp.getDirection() == Constants.Direction.LEFT)? 3:0;
+        } else if (this.model.type == Constants.EntityType.COIN) {
+            Coin temp = (Coin) this.model;
             return (temp.getDirection() == Constants.Direction.LEFT)? 3:0;
         }
         return 0;

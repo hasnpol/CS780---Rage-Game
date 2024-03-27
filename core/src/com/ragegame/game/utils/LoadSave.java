@@ -41,6 +41,10 @@ public class LoadSave {
             "enemy_left_idle", "enemy_left_jump", "enemy_left",
             "enemy_right_idle", "enemy_right_jump", "enemy_right"};
 
+    public static final String[] COIN_SPRITE = {"sprites/coin_move.txt",
+            "coin", "coin", "coin", "coin",
+            "coin_shiny", "coin_shiny", "coin_shiny", "coin_shiny"};
+
     public static ArrayList<Object> GetEnemies() {  // TODO use for tileMap loading enemies
         // TODO should call on the enemyhandler
         return new ArrayList<>();
