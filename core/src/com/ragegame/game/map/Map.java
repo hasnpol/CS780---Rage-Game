@@ -124,6 +124,7 @@ public class Map {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = enemyBox;
         fixtureDef.density = 1f;  // more density -> bigger mass for the same size
+        fixtureDef.friction = 0;
 
         enemyBody.setFixedRotation(true);
         enemyBody.createFixture(fixtureDef).setUserData(enemyModel.getId());
