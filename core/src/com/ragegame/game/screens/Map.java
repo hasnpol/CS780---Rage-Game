@@ -19,6 +19,7 @@ import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.ragegame.game.objects.DynamicEntity.BoarModel;
+import com.ragegame.game.objects.DynamicEntity.Coin;
 import com.ragegame.game.objects.DynamicEntity.DynamicEntity;
 import com.ragegame.game.objects.DynamicEntity.EnemyModel;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
@@ -29,7 +30,6 @@ import com.ragegame.game.objects.StaticEntity.Platform;
 import com.ragegame.game.objects.view.View;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class Map {
@@ -102,9 +102,38 @@ public class Map {
                     createHiddenPlatform((PolygonMapObject) mapObject);
                 }
                 break;
+            case "coin":
+                if (mapObject instanceof PolygonMapObject) {
+                    createCoin((PolygonMapObject) mapObject);
+                }
             default:
                 break;
         }
+    }
+
+    private void createCoin(PolygonMapObject mapObject) {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM);
+
+        Body coinBody = world.createBody(bodyDef);
+        PolygonShape coinBox = new PolygonShape();
+        coinBox.setAsBox(0.2f, 0.2f);
+
+        Coin coin = new Coin(coinBody);
+        View view = new View(coin, batch);
+        coin.setView(view);
+
+        gameObjects.put(coin.getId(), coin);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = coinBox;
+        fixtureDef.isSensor = true;
+        fixtureDef.density = 0;
+
+        coinBody.setFixedRotation(true);
+        coinBody.createFixture(fixtureDef).setUserData(coin.getId());
+        coinBox.dispose();
+        dynamicEntities.add(coin);
     }
 
     private void createBoar(PolygonMapObject mapObject) {

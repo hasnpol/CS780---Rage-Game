@@ -17,7 +17,7 @@ public class Constants {
     }
     public enum State { IDLE, RUNNING, JUMPING, HIT, DEAD };
     public enum EntityType {
-        PLAYER(null), ENEMY(null), OBSTACLE(null);
+        PLAYER(null), ENEMY(null), OBSTACLE(null), COIN(null);
         private Object subType;
         EntityType(Object subType) {this.subType = subType;}
         public void setEnemySubType(Object enemySubType) {
@@ -28,6 +28,10 @@ public class Constants {
     }
 
     public enum EnemyType {SOLDIER, SNIPER;}
+
+    // TODO: add more coin types with different attributes?
+    public enum CoinType {COIN}
+
     public static class EnemyConstants {
         // Enum Enemy Type
         public static final int SOLDIER = 0;
@@ -47,20 +51,19 @@ public class Constants {
         public static final int SOLDIER_HEIGHT = (int) (SOLDIER_HEIGHT_DEFAULT * Game.SCALE);
 
         public static int GetSpriteAmount(int enemy_type, int enemy_state) {
-            switch(enemy_type) {
-                case SOLDIER:
-                    switch (enemy_type) {
-                        case IDLE:
-                            return 9;
-                        case RUNNING:
-                            return 6;
-                        case ATTACK:
-                            return 7;
-                        case HIT:
-                            return 4;
-                        case DEAD:
-                            return 5;
-                    }
+            if (enemy_type == SOLDIER) {
+                switch (enemy_type) {
+                    case IDLE:
+                        return 9;
+                    case RUNNING:
+                        return 6;
+                    case ATTACK:
+                        return 7;
+                    case HIT:
+                        return 4;
+                    case DEAD:
+                        return 5;
+                }
             }
             return 0;
         }
@@ -100,10 +103,8 @@ public class Constants {
     }
 
     public static class Game {
-
         public static final int HEIGHT = 800;
         public static final int WIDTH = 1000;
-
         public static final int SCALE = 1/16;
     }
 }
