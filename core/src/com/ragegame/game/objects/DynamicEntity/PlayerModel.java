@@ -25,7 +25,7 @@ public class PlayerModel extends DynamicEntity {
 
     public PlayerContactHandler playerContactHandler;
     private int health = 100;
-    private int coins = 100;
+    private int coins = 0;//change to debug
 
     public PlayerModel(Body body) {
         super(body, PLAYER);

@@ -28,6 +28,7 @@ public class GameOver implements Screen {
         //Load textures and fonts
         gameOverBanner = new Texture("game_over.png");
         scoreFont = new BitmapFont(Gdx.files.internal("fonts/score.fnt"));
+        //System.out.println(game.account.getCurrency());
     }
 
     @Override

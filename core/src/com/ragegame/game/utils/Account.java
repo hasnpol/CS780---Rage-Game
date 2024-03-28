@@ -1,39 +1,27 @@
 package com.ragegame.game.utils;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
+
 public class Account {
 
-    private int currency;
+    private final Preferences account;
 
-    private String user;
-    private int id;
-
-    public Account(String user, int id) {
-        this.currency = 0;
-        this.id = id;
-        this.user = user;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public Account() {
+        account = Gdx.app.getPreferences("RageGame Data");
     }
 
     public void setCurrency(int currency) {
-        this.currency = currency;
-    }
-
-    public void setUser(String name) {
-        this.user = name;
-    }
-
-    public int getId() {
-        return id;
+        int acc = getCurrency() + currency;
+        String cur = Integer.toString(acc);
+        this.account.putString("accountBalance", cur);
     }
 
     public int getCurrency() {
-        return currency;
+        return this.account.getInteger("accountBalance");
     }
 
-    public String getUser() {
-        return user;
+    public void flush() {//Saves new data
+        this.account.flush();
     }
 }

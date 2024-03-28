@@ -6,16 +6,19 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ragegame.game.screens.GameOver;
 import com.ragegame.game.screens.MainMenu;
+import com.ragegame.game.utils.Account;
 
 import java.util.UUID;
 
 public class RageGame extends Game {
 	public SpriteBatch batch;
 
+	public Account account;
 
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
+		account = new Account();
 		this.setScreen(new MainMenu(this));
 	}
 

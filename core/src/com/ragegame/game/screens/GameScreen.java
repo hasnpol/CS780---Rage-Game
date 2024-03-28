@@ -111,6 +111,8 @@ public class GameScreen implements Screen {
 		debugRenderer.render(world, camera.combined);
 
         if (gameMap.playerModel.isDead()) {
+            game.account.setCurrency(gameMap.playerModel.getCoins());
+            game.account.flush();
             game.changeScreen(new GameOver(game));
             this.dispose();
         }
