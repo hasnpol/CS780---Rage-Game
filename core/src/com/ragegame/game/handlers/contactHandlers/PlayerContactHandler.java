@@ -4,6 +4,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.ragegame.game.objects.DynamicEntity.EnemyModel;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.Entity;
+import com.ragegame.game.objects.StaticEntity.Bullet;
 import com.ragegame.game.objects.StaticEntity.Platform;
 
 public class PlayerContactHandler {
@@ -21,6 +22,10 @@ public class PlayerContactHandler {
 
         if (entity instanceof EnemyModel) {
             playerEnemyContact((EnemyModel) entity);
+        }
+
+        if (entity instanceof Bullet) {
+            playerBulletContact((Bullet) entity);
         }
     }
 
@@ -59,6 +64,17 @@ public class PlayerContactHandler {
             if (playerModel.isDead()) {
                 playerModel.kill();
             }
+        }
+    }
+
+    public void playerBulletContact(Bullet bullet) {
+        playerModel.setCoins((int) (-playerModel.getCoins()*.1));
+        playerModel.setHealth(-10);
+        playerModel.getBody().getPosition().y = -10;
+        System.out.println("Player Coin: " + playerModel.getCoins());
+        System.out.println("Player Health: " + playerModel.getHealth());
+        if (playerModel.isDead()) {
+            playerModel.kill();
         }
     }
 
