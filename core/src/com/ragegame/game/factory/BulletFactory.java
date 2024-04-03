@@ -31,7 +31,7 @@ public class BulletFactory {
 
     }
 
-    public void createBullet(Vector2 initialPos, Vector2 destination, int speed) {
+    public void createBullet(Vector2 initialPos, Vector2 destination, float speed) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.gravityScale = 0;
@@ -40,7 +40,7 @@ public class BulletFactory {
         Bullet bullet = new Bullet(body, Constants.EntityType.OBSTACLE);
 
         CircleShape circleShape = new CircleShape();
-        circleShape.setRadius(.05f);
+        circleShape.setRadius(0.05f);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = 0;
         fixtureDef.shape = circleShape;
@@ -52,7 +52,7 @@ public class BulletFactory {
         circleShape.dispose();
     }
 
-    public Vector2 getVelocity(Vector2 initial, Vector2 destination, int speed) {
+    public Vector2 getVelocity(Vector2 initial, Vector2 destination, float speed) {
         return new Vector2((destination.x - initial.x) * speed, (destination.y - initial.y) * speed);
     }
 

@@ -95,7 +95,10 @@ public class GameScreen implements Screen {
 		ScreenUtils.clear(0, 0, 0, 1);
 
 		// Handle camera logic so that camera follows player within gameMap bounds
-		this.cameraHandler.snapToPlayer(gameMap.playerModel.getBody().getPosition(), gameMap.getWidth(), gameMap.getHeight());
+        if (!gameMap.playerModel.isDead())
+        {
+            this.cameraHandler.snapToPlayer(gameMap.playerModel.getBody().getPosition(), gameMap.getWidth(), gameMap.getHeight());
+        }
 
 		// Draw the background
 		game.batch.begin();

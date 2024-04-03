@@ -9,8 +9,8 @@ public class Gunmen extends EnemyModel {
 
     int GUNMEN_HORIZONTAL_SIGHT = 7;
     int GUNMEN_VERTICAL_SIGHT = 2;
-    int GUNMEN_BULLET_SPEED = 3;
-    long SHOTRATE = 500;
+    float GUNMEN_BULLET_SPEED = 1f;
+    long SHOTRATE = 750;
     long nextShot;
     int playerDirection;
 
@@ -24,7 +24,10 @@ public class Gunmen extends EnemyModel {
 
     @Override
     public  void update() {
-        playerDirection = isPlayerInRange(GUNMEN_HORIZONTAL_SIGHT, GUNMEN_HORIZONTAL_SIGHT, getPosition());
+        if (isDead()) {
+            return;
+        }
+        playerDirection = isPlayerInRange(GUNMEN_HORIZONTAL_SIGHT, GUNMEN_VERTICAL_SIGHT, getPosition());
         if (playerDirection != 0) {
             shoot();
         }
