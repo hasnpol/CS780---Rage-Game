@@ -4,7 +4,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.ragegame.game.objects.DynamicEntity.EnemyModel;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
-import static com.ragegame.game.utils.Constants.EnemyType.BOAR;
+
+import static com.ragegame.game.utils.Constants.EnemyConstants.*;
+import static com.ragegame.game.utils.Constants.EnemyConstants.EnemyType.BOAR;
 
 public class BoarModel extends EnemyModel {
 
@@ -14,13 +16,6 @@ public class BoarModel extends EnemyModel {
     long chargeFinishTime;
 
     int playerDirection;
-
-    int CHARGESPEED = 4;
-    long CHARGETIME = 1000;
-
-    int BOARHORIZONTALSIGHT = 7;
-
-    int BOARVERTICALSIGHT = 2;
 
     public BoarModel(Body body) {
         super(body, BOAR);
@@ -33,9 +28,10 @@ public class BoarModel extends EnemyModel {
         if (charging == 0) {
             PlayerModel playerModel = PlayerModel.getPlayerModel();
             if (playerModel != null) {
-                if (Math.abs(playerModel.getBody().getPosition().x - getPosition().x) < BOARHORIZONTALSIGHT && Math.abs(playerModel.getBody().getPosition().y - getPosition().y) < BOARVERTICALSIGHT) {
+                if (Math.abs(playerModel.getBody().getPosition().x - getPosition().x) < BOAR_HORIZONTALSIGHT &&
+                        Math.abs(playerModel.getBody().getPosition().y - getPosition().y) < BOAR_VERTICALSIGHT) {
                     charging = 1;
-                    chargeFinishTime = System.currentTimeMillis() + CHARGETIME;
+                    chargeFinishTime = System.currentTimeMillis() + BOAR_CHARGETIME;
                     if (playerModel.getBody().getPosition().x > getPosition().x) {
                         playerDirection = 6;
                     } else {
@@ -50,12 +46,8 @@ public class BoarModel extends EnemyModel {
 
     public void charge() {
         if (charging == 1 && chargeFinishTime < System.currentTimeMillis()) {
-            Vector2 chargeVector = null;
-            if (playerDirection == 6) {
-                chargeVector = new Vector2(CHARGESPEED, 0);
-            } else {
-                chargeVector = new Vector2(-CHARGESPEED, 0);
-            }
+            Vector2 chargeVector = new Vector2((playerDirection == 6)?
+                    BOAR_CHARGESPEED: -BOAR_CHARGESPEED, 0);
             setMovementVector(chargeVector);
             getBody().setLinearVelocity(chargeVector);
             charging = 2;
