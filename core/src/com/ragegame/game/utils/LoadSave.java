@@ -15,9 +15,8 @@ import java.util.Objects;
 import java.util.Set;
 
 import com.ragegame.game.utils.Constants.*;
-import com.sun.tools.javac.util.Pair;
 
-import static com.ragegame.game.utils.Constants.Direction.*;
+import static com.ragegame.game.utils.UtilTypes.*;
 
 
 /** DESCRIPTION:
@@ -26,34 +25,6 @@ import static com.ragegame.game.utils.Constants.Direction.*;
  * */
 
 public class LoadSave {
-    public static class SPRITE {
-        public String resPath;
-        public Map<State, String> animation = new HashMap<State, String>() {{
-            put(State.IDLE, "");
-            put(State.RUNNING, "");
-            put(State.JUMPING, "");
-            put(State.HIT, "");
-            put(State.DEAD, "");
-        }};
-        SPRITE(String path, Map<State, String> stateList) {
-            assert stateList.containsKey(State.IDLE): "SPRITE is required to have an IDLE animation";
-            this.resPath = path;
-            for (State state : animation.keySet()) {
-                if (stateList.containsKey(state)) {
-                    animation.put(state, stateList.get(state));
-                } else { // Use IDLE as default
-                    animation.put(state, stateList.get(State.IDLE));
-                }
-            }
-        }
-        public Array<String> flattenMap() {
-            Array<String> stateArr = new Array<>();
-            for (State state : State.values()) {
-                stateArr.add(animation.get(state));
-            }
-            return stateArr;
-        }
-    }
     public static final SPRITE PLAYER_SPRITE = new SPRITE("sprites/textureatlas_human.txt",
             new HashMap<State, String>() {{
                 put(State.IDLE, "idle");
@@ -81,6 +52,13 @@ public class LoadSave {
                 }}
         );
     }
+
+    public static final COLLECTABLE COIN_SPRITE = new COLLECTABLE("sprites/coin_move.txt",
+            new ArrayList<String>() {{
+                add("coin");
+                add("coin_shiny");
+            }}
+    );
 
     public static final String[] SNIPER_SPRITE = {"sprites/textureatlas_boar.txt",
             "boar_right_idle", "boar_left_idle"};

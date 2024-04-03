@@ -19,6 +19,7 @@ import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.ragegame.game.objects.DynamicEntity.Enemies.BoarModel;
+import com.ragegame.game.objects.DynamicEntity.Coin;
 import com.ragegame.game.objects.DynamicEntity.DynamicEntity;
 import com.ragegame.game.objects.DynamicEntity.EnemyModel;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
@@ -102,9 +103,38 @@ public class Map {
                     createHiddenPlatform((PolygonMapObject) mapObject);
                 }
                 break;
+            case "coin":
+                if (mapObject instanceof PolygonMapObject) {
+                    createCoin((PolygonMapObject) mapObject);
+                }
             default:
                 break;
         }
+    }
+
+    private void createCoin(PolygonMapObject mapObject) {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM);
+
+        Body coinBody = world.createBody(bodyDef);
+        PolygonShape coinBox = new PolygonShape();
+        coinBox.setAsBox(0.2f, 0.2f);
+
+        Coin coin = new Coin(coinBody);
+        View view = new View(coin, batch);
+        coin.setView(view);
+
+        gameObjects.put(coin.getId(), coin);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = coinBox;
+        fixtureDef.isSensor = true;
+        fixtureDef.density = 0;
+
+        coinBody.setFixedRotation(true);
+        coinBody.createFixture(fixtureDef).setUserData(coin.getId());
+        coinBox.dispose();
+        dynamicEntities.add(coin);
     }
 
     private void createBoar(PolygonMapObject mapObject) {
@@ -140,10 +170,12 @@ public class Map {
         bodyDef.type = BodyDef.BodyType.StaticBody;
         Body body = world.createBody(bodyDef);
 
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.isSensor = true;
 
-        FakePlatform platform = new FakePlatform(body, mapObject.getPolygon().getX() / PPM,
-                mapObject.getPolygon().getY()/ PPM, tiledLayer);
-        body.createFixture(shape, 0).setUserData(platform.getId());
+        FakePlatform platform = new FakePlatform(body, mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM, tiledLayer);
+        body.createFixture(fixtureDef).setUserData(platform.getId());
         gameObjects.put(platform.getId(), platform);
     }
 
@@ -167,7 +199,7 @@ public class Map {
 
         Body playerBody = world.createBody(playerBodyDef);
         PolygonShape playerBox = new PolygonShape();
-        playerBox.setAsBox(0.20f, 0.46f);
+        playerBox.setAsBox(0.18f, 0.45f);
 
         this.playerModel = new PlayerModel(playerBody);
         View playerView = new View(playerModel, batch);
@@ -175,7 +207,7 @@ public class Map {
         gameObjects.put(playerModel.getId(), playerModel);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = playerBox;
-        fixtureDef.density = 2.2f;  // more density -> bigger mass for the same size
+        fixtureDef.density = 2.3f;  // more density -> bigger mass for the same size
         fixtureDef.friction = 1;
         playerBody.setFixedRotation(true);
         playerBody.createFixture(fixtureDef).setUserData(playerModel.getId());
@@ -190,7 +222,7 @@ public class Map {
 
 		Body enemyBody = world.createBody(enemyBodyDef);
 		PolygonShape enemyBox = new PolygonShape();
-		enemyBox.setAsBox(0.25f, 0.5f);
+        enemyBox.setAsBox(0.18f, 0.45f);
 
 		EnemyModel enemyModel = new EnemyModel(enemyBody, EnemyType.SOLDIER);
 		View enemyView = new View(enemyModel, batch);

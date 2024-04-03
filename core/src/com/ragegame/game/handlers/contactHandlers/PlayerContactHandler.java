@@ -1,6 +1,7 @@
 package com.ragegame.game.handlers.contactHandlers;
 
 import com.badlogic.gdx.physics.box2d.World;
+import com.ragegame.game.objects.DynamicEntity.Coin;
 import com.ragegame.game.objects.DynamicEntity.EnemyModel;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.Entity;
@@ -22,6 +23,11 @@ public class PlayerContactHandler {
         if (entity instanceof EnemyModel) {
             playerEnemyContact((EnemyModel) entity);
         }
+
+        if (entity instanceof Coin) {
+            playerCoinContact((Coin) entity);
+        }
+
     }
 
     public void endContact(Entity entity, World world) {
@@ -54,12 +60,18 @@ public class PlayerContactHandler {
             playerModel.setCoins((int) (-playerModel.getCoins()*.1));
             playerModel.setHealth(-50);
             playerModel.getBody().getPosition().y = -10;
-            System.out.println("Player Coin: " + playerModel.getCoins());
-            System.out.println("Player Health: " + playerModel.getHealth());
+            // System.out.println("Player Coin: " + playerModel.getCoins());
+            // System.out.println("Player Health: " + playerModel.getHealth());
             if (playerModel.isDead()) {
                 playerModel.kill();
             }
         }
+    }
+
+    public void playerCoinContact(Coin collectable) {
+        playerModel.setCoins(1);
+        // System.out.println("Player Coin: " + playerModel.getCoins());
+        collectable.setCollected();
     }
 
 }

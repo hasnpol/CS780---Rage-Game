@@ -17,20 +17,24 @@ public class Constants {
     }
     public enum State { IDLE, RUNNING, JUMPING, HIT, DEAD };
     public enum EntityType {
-        PLAYER(null), ENEMY(null), OBSTACLE(null);
+        PLAYER(null), ENEMY(null), OBSTACLE(null), RESOURCE(null), COIN(null);
         private Object subType;
         EntityType(Object subType) {this.subType = subType;}
 
-        public EntityType ENEMY(EnemyConstants.EnemyType enemyType) {
-            this.subType = enemyType;
+        public EntityType SubType(Object subType) {
+            this.subType = subType;
             return this;
-        }
-        public void setEnemyType(Object enemyType) {
-            if (this == ENEMY) {this.subType = enemyType;}
-            else {throw new UnsupportedOperationException("Cannot set subtype for non-ENEMY EntityType");}
         }
         public Object getSubType() {return subType;}
     }
+
+    public static class ResourceConstants {
+        // Enum Resource Type
+        public enum ResType {COIN}
+    }
+
+    // TODO: add more coin types with different attributes?
+    public enum CoinType {COIN}
 
     public static class EnemyConstants {
         // Enum Enemy Type
@@ -149,10 +153,8 @@ public class Constants {
     }
 
     public static class Game {
-
         public static final int HEIGHT = 800;
         public static final int WIDTH = 1000;
-
         public static final int SCALE = 1/16;
     }
 }
