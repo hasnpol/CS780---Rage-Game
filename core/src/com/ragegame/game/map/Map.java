@@ -27,7 +27,7 @@ import com.ragegame.game.objects.StaticEntity.FakePlatform;
 import com.ragegame.game.objects.StaticEntity.HiddenPlatform;
 import com.ragegame.game.objects.StaticEntity.Platform;
 import com.ragegame.game.objects.view.View;
-import com.ragegame.game.utils.Constants.EnemyType;
+import com.ragegame.game.utils.Constants.EnemyConstants.EnemyType;
 
 import java.util.ArrayList;
 import java.util.UUID;
