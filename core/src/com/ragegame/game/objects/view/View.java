@@ -35,9 +35,6 @@ public class View {
     public View(DynamicEntity model, SpriteBatch batch) {
         this.model = model;
         this.batch = batch;
-        if (model.type != null && model.type.getType() == Constants.EnemyType.BOAR) {
-            int o = 0;
-        }
         LoadSave.SPRITE sprite_textures = HelpMethods.GetTextureAtlas(model.type);
         assert sprite_textures != null;
         this.textureAtlas = new TextureAtlas(sprite_textures.resPath);
@@ -54,9 +51,6 @@ public class View {
         // TODO ADD LOGIC TO RENDER DEATH ANIMATION AND THEN HAVE PLAYER DISAPPEAR
         int nextAnimationSequence = getAnimationSequenceFromMovementDirection(isDead);
         if (currentAnimationSequence != nextAnimationSequence) {
-            if (this.model.type != null && this.model.type.getType() == Constants.EnemyType.BOAR) {
-                int x = 0;
-            }
             Array<Sprite> spriteList = animationFrames.get(nextAnimationSequence);
             currentAnimation = new Animation<>(this.animationFrameDuration, spriteList);
             currentAnimationSequence = nextAnimationSequence;
@@ -64,21 +58,23 @@ public class View {
 
         stateTime += dt;
         currentAnimationFrame = (TextureRegion) currentAnimation.getKeyFrame(stateTime, true);
+        boolean shouldFlip = model.getDirection().getNum() == 1; // Assuming 1 indicates left direction, adjust based on your implementation
+        if (currentAnimationFrame.isFlipX() != shouldFlip) {
+            currentAnimationFrame.flip(true, false); // Flip horizontally without flipping vertically
+        }
         batch.draw(currentAnimationFrame, this.model.getBody().getPosition().x - (float)1/2,
                 this.model.getBody().getPosition().y- (float)1/2, 1, 1);
-
-
     }
 
     public int getAnimationSequenceFromMovementDirection(boolean isDead) {
         if (isDead) {
-            return (State.DEAD.ordinal() * 2 + model.getDirection().getNum());
+            return State.DEAD.ordinal();
         } else if (this.model.getMovementVector().y != 0) { // If JUMPING
-            return (State.JUMPING.ordinal() * 2 + model.getDirection().getNum());
+            return State.JUMPING.ordinal();
         } else if (this.model.getMovementVector().x != 0) { // If RUNNING
-            return (State.RUNNING.ordinal() * 2 + model.getDirection().getNum());
+            return State.RUNNING.ordinal();
         } else { // otherwise Idle
-            return (State.IDLE.ordinal() * 2 + model.getDirection().getNum());
+            return State.IDLE.ordinal();
         }
     }
 

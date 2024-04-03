@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.ragegame.game.RageGame;
-import com.ragegame.game.objects.DynamicEntity.Enemy;
 
 import com.badlogic.gdx.utils.Array;
 import java.util.ArrayList;
@@ -29,14 +28,14 @@ import static com.ragegame.game.utils.Constants.Direction.*;
 public class LoadSave {
     public static class SPRITE {
         public String resPath;
-        public Map<State, HashMap<Direction, String>> animation = new HashMap<State, HashMap<Direction, String>>() {{
-            put(State.IDLE, new HashMap<Direction, String>() {{put(LEFT, "");put(RIGHT, "");}});
-            put(State.RUNNING, new HashMap<Direction, String>() {{put(LEFT, "");put(RIGHT, "");}});
-            put(State.JUMPING, new HashMap<Direction, String>() {{put(LEFT, "");put(RIGHT, "");}});
-            put(State.HIT, new HashMap<Direction, String>() {{put(LEFT, "");put(RIGHT, "");}});
-            put(State.DEAD, new HashMap<Direction, String>() {{put(LEFT, "");put(RIGHT, "");}});
+        public Map<State, String> animation = new HashMap<State, String>() {{
+            put(State.IDLE, "");
+            put(State.RUNNING, "");
+            put(State.JUMPING, "");
+            put(State.HIT, "");
+            put(State.DEAD, "");
         }};
-        SPRITE(String path, Map<State, HashMap<Direction, String>> stateList) {
+        SPRITE(String path, Map<State, String> stateList) {
             assert stateList.containsKey(State.IDLE): "SPRITE is required to have an IDLE animation";
             this.resPath = path;
             for (State state : animation.keySet()) {
@@ -50,44 +49,40 @@ public class LoadSave {
         public Array<String> flattenMap() {
             Array<String> stateArr = new Array<>();
             for (State state : State.values()) {
-                stateArr.add(animation.get(state).get(LEFT));
-                stateArr.add(animation.get(state).get(RIGHT));
+                stateArr.add(animation.get(state));
             }
             return stateArr;
         }
-        public int getAnimFromState(Constants.Direction direction) {
-            switch (direction) {
-                case LEFT:
-                    return 3;
-                case RIGHT:
-                    return 2;
-                default:
-                    return 0;
-            }
-        }
     }
-    public static final SPRITE PLAYER_SPRITE = new SPRITE("sprites/human_walk.txt",
-            new HashMap<State, HashMap<Direction, String>>() {{
-                put(State.IDLE, new HashMap<Direction, String>() {{put(LEFT, "human_left_idle");put(RIGHT, "human_right_idle");}});
-                put(State.RUNNING, new HashMap<Direction, String>() {{put(LEFT, "human_left");put(RIGHT, "human_right");}});
-                put(State.JUMPING, new HashMap<Direction, String>() {{put(LEFT, "human_left_jump");put(RIGHT, "human_right_jump");}});
+    public static final SPRITE PLAYER_SPRITE = new SPRITE("sprites/textureatlas_human.txt",
+            new HashMap<State, String>() {{
+                put(State.IDLE, "idle");
+                put(State.RUNNING, "running");
+                put(State.JUMPING, "jumping");
             }}
     );
 
-    public static final SPRITE BOAR_SPRITE = new SPRITE("sprites/boar_animation.txt",
-            new HashMap<State, HashMap<Direction, String>>() {{
-                put(State.IDLE, new HashMap<Direction, String>() {{put(LEFT, "boar_left_idle");put(RIGHT, "boar_right_idle");}});
-            }}
-    );
-    public static final SPRITE SOLDIER_SPRITE = new SPRITE("sprites/enemy_walk.txt",
-            new HashMap<State, HashMap<Direction, String>>() {{
-                put(State.IDLE, new HashMap<Direction, String>() {{put(LEFT, "enemy_left_idle");put(RIGHT, "enemy_right_idle");}});
-                put(State.RUNNING, new HashMap<Direction, String>() {{put(LEFT, "enemy_left");put(RIGHT, "enemy_right");}});
-                put(State.JUMPING, new HashMap<Direction, String>() {{put(LEFT, "enemy_left_jump");put(RIGHT, "enemy_right_jump");}});
-            }}
-    );
+    public static class EnemySprite {
+        public static final SPRITE BOAR_SPRITE = new SPRITE("sprites/textureatlas_boar.txt",
+                new HashMap<State, String>() {{
+                    put(State.IDLE, "idle");
+                }}
+        );
+        public static final SPRITE DRONE_SPRITE = new SPRITE("sprites/textureatlas_drone.txt",
+                new HashMap<State, String>() {{
+                    put(State.IDLE, "idle");
+                }}
+        );
+        public static final SPRITE SOLDIER_SPRITE = new SPRITE("sprites/enemy_walk.txt",
+                new HashMap<State, String>() {{
+                    put(State.IDLE, "enemy_left_idle");
+                    put(State.RUNNING, "enemy_left");
+                    put(State.JUMPING, "enemy_left_jump");
+                }}
+        );
+    }
 
-    public static final String[] SNIPER_SPRITE = {"sprites/boar_animation.txt",
+    public static final String[] SNIPER_SPRITE = {"sprites/textureatlas_boar.txt",
             "boar_right_idle", "boar_left_idle"};
 
     public static ArrayList<Object> GetEnemies() {  // TODO use for tileMap loading enemies

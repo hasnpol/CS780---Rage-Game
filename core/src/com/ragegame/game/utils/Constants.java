@@ -21,7 +21,7 @@ public class Constants {
         private Object subType;
         EntityType(Object subType) {this.subType = subType;}
 
-        public EntityType ENEMY(EnemyType enemyType) {
+        public EntityType ENEMY(EnemyConstants.EnemyType enemyType) {
             this.subType = enemyType;
             return this;
         }
@@ -29,21 +29,15 @@ public class Constants {
             if (this == ENEMY) {this.subType = enemyType;}
             else {throw new UnsupportedOperationException("Cannot set subtype for non-ENEMY EntityType");}
         }
-        public Object getType() {return subType;}
+        public Object getSubType() {return subType;}
     }
 
-    public enum EnemyType {SOLDIER, BOAR, SNIPER;}
     public static class EnemyConstants {
         // Enum Enemy Type
-        public static final int SOLDIER = 0;
-        public static final int BOAR = 1;
+        public enum EnemyType {SOLDIER, BOAR, DRONE}
 
         // Enemy State
-        public static final int IDLE = 0;
-        public static final int RUNNING = 1;
-        public static final int ATTACK = 2;
-        public static final int HIT = 3;
-        public static final int DEAD = 4;
+        public enum EnemyState {IDLE, RUNNING, ATTACK, HIT, DEAD}
 
         // Values for SOLDIER
         public static final int SOLDIER_WIDTH_DEFAULT = 72;
@@ -56,8 +50,25 @@ public class Constants {
         public static final int BOAR_HEIGHT_DEFAULT = 32;
         public static final int BOAR_WIDTH = (int) (BOAR_WIDTH_DEFAULT * Game.SCALE);
         public static final int BOAR_HEIGHT = (int) (BOAR_HEIGHT_DEFAULT * Game.SCALE);
+        public static final int BOAR_CHARGESPEED = 4;
+        public static final int BOAR_CHARGETIME = 1000;
+        public static final int BOAR_HORIZONTALSIGHT = 7;
+        public static final int BOAR_VERTICALSIGHT = 2;
 
-        public static int GetSpriteAmount(int enemy_type, int enemy_state) {
+        // Values for BOAR
+        public static final int DRONE_WIDTH_DEFAULT = 72;
+        public static final int DRONE_HEIGHT_DEFAULT = 32;
+        public static final int DRONE_WIDTH = (int) (BOAR_WIDTH_DEFAULT * Game.SCALE);
+        public static final int DRONE_HEIGHT = (int) (BOAR_HEIGHT_DEFAULT * Game.SCALE);
+        public static final float DRONE_SPEED = 0.15f; // Drone speed
+        public static final float DRONE_DENSITY = 0.25f; // Drone speed
+        public static final float DRONE_AMPLITUDE = 5.0f; // Amplitude of the sinusoidal movement
+        public static final float DRONE_FREQUENCY = 1.5f; // Frequency of the sinusoidal movement
+        public static final int DRONE_HORIZONTALSIGHT = 7; // Frequency of the sinusoidal movement
+        public static final int DRONE_VERTICALSIGHT = 2; // Frequency of the sinusoidal movement
+
+        // TODO Implement this later to easily get state from type and state
+        public static int GetSpriteAmount(EnemyType enemy_type, EnemyState enemy_state) {
             switch(enemy_type) {
                 case SOLDIER:
                     switch (enemy_state) {
@@ -85,6 +96,19 @@ public class Constants {
                         case DEAD:
                             return 5;
                     }
+                case DRONE:
+                    switch (enemy_state) {
+                        case IDLE:
+                            return 0;
+                        case RUNNING:
+                            return 6;
+                        case ATTACK:
+                            return 7;
+                        case HIT:
+                            return 4;
+                        case DEAD:
+                            return 5;
+                    }
             }
             return 0;
         }
@@ -100,6 +124,7 @@ public class Constants {
         public static final int HIT = 5;
         public static final int ATTACK = 6;
 
+        public static final int HEALTH = 1000;
         public static final float MAXSPEED = 8f;
         public static float speed = 120F;
 

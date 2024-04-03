@@ -1,8 +1,10 @@
 package com.ragegame.game.objects.DynamicEntity;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.view.View;
+import com.ragegame.game.utils.Constants;
 import com.ragegame.game.utils.Constants.*;
 
 public class DynamicEntity extends Entity {
@@ -16,6 +18,9 @@ public class DynamicEntity extends Entity {
 
     public Direction getDirection() {
         return this.direction;
+    }
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
     public void setView(View view) {
         this.view = view;
