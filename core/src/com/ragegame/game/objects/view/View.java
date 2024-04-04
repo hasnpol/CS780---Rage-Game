@@ -11,14 +11,20 @@ import com.ragegame.game.objects.DynamicEntity.EnemyModel;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.DynamicEntity.DynamicEntity;
 import com.ragegame.game.utils.Constants;
+import com.ragegame.game.utils.Constants.State;
+import com.ragegame.game.utils.Constants.Direction;
+import com.ragegame.game.utils.Constants.EntityType;
 import com.ragegame.game.utils.HelpMethods;
+import com.ragegame.game.utils.LoadSave;
+import com.ragegame.game.utils.UtilTypes;
+import com.ragegame.game.utils.UtilTypes.*;
 
 import java.util.Arrays;
 
 public class View {
     private final DynamicEntity model;
     private final SpriteBatch batch;
-    private final Array<Array<Sprite>> animationFrames;
+    private final Array<Array<Sprite>> animationFrames = new Array<>();
     TextureAtlas textureAtlas;
     protected Animation currentAnimation;
     protected int currentAnimationSequence = -1;
@@ -30,12 +36,13 @@ public class View {
     public View(DynamicEntity model, SpriteBatch batch) {
         this.model = model;
         this.batch = batch;
-        String[] texturePaths = HelpMethods.GetTextureAtlas(model.type);
-        assert texturePaths != null;
-        this.textureAtlas = new TextureAtlas(texturePaths[0]);
-        this.animationFrames = new Array<>();
-        String[] textures = Arrays.copyOfRange(texturePaths, 1, texturePaths.length);
-        for (String texture : textures) { // Gets array excluding texturePath
+        if (model.type == EntityType.RESOURCE) {
+            int x = 0;
+        }
+        UtilTypes sprite_textures = HelpMethods.GetTextureAtlas(model.type);
+        assert sprite_textures != null;
+        this.textureAtlas = new TextureAtlas(sprite_textures.resPath);
+        for (String texture : sprite_textures.animations) { // Gets array excluding texturePath
             animationFrames.add(textureAtlas.createSprites(texture));
         }
         currentAnimation = new Animation<>(this.animationFrameDuration, animationFrames.get(0));
@@ -43,6 +50,7 @@ public class View {
     }
 
     public void render(float dt) {
+
         if (model instanceof PlayerModel) {
             PlayerModel playerModel;
             playerModel = (PlayerModel) model;
@@ -67,7 +75,14 @@ public class View {
             }
         }
 
-        int nextAnimationSequence = getAnimationSequenceFromMovementDirection();
+        // TODO ============================
+        // TODO Figure out a way to render death animation before disappearing
+        boolean isDead = (model instanceof PlayerModel && ((PlayerModel) model).isDead()) ||
+                (model instanceof EnemyModel && ((EnemyModel) model).isDead());
+        // TODO ============================
+
+        // TODO ADD LOGIC TO RENDER DEATH ANIMATION AND THEN HAVE PLAYER DISAPPEAR
+        int nextAnimationSequence = getAnimationSequenceFromMovementDirection(isDead);
         if (currentAnimationSequence != nextAnimationSequence) {
             Array<Sprite> spriteList = animationFrames.get(nextAnimationSequence);
             currentAnimation = new Animation<>(this.animationFrameDuration, spriteList);
@@ -76,28 +91,28 @@ public class View {
 
         stateTime += dt;
         currentAnimationFrame = (TextureRegion) currentAnimation.getKeyFrame(stateTime, true);
+        boolean shouldFlip = model.getDirection().getNum() == 1; // Assuming 1 indicates left direction, adjust based on your implementation
+        if (currentAnimationFrame.isFlipX() != shouldFlip) {
+            currentAnimationFrame.flip(true, false); // Flip horizontally without flipping vertically
+        }
         batch.draw(currentAnimationFrame, this.model.getBody().getPosition().x - (float)1/2,
                 this.model.getBody().getPosition().y- (float)1/2, 1, 1);
     }
 
-    public int getAnimationSequenceFromMovementDirection() {
-        if (this.model.getMovementVector().x < 0) {
-            return 2 - ((this.model.getMovementVector().y > 0)? 1:0);
-        } else if (this.model.getMovementVector().x > 0) {
-            return 5 - ((this.model.getMovementVector().y > 0)? 1:0);
+    public int getAnimationSequenceFromMovementDirection(boolean isDead) {
+        if (this.model.type == EntityType.RESOURCE) {
+            return 0; // Collectables will probably have only one animation?
+        } else {
+            if (isDead) {
+                return State.DEAD.ordinal();
+            } else if (this.model.getMovementVector().y != 0) { // If JUMPING
+                return State.JUMPING.ordinal();
+            } else if (this.model.getMovementVector().x != 0) { // If RUNNING
+                return State.RUNNING.ordinal();
+            } else { // otherwise Idle
+                return State.IDLE.ordinal();
+            }
         }
-        // Can expect this.model.getMovementVector().x == 0
-        if (this.model.type == Constants.EntityType.ENEMY) {
-            EnemyModel temp = (EnemyModel) this.model;
-            return (temp.getDirection() == Constants.Direction.LEFT)? 3:0;
-        } else if (this.model.type == Constants.EntityType.PLAYER) {
-            PlayerModel temp = (PlayerModel) this.model;
-            return (temp.getDirection() == Constants.Direction.LEFT)? 3:0;
-        } else if (this.model.type == Constants.EntityType.COIN) {
-            Coin temp = (Coin) this.model;
-            return (temp.getDirection() == Constants.Direction.LEFT)? 3:0;
-        }
-        return 0;
     }
 
     public void dispose() {

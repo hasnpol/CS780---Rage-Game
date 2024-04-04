@@ -18,7 +18,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.ragegame.game.objects.DynamicEntity.BoarModel;
+import com.ragegame.game.objects.DynamicEntity.Enemies.BoarModel;
 import com.ragegame.game.objects.DynamicEntity.Coin;
 import com.ragegame.game.objects.DynamicEntity.DynamicEntity;
 import com.ragegame.game.objects.DynamicEntity.EnemyModel;
@@ -28,6 +28,7 @@ import com.ragegame.game.objects.StaticEntity.FakePlatform;
 import com.ragegame.game.objects.StaticEntity.HiddenPlatform;
 import com.ragegame.game.objects.StaticEntity.Platform;
 import com.ragegame.game.objects.view.View;
+import com.ragegame.game.utils.Constants.EnemyConstants.EnemyType;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -145,20 +146,20 @@ public class Map {
         PolygonShape enemyBox = new PolygonShape();
         enemyBox.setAsBox(0.5f, 0.25f);
 
-        BoarModel enemyModel = new BoarModel(enemyBody);
-        View enemyView = new View(enemyModel, batch);
-        enemyModel.setView(enemyView);
+        BoarModel boarModel = new BoarModel(enemyBody);
+        View boarView = new View(boarModel, batch);
+        boarModel.setView(boarView);
 
-        gameObjects.put(enemyModel.getId(), enemyModel);
+        gameObjects.put(boarModel.getId(), boarModel);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = enemyBox;
         fixtureDef.density = 1f;  // more density -> bigger mass for the same size
         fixtureDef.friction = 0;
 
         enemyBody.setFixedRotation(true);
-        enemyBody.createFixture(fixtureDef).setUserData(enemyModel.getId());
+        enemyBody.createFixture(fixtureDef).setUserData(boarModel.getId());
         enemyBox.dispose();
-        dynamicEntities.add(enemyModel);
+        dynamicEntities.add(boarModel);
     }
 
     public void createFakePlatform(PolygonMapObject mapObject) {
@@ -223,7 +224,7 @@ public class Map {
 		PolygonShape enemyBox = new PolygonShape();
         enemyBox.setAsBox(0.18f, 0.45f);
 
-		EnemyModel enemyModel = new EnemyModel(enemyBody);
+		EnemyModel enemyModel = new EnemyModel(enemyBody, EnemyType.SOLDIER);
 		View enemyView = new View(enemyModel, batch);
         enemyModel.setView(enemyView);
 
