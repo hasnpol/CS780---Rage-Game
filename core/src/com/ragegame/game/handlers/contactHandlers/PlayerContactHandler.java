@@ -49,7 +49,11 @@ public class PlayerContactHandler {
     }
 
     public void playerEnemyContact(EnemyModel enemyModel) {
-        if ((playerModel.getBody().getPosition().y - 0.5) > enemyModel.getBody().getPosition().y) {
+        System.out.println("Player y: " + playerModel.getBody().getPosition().y);
+        System.out.println("Enemy y: " + enemyModel.getBody().getPosition().y);
+        System.out.println("Diff: " + (float) (playerModel.getBody().getPosition().y - enemyModel.getBody().getPosition().y));
+        System.out.println("Enemy height: " + enemyModel.getHeight());
+        if ((playerModel.getBody().getPosition().y) >= enemyModel.getBody().getPosition().y + enemyModel.getHeight()) {
             playerModel.setGrounded(true);
             enemyModel.setHealth(-100);
             System.out.println("Enemy Health: " + enemyModel.getHealth());

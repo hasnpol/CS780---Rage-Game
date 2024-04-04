@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.ragegame.game.objects.DynamicEntity.Enemies.BoarModel;
 import com.ragegame.game.objects.DynamicEntity.Coin;
 import com.ragegame.game.objects.DynamicEntity.DynamicEntity;
+import com.ragegame.game.objects.DynamicEntity.Enemies.Soldier;
 import com.ragegame.game.objects.DynamicEntity.EnemyModel;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.Entity;
@@ -28,7 +29,6 @@ import com.ragegame.game.objects.StaticEntity.FakePlatform;
 import com.ragegame.game.objects.StaticEntity.HiddenPlatform;
 import com.ragegame.game.objects.StaticEntity.Platform;
 import com.ragegame.game.objects.view.View;
-import com.ragegame.game.utils.Constants.EnemyConstants.EnemyType;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -224,7 +224,7 @@ public class Map {
 		PolygonShape enemyBox = new PolygonShape();
         enemyBox.setAsBox(0.18f, 0.45f);
 
-		EnemyModel enemyModel = new EnemyModel(enemyBody, EnemyType.SOLDIER);
+		EnemyModel enemyModel = new Soldier(enemyBody);
 		View enemyView = new View(enemyModel, batch);
         enemyModel.setView(enemyView);
 
