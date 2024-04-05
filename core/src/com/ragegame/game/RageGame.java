@@ -11,6 +11,9 @@ import com.ragegame.game.utils.Account;
 import java.util.UUID;
 
 public class RageGame extends Game {
+
+	public static final int V_Width = 400;
+	public static final int V_Height = 208;
 	public SpriteBatch batch;
 
 	public Account account;

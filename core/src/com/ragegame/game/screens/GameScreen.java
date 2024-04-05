@@ -16,6 +16,7 @@ import com.ragegame.game.handlers.ContactHandler;
 import com.ragegame.game.handlers.InputHandler;
 import com.ragegame.game.handlers.PhysicsHandler;
 import com.ragegame.game.objects.Entity;
+import com.ragegame.game.utils.HUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +43,8 @@ public class GameScreen implements Screen {
     private CameraHandler cameraHandler;
     private BackgroundHandler backgroundHandler;
 
+    private HUD hud;
+
 
     public GameScreen(RageGame game) {
         this.game = game;
@@ -49,7 +52,8 @@ public class GameScreen implements Screen {
         // Init Camera
         this.screenWidth = Gdx.graphics.getWidth();
         this.screenHeight =  Gdx.graphics.getHeight();
-        this.camera = new OrthographicCamera(15 , 15 * ((float) screenHeight / screenWidth));
+        this.camera = new OrthographicCamera(15, 15 * ((float) screenHeight / screenWidth));
+        this.hud = new HUD(game.batch);
         this.cameraHandler = new CameraHandler(camera);
 
         // Init backgrounds
@@ -87,6 +91,10 @@ public class GameScreen implements Screen {
 
 		// Clear previous images drawn to the screen
 		ScreenUtils.clear(0, 0, 0, 1);
+
+        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+        hud.stage.draw();
+        hud.addCoins(gameMap.playerModel.getCoins());
 
 		// Handle camera logic so that camera follows player within gameMap bounds
 		this.cameraHandler.snapToPlayer(gameMap.playerModel.getBody().getPosition(), gameMap.getWidth(), gameMap.getHeight());
@@ -157,5 +165,6 @@ public class GameScreen implements Screen {
         this.gameMap.dispose();
         world.dispose();
         this.debugRenderer.dispose();
+        hud.dispose();
     }
 }
