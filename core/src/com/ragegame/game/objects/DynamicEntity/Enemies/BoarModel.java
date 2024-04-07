@@ -26,6 +26,7 @@ public class BoarModel extends EnemyModel {
         super(body, BOAR);
         charging = 0;
         playerDirection = 0;
+        setWidth(1f);
         setHeight(0.5f);
     }
 

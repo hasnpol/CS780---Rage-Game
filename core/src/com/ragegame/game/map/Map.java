@@ -13,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
@@ -195,9 +196,9 @@ public class Map {
     public void createPlayerModel(PolygonMapObject mapObject) {
         BodyDef playerBodyDef = new BodyDef();
         playerBodyDef.type = BodyDef.BodyType.DynamicBody;
-        playerBodyDef.position.set(mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM);
-
+        playerBodyDef.position.set(mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY() / PPM);
         Body playerBody = world.createBody(playerBodyDef);
+
         PolygonShape playerBox = new PolygonShape();
         playerBox.setAsBox(0.18f, 0.45f);
 
@@ -205,12 +206,15 @@ public class Map {
         View playerView = new View(playerModel, batch);
         playerModel.setView(playerView);
         gameObjects.put(playerModel.getId(), playerModel);
+
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = playerBox;
         fixtureDef.density = 2.3f;  // more density -> bigger mass for the same size
         fixtureDef.friction = 1;
+
         playerBody.setFixedRotation(true);
         playerBody.createFixture(fixtureDef).setUserData(playerModel.getId());
+
         playerBox.dispose();
         dynamicEntities.add(playerModel);
     }

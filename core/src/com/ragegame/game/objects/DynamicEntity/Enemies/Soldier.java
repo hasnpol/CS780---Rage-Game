@@ -7,6 +7,7 @@ import static com.ragegame.game.utils.Constants.EnemyConstants.EnemyType.SOLDIER
 public class Soldier extends EnemyModel {
     public Soldier(Body body) {
         super(body, SOLDIER);
-        setHeight(0.90f);
+        setWidth(0.36f);
+        setHeight(0.9f);
     }
 }

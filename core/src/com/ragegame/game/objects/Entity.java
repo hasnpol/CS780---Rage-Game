@@ -15,6 +15,7 @@ public class Entity {
     /// This super class is used for game objects that has physics
     public final EntityType type;
     private final Body body;
+    protected float width;
     protected float height;
     private UUID id;
     private Vector2 force;
@@ -56,6 +57,14 @@ public class Entity {
 
     protected void setHeight(float height) {
         this.height = height;
+    }
+
+    protected void setWidth(float width) {
+        this.width = width;
+    }
+
+    public float getWidth() {
+        return this.width;
     }
 
     public float getHeight() {

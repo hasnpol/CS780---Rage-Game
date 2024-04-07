@@ -62,7 +62,7 @@ public class View {
         if (model instanceof EnemyModel) {
             EnemyModel enemyModel;
             enemyModel = (EnemyModel) model;
-            if (enemyModel.isDead()) {
+            if (enemyModel.isDead) {
                 return;
             }
         }
@@ -78,7 +78,7 @@ public class View {
         // TODO ============================
         // TODO Figure out a way to render death animation before disappearing
         boolean isDead = (model instanceof PlayerModel && ((PlayerModel) model).isDead()) ||
-                (model instanceof EnemyModel && ((EnemyModel) model).isDead());
+                (model instanceof EnemyModel && ((EnemyModel) model).isDead);
         // TODO ============================
 
         // TODO ADD LOGIC TO RENDER DEATH ANIMATION AND THEN HAVE PLAYER DISAPPEAR

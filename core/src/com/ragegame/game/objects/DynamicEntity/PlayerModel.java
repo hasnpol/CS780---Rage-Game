@@ -29,6 +29,8 @@ public class PlayerModel extends DynamicEntity {
         sprint = false;
         playerContactHandler = new PlayerContactHandler(this);
         playerModel = this;
+        setWidth(0.36f);
+        setHeight(0.9f);
     }
 
     public static PlayerModel getPlayerModel() {
