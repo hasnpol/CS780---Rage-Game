@@ -55,22 +55,6 @@ public class Entity {
         this.movementVector = movementVector;
     }
 
-    protected void setHeight(float height) {
-        this.height = height;
-    }
-
-    protected void setWidth(float width) {
-        this.width = width;
-    }
-
-    public float getWidth() {
-        return this.width;
-    }
-
-    public float getHeight() {
-        return this.height;
-    }
-
     public boolean needsDeletion() {
         return this.markedForDelete;
     }

@@ -46,14 +46,14 @@ public class Constants {
         // Values for SOLDIER
         public static final int SOLDIER_WIDTH_DEFAULT = 72;
         public static final int SOLDIER_HEIGHT_DEFAULT = 32;
-        public static final int SOLDIER_WIDTH = (int) (SOLDIER_WIDTH_DEFAULT * Game.SCALE);
-        public static final int SOLDIER_HEIGHT = (int) (SOLDIER_HEIGHT_DEFAULT * Game.SCALE);
+        public static final float SOLDIER_WIDTH = .36f;
+        public static final float SOLDIER_HEIGHT = .9f;
 
         // Values for BOAR
         public static final int BOAR_WIDTH_DEFAULT = 72;
         public static final int BOAR_HEIGHT_DEFAULT = 32;
-        public static final int BOAR_WIDTH = (int) (BOAR_WIDTH_DEFAULT * Game.SCALE);
-        public static final int BOAR_HEIGHT = (int) (BOAR_HEIGHT_DEFAULT * Game.SCALE);
+        public static final float BOAR_WIDTH = 1f;
+        public static final float BOAR_HEIGHT = .5f;
         public static final int BOAR_CHARGESPEED = 4;
         public static final int BOAR_CHARGETIME = 1000;
         public static final int BOAR_HORIZONTALSIGHT = 7;
@@ -62,8 +62,9 @@ public class Constants {
         // Values for BOAR
         public static final int DRONE_WIDTH_DEFAULT = 72;
         public static final int DRONE_HEIGHT_DEFAULT = 32;
-        public static final int DRONE_WIDTH = (int) (BOAR_WIDTH_DEFAULT * Game.SCALE);
-        public static final int DRONE_HEIGHT = (int) (BOAR_HEIGHT_DEFAULT * Game.SCALE);
+        // TODO Update drone width and height
+        public static final float DRONE_WIDTH = .1f;
+        public static final float DRONE_HEIGHT = .1f;
         public static final float DRONE_SPEED = 0.15f; // Drone speed
         public static final float DRONE_DENSITY = 0.25f; // Drone speed
         public static final float DRONE_AMPLITUDE = 5.0f; // Amplitude of the sinusoidal movement
@@ -131,6 +132,8 @@ public class Constants {
         public static final int HEALTH = 1000;
         public static final float MAXSPEED = 8f;
         public static float speed = 120F;
+        public static final float PLAYER_WIDTH = .36f;
+        public static final float PLAYER_HEIGHT = .9f;
 
         public static int GetSpriteAmount(int player_action) {
             switch (player_action) {

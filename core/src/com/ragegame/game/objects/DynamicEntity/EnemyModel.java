@@ -13,7 +13,6 @@ public class EnemyModel extends DynamicEntity {
     private float speed = 120F;
     private Vector2 movementVector = new Vector2(0, 0);
     private int enemyState;
-
     public boolean isDead;
 
     public EnemyModel(Body body, EnemyConstants.EnemyType enemyType) {
