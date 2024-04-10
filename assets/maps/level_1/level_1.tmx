@@ -612,6 +612,11 @@
    <polygon points="0,0 16,0 16,-6.5 0,-6.5"/>
   </object>
  </objectgroup>
+ <objectgroup id="20" name="drone">
+  <object id="179" x="64.5" y="640.478">
+   <polygon points="0,0 0,8.04325 8.43478,8.06512 8.43478,-0.0218567"/>
+  </object>
+ </objectgroup>
  <objectgroup id="12" name="hidden">
   <object id="110" name="hidden1" x="64" y="672">
    <polygon points="0,0 48,0 48,16 0,16"/>
