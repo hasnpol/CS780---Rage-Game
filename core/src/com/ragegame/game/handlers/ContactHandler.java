@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.ragegame.game.objects.DynamicEntity.Coin;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.StaticEntity.FakePlatform;
@@ -32,13 +33,11 @@ public class ContactHandler implements ContactListener {
         Entity objB = null;
 
         if (fixtureA.getUserData() != null && fixtureA.getUserData() instanceof UUID) {
-            // destroy the cannon ball on collision'
             UUID objId = (UUID) fixtureA.getUserData();
             objA = gameObjects.get(objId);
         }
 
         if (fixtureB.getUserData() != null && fixtureB.getUserData() instanceof UUID) {
-            // destroy the cannon ball on collision'
             UUID objId = (UUID) fixtureB.getUserData();
             objB = gameObjects.get(objId);
         }
@@ -73,7 +72,6 @@ public class ContactHandler implements ContactListener {
             hiddenPlatform.reveal();
         }
 
-
     }
 
     @Override
@@ -85,25 +83,23 @@ public class ContactHandler implements ContactListener {
         Entity objB = null;
 
         if (fixtureA.getUserData() != null && fixtureA.getUserData() instanceof UUID) {
-            // destroy the cannon ball on collision'
             UUID objId = (UUID) fixtureA.getUserData();
             objA = gameObjects.get(objId);
         }
 
         if (fixtureB.getUserData() != null && fixtureB.getUserData() instanceof UUID) {
-            // destroy the cannon ball on collision'
             UUID objId = (UUID) fixtureB.getUserData();
             objB = gameObjects.get(objId);
         }
 
         if (objB instanceof PlayerModel) {
             PlayerModel playerModel = (PlayerModel) objB;
-            playerModel.playerContactHandler.endContact(objA, world);
+            playerModel.playerContactHandler.endContact(objA);
         }
 
         if (objA instanceof PlayerModel) {
             PlayerModel playerModel = (PlayerModel) objA;
-            playerModel.playerContactHandler.endContact(objB, world);
+            playerModel.playerContactHandler.endContact(objB);
         }
 
         if (objA instanceof HiddenPlatform) {

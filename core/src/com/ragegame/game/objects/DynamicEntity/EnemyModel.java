@@ -46,7 +46,7 @@ public class EnemyModel extends DynamicEntity {
         this.markedForDelete = true;
     }
 
-    public void update() {
+    public void update(float dt) {
         Vector2 enemyPosition = new Vector2(this.getBody().getPosition());
         if (enemyPosition.x > 0) {
             setDirection(Direction.LEFT);
