@@ -25,8 +25,7 @@ public class Drone extends EnemyModel {
 
     @Override
     public void update() {
-//        float deltaTime = Gdx.graphics.getDeltaTime();
-        float deltaTime = System.currentTimeMillis();
+        float deltaTime = Gdx.graphics.getDeltaTime();
         PlayerModel player = PlayerModel.getPlayerModel();
         Vector2 playerPosition = new Vector2(player.getBody().getPosition());
         Vector2 dronePosition = new Vector2(this.getBody().getPosition());
@@ -34,17 +33,18 @@ public class Drone extends EnemyModel {
 
 //        float sinusoidalOffset = MathUtils.sin(elapsedTime * DRONE_FREQUENCY) * DRONE_AMPLITUDE;
 
+        // Applied the sinusoidal up and down "bounce" movement
         float sinusoidalVelocity = DRONE_AMPLITUDE * MathUtils.sin(MathUtils.PI2 * DRONE_FREQUENCY * elapsedTime);
         getBody().applyForceToCenter(0, sinusoidalVelocity, true);
-        Vector2 currentVelocity = getBody().getLinearVelocity();
 
+
+        Vector2 currentVelocity = getBody().getLinearVelocity();
         getBody().setLinearVelocity(currentVelocity.x, sinusoidalVelocity);
 
         float angle = MathUtils.atan2(playerPosition.y - dronePosition.y, playerPosition.x - dronePosition.x);
         Vector2 pursuitMovement = new Vector2(MathUtils.cos(angle) * DRONE_SPEED, MathUtils.sin(angle) * DRONE_SPEED);
 //        Vector2 combinedMovement = pursuitMovement.add(0, sinusoidalOffset);
-//
-//        dronePosition.add(combinedMovement);
+        dronePosition.add(pursuitMovement);
         getBody().setTransform(dronePosition, angle); // sets the angle, could be used for a gun?
 
 //        float angle = MathUtils.atan2(playerPosition.y - dronePosition.y, playerPosition.x - dronePosition.x);

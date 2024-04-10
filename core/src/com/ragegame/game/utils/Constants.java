@@ -64,10 +64,10 @@ public class Constants {
         public static final int DRONE_HEIGHT_DEFAULT = 32;
         public static final int DRONE_WIDTH = (int) (BOAR_WIDTH_DEFAULT * Game.SCALE);
         public static final int DRONE_HEIGHT = (int) (BOAR_HEIGHT_DEFAULT * Game.SCALE);
-        public static final float DRONE_SPEED = 0.15f; // Drone speed
+        public static final float DRONE_SPEED = 0.01f; // Drone speed
         public static final float DRONE_DENSITY = 0.25f; // Drone speed
         public static final float DRONE_AMPLITUDE = 5.0f; // Amplitude of the sinusoidal movement
-        public static final float DRONE_FREQUENCY = 1.5f; // Frequency of the sinusoidal movement
+        public static final float DRONE_FREQUENCY = 1.0f; // Frequency of the sinusoidal movement
         public static final int DRONE_HORIZONTALSIGHT = 7; // Frequency of the sinusoidal movement
         public static final int DRONE_VERTICALSIGHT = 2; // Frequency of the sinusoidal movement
 
