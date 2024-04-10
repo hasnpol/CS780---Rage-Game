@@ -13,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
@@ -21,6 +22,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.ragegame.game.objects.DynamicEntity.Enemies.BoarModel;
 import com.ragegame.game.objects.DynamicEntity.Coin;
 import com.ragegame.game.objects.DynamicEntity.DynamicEntity;
+import com.ragegame.game.objects.DynamicEntity.Enemies.Soldier;
 import com.ragegame.game.objects.DynamicEntity.EnemyModel;
 import com.ragegame.game.objects.DynamicEntity.Enemies.Gunmen;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
@@ -29,7 +31,6 @@ import com.ragegame.game.objects.StaticEntity.FakePlatform;
 import com.ragegame.game.objects.StaticEntity.HiddenPlatform;
 import com.ragegame.game.objects.StaticEntity.Platform;
 import com.ragegame.game.objects.view.View;
-import com.ragegame.game.utils.Constants.EnemyConstants.EnemyType;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -126,8 +127,8 @@ public class Map {
         bodyDef.position.set(mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM);
 
         Body coinBody = world.createBody(bodyDef);
-        PolygonShape coinBox = new PolygonShape();
-        coinBox.setAsBox(0.2f, 0.2f);
+        CircleShape coinBox = new CircleShape();
+        coinBox.setRadius(0.2f);
 
         Coin coin = new Coin(coinBody);
         View view = new View(coin, batch);
@@ -152,7 +153,7 @@ public class Map {
 
         Body enemyBody = world.createBody(enemyBodyDef);
         PolygonShape enemyBox = new PolygonShape();
-        enemyBox.setAsBox(0.5f, 0.25f);
+        enemyBox.setAsBox(0.5f, 0.32f);
 
         BoarModel boarModel = new BoarModel(enemyBody);
         View boarView = new View(boarModel, batch);
@@ -161,8 +162,9 @@ public class Map {
         gameObjects.put(boarModel.getId(), boarModel);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = enemyBox;
-        fixtureDef.density = 1f;  // more density -> bigger mass for the same size
-        fixtureDef.friction = 0;
+        fixtureDef.density = 2.5f;  // more density -> bigger mass for the same size
+        fixtureDef.friction = .2f;
+        fixtureDef.restitution = .1f;
 
         enemyBody.setFixedRotation(true);
         enemyBody.createFixture(fixtureDef).setUserData(boarModel.getId());
@@ -203,22 +205,27 @@ public class Map {
     public void createPlayerModel(PolygonMapObject mapObject) {
         BodyDef playerBodyDef = new BodyDef();
         playerBodyDef.type = BodyDef.BodyType.DynamicBody;
-        playerBodyDef.position.set(mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM);
-
+        playerBodyDef.position.set(mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY() / PPM);
         Body playerBody = world.createBody(playerBodyDef);
+
         PolygonShape playerBox = new PolygonShape();
         playerBox.setAsBox(0.18f, 0.45f);
 
         this.playerModel = new PlayerModel(playerBody);
+        this.playerModel.setPlayerContactHandler();
         View playerView = new View(playerModel, batch);
         playerModel.setView(playerView);
         gameObjects.put(playerModel.getId(), playerModel);
+
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = playerBox;
-        fixtureDef.density = 2.3f;  // more density -> bigger mass for the same size
+        fixtureDef.density = 2.5f;  // more density -> bigger mass for the same size
         fixtureDef.friction = 1;
+        fixtureDef.restitution = .1f;
+
         playerBody.setFixedRotation(true);
         playerBody.createFixture(fixtureDef).setUserData(playerModel.getId());
+
         playerBox.dispose();
         dynamicEntities.add(playerModel);
     }
@@ -232,15 +239,16 @@ public class Map {
 		PolygonShape enemyBox = new PolygonShape();
         enemyBox.setAsBox(0.18f, 0.45f);
 
-		EnemyModel enemyModel = new EnemyModel(enemyBody, EnemyType.SOLDIER);
+		EnemyModel enemyModel = new Soldier(enemyBody);
 		View enemyView = new View(enemyModel, batch);
         enemyModel.setView(enemyView);
 
         gameObjects.put(enemyModel.getId(), enemyModel);
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = enemyBox;
-		fixtureDef.density = 2f;  // more density -> bigger mass for the same size
+		fixtureDef.density = 2.5f;  // more density -> bigger mass for the same size
 		fixtureDef.friction = 1;
+        fixtureDef.restitution = .1f;
 
         enemyBody.setFixedRotation(true);
         enemyBody.createFixture(fixtureDef).setUserData(enemyModel.getId());

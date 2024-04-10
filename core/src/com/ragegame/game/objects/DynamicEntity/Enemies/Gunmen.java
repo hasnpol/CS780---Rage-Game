@@ -25,7 +25,7 @@ public class Gunmen extends EnemyModel {
 
     @Override
     public  void update() {
-        if (isDead()) {
+        if (isDead) {
             return;
         }
         playerDirection = isPlayerInRange(GUNMEN_HORIZONTAL_SIGHT, GUNMEN_VERTICAL_SIGHT, getPosition());

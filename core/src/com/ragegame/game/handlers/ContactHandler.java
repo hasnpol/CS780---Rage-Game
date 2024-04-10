@@ -7,6 +7,8 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.ragegame.game.objects.DynamicEntity.Coin;
+import com.ragegame.game.objects.DynamicEntity.EnemyModel;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.StaticEntity.Bullet;
@@ -33,13 +35,11 @@ public class ContactHandler implements ContactListener {
         Entity objB = null;
 
         if (fixtureA.getUserData() != null && fixtureA.getUserData() instanceof UUID) {
-            // destroy the cannon ball on collision'
             UUID objId = (UUID) fixtureA.getUserData();
             objA = gameObjects.get(objId);
         }
 
         if (fixtureB.getUserData() != null && fixtureB.getUserData() instanceof UUID) {
-            // destroy the cannon ball on collision'
             UUID objId = (UUID) fixtureB.getUserData();
             objB = gameObjects.get(objId);
         }
@@ -64,26 +64,25 @@ public class ContactHandler implements ContactListener {
             bullet.markedForDelete = true;
         }
 
-        if (objA instanceof FakePlatform) {
+        if (objA instanceof FakePlatform && objB instanceof PlayerModel) {
             FakePlatform fakePlatform = (FakePlatform) objA;
             fakePlatform.rugPull();
         }
 
-        if (objB instanceof FakePlatform) {
+        if (objB instanceof FakePlatform && objA instanceof PlayerModel) {
             FakePlatform fakePlatform = (FakePlatform) objB;
             fakePlatform.rugPull();
         }
 
-        if (objA instanceof HiddenPlatform) {
+        if (objA instanceof HiddenPlatform && objB instanceof PlayerModel) {
             HiddenPlatform hiddenPlatform = (HiddenPlatform) objA;
             hiddenPlatform.reveal();
         }
 
-        if (objB instanceof HiddenPlatform) {
+        if (objB instanceof HiddenPlatform && objA instanceof PlayerModel) {
             HiddenPlatform hiddenPlatform = (HiddenPlatform) objB;
             hiddenPlatform.reveal();
         }
-
 
     }
 
@@ -96,33 +95,31 @@ public class ContactHandler implements ContactListener {
         Entity objB = null;
 
         if (fixtureA.getUserData() != null && fixtureA.getUserData() instanceof UUID) {
-            // destroy the cannon ball on collision'
             UUID objId = (UUID) fixtureA.getUserData();
             objA = gameObjects.get(objId);
         }
 
         if (fixtureB.getUserData() != null && fixtureB.getUserData() instanceof UUID) {
-            // destroy the cannon ball on collision'
             UUID objId = (UUID) fixtureB.getUserData();
             objB = gameObjects.get(objId);
         }
 
         if (objB instanceof PlayerModel) {
             PlayerModel playerModel = (PlayerModel) objB;
-            playerModel.playerContactHandler.endContact(objA, world);
+            playerModel.playerContactHandler.endContact(objA);
         }
 
         if (objA instanceof PlayerModel) {
             PlayerModel playerModel = (PlayerModel) objA;
-            playerModel.playerContactHandler.endContact(objB, world);
+            playerModel.playerContactHandler.endContact(objB);
         }
 
-        if (objA instanceof HiddenPlatform) {
+        if (objA instanceof HiddenPlatform && objB instanceof PlayerModel) {
             HiddenPlatform hiddenPlatform = (HiddenPlatform) objA;
             hiddenPlatform.hide();
         }
 
-        if (objB instanceof HiddenPlatform) {
+        if (objB instanceof HiddenPlatform && objA instanceof PlayerModel) {
             HiddenPlatform hiddenPlatform = (HiddenPlatform) objB;
             hiddenPlatform.hide();
         }

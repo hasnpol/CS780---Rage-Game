@@ -17,26 +17,19 @@ import com.ragegame.game.handlers.InputHandler;
 import com.ragegame.game.handlers.PhysicsHandler;
 import com.ragegame.game.map.Map;
 import com.ragegame.game.objects.Entity;
+import com.ragegame.game.factory.CoinFactory;
 
 import java.util.UUID;
 
 public class GameScreen implements Screen {
-
     final RageGame game;
     public OrthographicCamera camera;
-
     public static World world;
     private Box2DDebugRenderer debugRenderer;
     private Map gameMap;
-
     private ObjectMap<UUID, Entity> gameObjectsToDestroy;
     private ObjectMap<UUID, Entity> gameObjects;
     private int screenHeight, screenWidth;
-
-    //private PlayerModel playerModel;
-    //private View playerView;
-    ////private EnemyModel enemyModel;
-    //private View enemyView;
     private PhysicsHandler physicsHandler;
     private CameraHandler cameraHandler;
     private BackgroundHandler backgroundHandler;
@@ -76,6 +69,12 @@ public class GameScreen implements Screen {
         ContactHandler contactHandler = new ContactHandler(world, gameObjects);
         world.setContactListener(contactHandler);
         this.physicsHandler = new PhysicsHandler(world, gameObjects);
+
+        // Create Coin Factory to use during enemy vs player collisions.
+        CoinFactory coinFactory = CoinFactory.getInstance();
+        coinFactory.gameObjectsToDestroy = gameObjectsToDestroy;
+        coinFactory.gameObjects = gameObjects;
+        coinFactory.world = world;
     }
 
 
@@ -115,7 +114,7 @@ public class GameScreen implements Screen {
 		this.physicsHandler.applyForces();
 		this.physicsHandler.doPhysicsStep(dt);
         deleteMarkedObjects();
-		// debugRenderer.render(world, camera.combined);
+		debugRenderer.render(world, camera.combined);
 
         if (gameMap.playerModel.isDead()) {
             game.changeScreen(new GameOver(game));
