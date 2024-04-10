@@ -6,18 +6,19 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
+import com.ragegame.game.objects.DynamicEntity.Coin;
 import com.ragegame.game.objects.DynamicEntity.EnemyModel;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.DynamicEntity.DynamicEntity;
-import com.ragegame.game.objects.DynamicEntity.EnemyModel;
-import com.ragegame.game.objects.DynamicEntity.PlayerModel;
-import com.ragegame.game.objects.Entity;
 import com.ragegame.game.utils.Constants;
 import com.ragegame.game.utils.Constants.State;
+import com.ragegame.game.utils.Constants.Direction;
+import com.ragegame.game.utils.Constants.EntityType;
 import com.ragegame.game.utils.HelpMethods;
 import com.ragegame.game.utils.LoadSave;
+import com.ragegame.game.utils.UtilTypes;
+import com.ragegame.game.utils.UtilTypes.*;
 
-import java.text.BreakIterator;
 import java.util.Arrays;
 
 public class View {
@@ -35,10 +36,13 @@ public class View {
     public View(DynamicEntity model, SpriteBatch batch) {
         this.model = model;
         this.batch = batch;
-        LoadSave.SPRITE sprite_textures = HelpMethods.GetTextureAtlas(model.type);
+        if (model.type == EntityType.RESOURCE) {
+            int x = 0;
+        }
+        UtilTypes sprite_textures = HelpMethods.GetTextureAtlas(model.type);
         assert sprite_textures != null;
         this.textureAtlas = new TextureAtlas(sprite_textures.resPath);
-        for (String texture : sprite_textures.flattenMap()) { // Gets array excluding texturePath
+        for (String texture : sprite_textures.animations) { // Gets array excluding texturePath
             animationFrames.add(textureAtlas.createSprites(texture));
         }
         currentAnimation = new Animation<>(this.animationFrameDuration, animationFrames.get(0));
@@ -46,8 +50,37 @@ public class View {
     }
 
     public void render(float dt) {
+
+        if (model instanceof PlayerModel) {
+            PlayerModel playerModel;
+            playerModel = (PlayerModel) model;
+            if (playerModel.isDead()) {
+                return;
+            }
+        }
+
+        if (model instanceof EnemyModel) {
+            EnemyModel enemyModel;
+            enemyModel = (EnemyModel) model;
+            if (enemyModel.isDead()) {
+                return;
+            }
+        }
+
+        if (model instanceof Coin) {
+            Coin coin;
+            coin = (Coin) model;
+            if (coin.isCollected) {
+                return;
+            }
+        }
+
+        // TODO ============================
+        // TODO Figure out a way to render death animation before disappearing
         boolean isDead = (model instanceof PlayerModel && ((PlayerModel) model).isDead()) ||
                 (model instanceof EnemyModel && ((EnemyModel) model).isDead());
+        // TODO ============================
+
         // TODO ADD LOGIC TO RENDER DEATH ANIMATION AND THEN HAVE PLAYER DISAPPEAR
         int nextAnimationSequence = getAnimationSequenceFromMovementDirection(isDead);
         if (currentAnimationSequence != nextAnimationSequence) {
@@ -67,14 +100,18 @@ public class View {
     }
 
     public int getAnimationSequenceFromMovementDirection(boolean isDead) {
-        if (isDead) {
-            return State.DEAD.ordinal();
-        } else if (this.model.getMovementVector().y != 0) { // If JUMPING
-            return State.JUMPING.ordinal();
-        } else if (this.model.getMovementVector().x != 0) { // If RUNNING
-            return State.RUNNING.ordinal();
-        } else { // otherwise Idle
-            return State.IDLE.ordinal();
+        if (this.model.type == EntityType.RESOURCE) {
+            return 0; // Collectables will probably have only one animation?
+        } else {
+            if (isDead) {
+                return State.DEAD.ordinal();
+            } else if (this.model.getMovementVector().y != 0) { // If JUMPING
+                return State.JUMPING.ordinal();
+            } else if (this.model.getMovementVector().x != 0) { // If RUNNING
+                return State.RUNNING.ordinal();
+            } else { // otherwise Idle
+                return State.IDLE.ordinal();
+            }
         }
     }
 

@@ -15,7 +15,7 @@ public class EnemyModel extends DynamicEntity {
     private int enemyState;
 
     public EnemyModel(Body body, EnemyConstants.EnemyType enemyType) {
-        super(body, ENEMY.ENEMY(enemyType));
+        super(body, ENEMY.SubType(enemyType));
         this.position = body.getPosition();
     }
 
