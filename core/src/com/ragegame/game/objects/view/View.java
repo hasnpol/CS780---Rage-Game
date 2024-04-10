@@ -95,8 +95,13 @@ public class View {
         if (currentAnimationFrame.isFlipX() != shouldFlip) {
             currentAnimationFrame.flip(true, false); // Flip horizontally without flipping vertically
         }
-        batch.draw(currentAnimationFrame, this.model.getBody().getPosition().x - (float)1/2,
-                this.model.getBody().getPosition().y- (float)1/2, 1, 1);
+        if (model instanceof Coin) {
+            batch.draw(currentAnimationFrame, this.model.getBody().getPosition().x - .25f,
+                    this.model.getBody().getPosition().y - .25f, (float) 1/2, (float) 1/2);
+        } else {
+            batch.draw(currentAnimationFrame, this.model.getBody().getPosition().x - (float) 1 / 2,
+                    this.model.getBody().getPosition().y - (float) 1 / 2, 1, 1);
+        }
     }
 
     public int getAnimationSequenceFromMovementDirection(boolean isDead) {

@@ -120,7 +120,7 @@ public class Map {
 
         Body coinBody = world.createBody(bodyDef);
         CircleShape coinBox = new CircleShape();
-        coinBox.setRadius(0.4f);
+        coinBox.setRadius(0.2f);
 
         Coin coin = new Coin(coinBody);
         View view = new View(coin, batch);
