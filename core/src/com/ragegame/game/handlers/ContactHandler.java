@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.ragegame.game.objects.DynamicEntity.Coin;
+import com.ragegame.game.objects.DynamicEntity.EnemyModel;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.StaticEntity.FakePlatform;
@@ -52,22 +53,22 @@ public class ContactHandler implements ContactListener {
             playerModel.playerContactHandler.startContact(objB);
         }
 
-        if (objA instanceof FakePlatform) {
+        if (objA instanceof FakePlatform && objB instanceof PlayerModel) {
             FakePlatform fakePlatform = (FakePlatform) objA;
             fakePlatform.rugPull();
         }
 
-        if (objB instanceof FakePlatform) {
+        if (objB instanceof FakePlatform && objA instanceof PlayerModel) {
             FakePlatform fakePlatform = (FakePlatform) objB;
             fakePlatform.rugPull();
         }
 
-        if (objA instanceof HiddenPlatform) {
+        if (objA instanceof HiddenPlatform && objB instanceof PlayerModel) {
             HiddenPlatform hiddenPlatform = (HiddenPlatform) objA;
             hiddenPlatform.reveal();
         }
 
-        if (objB instanceof HiddenPlatform) {
+        if (objB instanceof HiddenPlatform && objA instanceof PlayerModel) {
             HiddenPlatform hiddenPlatform = (HiddenPlatform) objB;
             hiddenPlatform.reveal();
         }
@@ -102,12 +103,12 @@ public class ContactHandler implements ContactListener {
             playerModel.playerContactHandler.endContact(objB);
         }
 
-        if (objA instanceof HiddenPlatform) {
+        if (objA instanceof HiddenPlatform && objB instanceof PlayerModel) {
             HiddenPlatform hiddenPlatform = (HiddenPlatform) objA;
             hiddenPlatform.hide();
         }
 
-        if (objB instanceof HiddenPlatform) {
+        if (objB instanceof HiddenPlatform && objA instanceof PlayerModel) {
             HiddenPlatform hiddenPlatform = (HiddenPlatform) objB;
             hiddenPlatform.hide();
         }

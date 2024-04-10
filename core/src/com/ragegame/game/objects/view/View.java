@@ -10,14 +10,10 @@ import com.ragegame.game.objects.DynamicEntity.Coin;
 import com.ragegame.game.objects.DynamicEntity.EnemyModel;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.DynamicEntity.DynamicEntity;
-import com.ragegame.game.utils.Constants;
 import com.ragegame.game.utils.Constants.State;
-import com.ragegame.game.utils.Constants.Direction;
 import com.ragegame.game.utils.Constants.EntityType;
 import com.ragegame.game.utils.HelpMethods;
-import com.ragegame.game.utils.LoadSave;
 import com.ragegame.game.utils.UtilTypes;
-import com.ragegame.game.utils.UtilTypes.*;
 
 import java.util.Arrays;
 
@@ -30,7 +26,6 @@ public class View {
     protected int currentAnimationSequence = -1;
     protected TextureRegion currentAnimationFrame;
     private float stateTime = 0f;
-
     final float animationFrameDuration= 0.5F;
 
     public View(DynamicEntity model, SpriteBatch batch) {

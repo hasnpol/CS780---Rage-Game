@@ -1,5 +1,6 @@
 package com.ragegame.game.factory;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -33,17 +34,17 @@ public class CoinFactory {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.gravityScale = 1f;
-        int max = 2;
-        int min = -2;
+        int max = 3;
+        int min = -3;
         int randomPos = (int) (Math.random() * (max - min) + min);
         bodyDef.position.set(playerPosition.x + randomPos, playerPosition.y);
         Body body = world.createBody(bodyDef);
         Coin coin = new Coin(body);
 
         CircleShape circleShape = new CircleShape();
-        circleShape.setRadius(0.5f);
+        circleShape.setRadius(0.2f);
         FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.density = 1;
+        fixtureDef.density = 0;
         fixtureDef.shape = circleShape;
         gameObjects.put(coin.getId(), coin);
 
