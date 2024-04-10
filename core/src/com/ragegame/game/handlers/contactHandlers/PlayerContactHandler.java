@@ -4,6 +4,7 @@ import com.ragegame.game.objects.DynamicEntity.Coin;
 import com.ragegame.game.objects.DynamicEntity.EnemyModel;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.Entity;
+import com.ragegame.game.objects.StaticEntity.Bullet;
 import com.ragegame.game.objects.StaticEntity.Platform;
 import static com.ragegame.game.utils.Constants.EnemyConstants.*;
 import static com.ragegame.game.utils.Constants.PlayerConstants.*;
@@ -25,6 +26,9 @@ public class PlayerContactHandler {
             enemyStartContact((EnemyModel) entity);
         }
 
+        if (entity instanceof Bullet) {
+            playerBulletContact((Bullet) entity);
+        }
         if (entity instanceof Coin) {
             coinStartContact((Coin) entity);
         }
@@ -106,6 +110,23 @@ public class PlayerContactHandler {
             playerModel.setGrounded(true);
             enemyModel.kill();
         }
+    }
+
+    public void playerBulletContact(Bullet bullet) {
+        playerModel.setCoins((int) (-playerModel.getCoins() * .1));
+        playerModel.setHealth(-10);
+        playerModel.getBody().getPosition().y = -10;
+        System.out.println("Player Coin: " + playerModel.getCoins());
+        System.out.println("Player Health: " + playerModel.getHealth());
+        if (playerModel.isDead()) {
+            playerModel.kill();
+        }
+    }
+
+    public void playerCoinContact(Coin collectable) {
+        playerModel.setCoins(1);
+        // System.out.println("Player Coin: " + playerModel.getCoins());
+        collectable.setCollected();
     }
 
     public void enemyEndContact() {
