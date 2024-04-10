@@ -10,14 +10,10 @@ import com.ragegame.game.objects.DynamicEntity.Coin;
 import com.ragegame.game.objects.DynamicEntity.EnemyModel;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.DynamicEntity.DynamicEntity;
-import com.ragegame.game.utils.Constants;
 import com.ragegame.game.utils.Constants.State;
-import com.ragegame.game.utils.Constants.Direction;
 import com.ragegame.game.utils.Constants.EntityType;
 import com.ragegame.game.utils.HelpMethods;
-import com.ragegame.game.utils.LoadSave;
 import com.ragegame.game.utils.UtilTypes;
-import com.ragegame.game.utils.UtilTypes.*;
 
 import java.util.Arrays;
 
@@ -30,7 +26,6 @@ public class View {
     protected int currentAnimationSequence = -1;
     protected TextureRegion currentAnimationFrame;
     private float stateTime = 0f;
-
     final float animationFrameDuration= 0.5F;
 
     public View(DynamicEntity model, SpriteBatch batch) {
@@ -62,7 +57,7 @@ public class View {
         if (model instanceof EnemyModel) {
             EnemyModel enemyModel;
             enemyModel = (EnemyModel) model;
-            if (enemyModel.isDead()) {
+            if (enemyModel.isDead) {
                 return;
             }
         }
@@ -78,7 +73,7 @@ public class View {
         // TODO ============================
         // TODO Figure out a way to render death animation before disappearing
         boolean isDead = (model instanceof PlayerModel && ((PlayerModel) model).isDead()) ||
-                (model instanceof EnemyModel && ((EnemyModel) model).isDead());
+                (model instanceof EnemyModel && ((EnemyModel) model).isDead);
         // TODO ============================
 
         // TODO ADD LOGIC TO RENDER DEATH ANIMATION AND THEN HAVE PLAYER DISAPPEAR
@@ -95,8 +90,13 @@ public class View {
         if (currentAnimationFrame.isFlipX() != shouldFlip) {
             currentAnimationFrame.flip(true, false); // Flip horizontally without flipping vertically
         }
-        batch.draw(currentAnimationFrame, this.model.getBody().getPosition().x - (float)1/2,
-                this.model.getBody().getPosition().y- (float)1/2, 1, 1);
+        if (model instanceof Coin) {
+            batch.draw(currentAnimationFrame, this.model.getBody().getPosition().x - .25f,
+                    this.model.getBody().getPosition().y - .25f, (float) 1/2, (float) 1/2);
+        } else {
+            batch.draw(currentAnimationFrame, this.model.getBody().getPosition().x - (float) 1 / 2,
+                    this.model.getBody().getPosition().y - (float) 1 / 2, 1, 1);
+        }
     }
 
     public int getAnimationSequenceFromMovementDirection(boolean isDead) {

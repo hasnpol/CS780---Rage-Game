@@ -13,6 +13,7 @@ public class EnemyModel extends DynamicEntity {
     private float speed = 120F;
     private Vector2 movementVector = new Vector2(0, 0);
     private int enemyState;
+    public boolean isDead;
 
     public EnemyModel(Body body, EnemyConstants.EnemyType enemyType) {
         super(body, ENEMY.SubType(enemyType));
@@ -40,26 +41,12 @@ public class EnemyModel extends DynamicEntity {
         setDirection((movementVector.x > 0)? Direction.LEFT : Direction.RIGHT);
     }
 
-    public int getHealth() {
-        return this.health;
-    }
-
-    public void setHealth(int value) {
-        /* positive value for incrementing health
-           negative value for decrementing health
-        */
-        this.health += value;
-    }
-
-    public boolean isDead() {
-        return getHealth() <= 0 || getBody().getPosition().y < 0;
-    }
-
     public void kill() {
+        this.isDead = true;
         this.markedForDelete = true;
     }
 
-    public void update() {
+    public void update(float dt) {
         Vector2 enemyPosition = new Vector2(this.getBody().getPosition());
         if (enemyPosition.x > 0) {
             setDirection(Direction.LEFT);
