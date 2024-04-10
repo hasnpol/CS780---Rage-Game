@@ -4,6 +4,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.ragegame.game.factory.BulletFactory;
 import com.ragegame.game.objects.DynamicEntity.EnemyModel;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
+import com.ragegame.game.utils.Constants;
 
 public class Gunmen extends EnemyModel {
 
@@ -16,7 +17,7 @@ public class Gunmen extends EnemyModel {
 
 
     public Gunmen(Body body) {
-        super(body);
+        super(body, Constants.EnemyConstants.EnemyType.SOLDIER);
         playerDirection = 0;
         nextShot = 0L;
 

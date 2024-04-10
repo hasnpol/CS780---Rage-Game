@@ -52,6 +52,8 @@ public class BoarModel extends EnemyModel {
             setMovementVector(chargeVector);
             getBody().setLinearVelocity(chargeVector);
             charging = 2;
+        } else if (charging == 2 &&  Math.abs(getBody().getLinearVelocity().x) < 0.01) {
+            charging = 0;
         }
     }
 }
