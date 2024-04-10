@@ -1,10 +1,10 @@
 package com.ragegame.game.objects.DynamicEntity.Enemies;
 
 import com.badlogic.gdx.physics.box2d.Body;
-import com.ragegame.game.objects.DynamicEntity.Enemy;
+import com.ragegame.game.objects.DynamicEntity.EnemyModel;
+import static com.ragegame.game.utils.Constants.EnemyConstants.EnemyType.SOLDIER;
 
-import static com.ragegame.game.utils.Constants.EnemyConstants.SOLDIER;
-public class Soldier extends Enemy {
+public class Soldier extends EnemyModel {
     public Soldier(Body body) {
         super(body, SOLDIER);
     }

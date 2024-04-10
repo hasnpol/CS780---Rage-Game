@@ -1,4 +1,4 @@
-human_walk_sheet_directional.png
+spritesheet_human.png
 size: 200, 150
 format: RGBA8888
 filter: Linear,Linear

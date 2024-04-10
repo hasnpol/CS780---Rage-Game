@@ -3,7 +3,6 @@ package com.ragegame.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -16,15 +15,14 @@ import com.ragegame.game.handlers.CameraHandler;
 import com.ragegame.game.handlers.ContactHandler;
 import com.ragegame.game.handlers.InputHandler;
 import com.ragegame.game.handlers.PhysicsHandler;
+import com.ragegame.game.map.Map;
 import com.ragegame.game.objects.Entity;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class GameScreen implements Screen {
 
-    private RageGame game;
+    final RageGame game;
     public OrthographicCamera camera;
 
     public static World world;
@@ -103,10 +101,8 @@ public class GameScreen implements Screen {
 		// Draw the background
 		game.batch.begin();
 		this.backgroundHandler.render(dt, game.batch, gameMap.getWidth(), gameMap.getHeight(), gameMap.getPPM());
-		game.batch.end(); // doing this so that the background is drawn before gameMap don't change this
-
-		// Setup for tiled gameMap to be drawn
-		game.batch.setProjectionMatrix(camera.combined);
+        game.batch.setProjectionMatrix(camera.combined);
+        game.batch.end(); // doing this so that the background is drawn before gameMap don't change this
 
 		// Draw the tiled gameMap
 		game.batch.begin();
@@ -119,7 +115,12 @@ public class GameScreen implements Screen {
 		this.physicsHandler.applyForces();
 		this.physicsHandler.doPhysicsStep(dt);
         deleteMarkedObjects();
-		debugRenderer.render(world, camera.combined);
+		// debugRenderer.render(world, camera.combined);
+
+        if (gameMap.playerModel.isDead()) {
+            game.changeScreen(new GameOver(game));
+            this.dispose();
+        }
     }
 
     public void deleteMarkedObjects() {
@@ -157,8 +158,9 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        game.batch.dispose();
         this.backgroundHandler.dispose();
         this.gameMap.dispose();
+        world.dispose();
+        this.debugRenderer.dispose();
     }
 }

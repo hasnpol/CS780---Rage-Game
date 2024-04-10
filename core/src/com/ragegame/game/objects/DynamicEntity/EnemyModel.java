@@ -1,8 +1,10 @@
 package com.ragegame.game.objects.DynamicEntity;
 
-import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.ragegame.game.utils.Constants;
+
+import static com.ragegame.game.utils.Constants.*;
 import static com.ragegame.game.utils.Constants.EntityType.*;
 
 public class EnemyModel extends DynamicEntity {
@@ -10,9 +12,10 @@ public class EnemyModel extends DynamicEntity {
     private int health = 100;
     private float speed = 120F;
     private Vector2 movementVector = new Vector2(0, 0);
+    private int enemyState;
 
-    public EnemyModel(Body body) {
-        super(body, ENEMY);
+    public EnemyModel(Body body, EnemyConstants.EnemyType enemyType) {
+        super(body, ENEMY.SubType(enemyType));
         this.position = body.getPosition();
     }
 
@@ -23,6 +26,9 @@ public class EnemyModel extends DynamicEntity {
     public void updatePosition(float dt) {
         Vector2 posChange = this.movementVector.cpy().scl(speed * dt);
         this.position.add(posChange);
+        if (this.type == Constants.EntityType.ENEMY && this.type.getSubType() == Constants.EnemyConstants.EnemyType.DRONE) {
+            System.out.println("Could set direction here?: " + ((this.getDirection().getNum() == 1)? "Left": "right"));
+        }
     }
 
     public Vector2 getMovementVector() {
@@ -31,6 +37,7 @@ public class EnemyModel extends DynamicEntity {
 
     public void setMovementVector(Vector2 movementVector) {
         this.movementVector = movementVector;
+        setDirection((movementVector.x > 0)? Direction.LEFT : Direction.RIGHT);
     }
 
     public int getHealth() {
@@ -64,5 +71,16 @@ public class EnemyModel extends DynamicEntity {
             }
         }
         return 0;
+    }
+
+    public void update() {
+        Vector2 enemyPosition = new Vector2(this.getBody().getPosition());
+        if (enemyPosition.x > 0) {
+            setDirection(Direction.LEFT);
+            this.setMovementVector(new Vector2(1, 0));
+        } else {
+            setDirection(Direction.RIGHT);
+            this.setMovementVector(new Vector2(-1, 0));
+        }
     }
 }
