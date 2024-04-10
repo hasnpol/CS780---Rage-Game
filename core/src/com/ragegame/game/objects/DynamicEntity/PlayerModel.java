@@ -17,14 +17,8 @@ public class PlayerModel extends DynamicEntity {
     boolean sprint;
     boolean dead;
 
-    private Direction direction = Direction.RIGHT;
-
-    public Direction getDirection() {
-        return this.direction;
-    }
-
     public PlayerContactHandler playerContactHandler;
-    private int health = 100;
+    private int health = HEALTH;
     private int coins = 100;
 
     public PlayerModel(Body body) {
@@ -49,14 +43,14 @@ public class PlayerModel extends DynamicEntity {
             case 6:
                 stop = false;
                 setForce(new Vector2(15, 0));
-                this.direction = Direction.LEFT;
+                setDirection(Direction.LEFT);
                 setForce(new Vector2(((sprint)) ? 15 : 7, 0));
                 break;
 
             case 4:
                 stop = false;
                 setForce(new Vector2(-15, 0));
-                this.direction = Direction.RIGHT;
+                setDirection(Direction.RIGHT);
                 setForce(new Vector2(((sprint)) ? -15 : -7, 0));
                 break;
 
