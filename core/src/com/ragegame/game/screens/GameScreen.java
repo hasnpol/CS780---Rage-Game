@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.ragegame.game.RageGame;
+import com.ragegame.game.factory.BulletFactory;
 import com.ragegame.game.handlers.BackgroundHandler;
 import com.ragegame.game.handlers.CameraHandler;
 import com.ragegame.game.handlers.ContactHandler;
@@ -57,6 +58,11 @@ public class GameScreen implements Screen {
         this.gameObjects = new ObjectMap<>();
         this.gameMap = new Map(world, gameObjects, game.batch, camera);
 
+        BulletFactory bulletFactory = BulletFactory.getInstance();
+        bulletFactory.gameObjectsToDestroy = gameObjectsToDestroy;
+        bulletFactory.gameObjects = gameObjects;
+        bulletFactory.world = world;
+
         // Handle InputProcessor and Contact Listener and Physics Handler
         InputHandler inputHandler = new InputHandler(gameMap.playerModel);
         Gdx.input.setInputProcessor(inputHandler);
@@ -86,7 +92,10 @@ public class GameScreen implements Screen {
 		ScreenUtils.clear(0, 0, 0, 1);
 
 		// Handle camera logic so that camera follows player within gameMap bounds
-		this.cameraHandler.snapToPlayer(gameMap.playerModel.getBody().getPosition(), gameMap.getWidth(), gameMap.getHeight());
+        if (!gameMap.playerModel.isDead())
+        {
+            this.cameraHandler.snapToPlayer(gameMap.playerModel.getBody().getPosition(), gameMap.getWidth(), gameMap.getHeight());
+        }
 
 		// Draw the background
 		game.batch.begin();

@@ -26,18 +26,10 @@ public class BoarModel extends EnemyModel {
     @Override
     public void update() {
         if (charging == 0) {
-            PlayerModel playerModel = PlayerModel.getPlayerModel();
-            if (playerModel != null) {
-                if (Math.abs(playerModel.getBody().getPosition().x - getPosition().x) < BOAR_HORIZONTALSIGHT &&
-                        Math.abs(playerModel.getBody().getPosition().y - getPosition().y) < BOAR_VERTICALSIGHT) {
-                    charging = 1;
-                    chargeFinishTime = System.currentTimeMillis() + BOAR_CHARGETIME;
-                    if (playerModel.getBody().getPosition().x > getPosition().x) {
-                        playerDirection = 6;
-                    } else {
-                        playerDirection = 4;
-                    }
-                }
+            playerDirection = EnemyModel.isPlayerInRange(BOAR_HORIZONTALSIGHT, BOAR_VERTICALSIGHT, getPosition());
+            if (playerDirection != 0) {
+                chargeFinishTime = System.currentTimeMillis() + BOAR_CHARGETIME;
+                charging = 1;
             }
         } else {
             charge();
@@ -51,6 +43,8 @@ public class BoarModel extends EnemyModel {
             setMovementVector(chargeVector);
             getBody().setLinearVelocity(chargeVector);
             charging = 2;
+        } else if (charging == 2 &&  Math.abs(getBody().getLinearVelocity().x) < 0.01) {
+            charging = 0;
         }
     }
 }

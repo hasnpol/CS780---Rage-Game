@@ -46,6 +46,20 @@ public class EnemyModel extends DynamicEntity {
         this.markedForDelete = true;
     }
 
+    public static int isPlayerInRange(int horizontal, int vertical, Vector2 position) {
+        PlayerModel playerModel = PlayerModel.getPlayerModel();
+        if (playerModel != null) {
+            if (Math.abs(playerModel.getBody().getPosition().x - position.x) < horizontal && Math.abs(playerModel.getBody().getPosition().y - position.y) < vertical) {
+                if (playerModel.getBody().getPosition().x > position.x) {
+                    return 6;
+                } else {
+                    return 4;
+                }
+            }
+        }
+        return 0;
+    }
+
     public void update(float dt) {
         Vector2 enemyPosition = new Vector2(this.getBody().getPosition());
         if (enemyPosition.x > 0) {
