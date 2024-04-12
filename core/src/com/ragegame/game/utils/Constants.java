@@ -10,60 +10,109 @@ package com.ragegame.game.utils;
 public class Constants {
     // TODO make an abstract GetSpriteAmount() for each standard state
     public enum Direction {
-        LEFT(6), RIGHT(4), UP(0);
+        LEFT(1), RIGHT(0);
         private final int num;
         Direction(int code) {this.num = code;}
         public int getNum() {return this.num;}
     }
     public enum State { IDLE, RUNNING, JUMPING, HIT, DEAD };
     public enum EntityType {
-        PLAYER(null), ENEMY(null), OBSTACLE(null), COIN(null);
+        PLAYER(null), ENEMY(null), OBSTACLE(null), RESOURCE(null), COIN(null);
         private Object subType;
         EntityType(Object subType) {this.subType = subType;}
-        public void setEnemySubType(Object enemySubType) {
-            if (this == ENEMY) {this.subType = enemySubType;}
-            else {throw new UnsupportedOperationException("Cannot set subtype for non-ENEMY EntityType");}
+
+        public EntityType SubType(Object subType) {
+            this.subType = subType;
+            return this;
         }
         public Object getSubType() {return subType;}
     }
 
-    public enum EnemyType {SOLDIER, SNIPER;}
+    public static class ResourceConstants {
+        // Enum Resource Type
+        public enum ResType {COIN}
+    }
 
     // TODO: add more coin types with different attributes?
     public enum CoinType {COIN}
 
     public static class EnemyConstants {
         // Enum Enemy Type
-        public static final int SOLDIER = 0;
+        public enum EnemyType {SOLDIER, BOAR, DRONE}
 
         // Enemy State
-        public static final int IDLE = 0;
-        public static final int RUNNING = 1;
-        public static final int ATTACK = 2;
-        public static final int HIT = 3;
-        public static final int DEAD = 4;
+        public enum EnemyState {IDLE, RUNNING, ATTACK, HIT, DEAD}
 
         // Values for SOLDIER
         public static final int SOLDIER_WIDTH_DEFAULT = 72;
         public static final int SOLDIER_HEIGHT_DEFAULT = 32;
+        public static final float SOLDIER_WIDTH = .36f;
+        public static final float SOLDIER_HEIGHT = .9f;
 
-        public static final int SOLDIER_WIDTH = (int) (SOLDIER_WIDTH_DEFAULT * Game.SCALE);
-        public static final int SOLDIER_HEIGHT = (int) (SOLDIER_HEIGHT_DEFAULT * Game.SCALE);
+        // Values for BOAR
+        public static final int BOAR_WIDTH_DEFAULT = 72;
+        public static final int BOAR_HEIGHT_DEFAULT = 32;
+        public static final float BOAR_WIDTH = 1f;
+        public static final float BOAR_HEIGHT = .5f;
+        public static final int BOAR_CHARGESPEED = 4;
+        public static final int BOAR_CHARGETIME = 1000;
+        public static final int BOAR_HORIZONTALSIGHT = 7;
+        public static final int BOAR_VERTICALSIGHT = 2;
 
-        public static int GetSpriteAmount(int enemy_type, int enemy_state) {
-            if (enemy_type == SOLDIER) {
-                switch (enemy_type) {
-                    case IDLE:
-                        return 9;
-                    case RUNNING:
-                        return 6;
-                    case ATTACK:
-                        return 7;
-                    case HIT:
-                        return 4;
-                    case DEAD:
-                        return 5;
-                }
+        // Values for BOAR
+        public static final int DRONE_WIDTH_DEFAULT = 72;
+        public static final int DRONE_HEIGHT_DEFAULT = 32;
+        public static final int DRONE_WIDTH = (int) (BOAR_WIDTH_DEFAULT * Game.SCALE);
+        public static final int DRONE_HEIGHT = (int) (BOAR_HEIGHT_DEFAULT * Game.SCALE);
+        public static final float DRONE_SPEED = 0.01f; // Drone speed
+        public static final float DRONE_DENSITY = 0.25f; // Drone speed
+        public static final float DRONE_AMPLITUDE = 5.0f; // Amplitude of the sinusoidal movement
+        public static final float DRONE_FREQUENCY = 1.0f; // Frequency of the sinusoidal movement
+        public static final int DRONE_HORIZONTALSIGHT = 7; // Frequency of the sinusoidal movement
+        public static final int DRONE_VERTICALSIGHT = 2; // Frequency of the sinusoidal movement
+
+        // TODO Implement this later to easily get state from type and state
+        public static int GetSpriteAmount(EnemyType enemy_type, EnemyState enemy_state) {
+            switch(enemy_type) {
+                case SOLDIER:
+                    switch (enemy_state) {
+                        case IDLE:
+                            return 9;
+                        case RUNNING:
+                            return 6;
+                        case ATTACK:
+                            return 7;
+                        case HIT:
+                            return 4;
+                        case DEAD:
+                            return 5;
+                    }
+                case BOAR:
+                    switch (enemy_state) {
+                        case IDLE:
+                            return 0;
+                        case RUNNING:
+                            return 6;
+                        case ATTACK:
+                            return 7;
+                        case HIT:
+                            return 4;
+                        case DEAD:
+                            return 5;
+                    }
+                case DRONE:
+                    switch (enemy_state) {
+                        case IDLE:
+                            return 0;
+                        case RUNNING:
+                            return 6;
+                        case ATTACK:
+                            return 7;
+                        case HIT:
+                            return 4;
+                        case DEAD:
+                            return 5;
+                    }
             }
             return 0;
         }
@@ -79,8 +128,11 @@ public class Constants {
         public static final int HIT = 5;
         public static final int ATTACK = 6;
 
+        public static final int HEALTH = 1000;
         public static final float MAXSPEED = 8f;
         public static float speed = 120F;
+        public static final float PLAYER_WIDTH = .36f;
+        public static final float PLAYER_HEIGHT = .9f;
 
         public static int GetSpriteAmount(int player_action) {
             switch (player_action) {

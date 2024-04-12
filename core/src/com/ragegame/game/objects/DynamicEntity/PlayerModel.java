@@ -3,29 +3,28 @@ package com.ragegame.game.objects.DynamicEntity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.ragegame.game.handlers.contactHandlers.PlayerContactHandler;
+import com.ragegame.game.factory.CoinFactory;
+
 import static com.ragegame.game.utils.Constants.EntityType.*;
 import static com.ragegame.game.utils.Constants.PlayerConstants.*;
 import static com.ragegame.game.utils.Constants.*;
+
 
 public class PlayerModel extends DynamicEntity {
     private static PlayerModel playerModel = null;
     float DRAG = 3f;
     boolean stop;
     public boolean grounded;
-
     long jumpPress;
     boolean sprint;
-    boolean dead;
-
-    private Direction direction = Direction.RIGHT;
-
-    public Direction getDirection() {
-        return this.direction;
-    }
-
     public PlayerContactHandler playerContactHandler;
-    private int health = 100;
-    private int coins = 0;//change to debug
+    private int health = HEALTH;
+    private int coins = 100;
+    public boolean isHit;
+    public boolean isImmune;
+    long startTime = 0;
+    long endTime;
+    public int coinsToDrop = 0;
 
     public PlayerModel(Body body) {
         super(body, PLAYER);
@@ -33,8 +32,13 @@ public class PlayerModel extends DynamicEntity {
         grounded = false;
         jumpPress = 0L;
         sprint = false;
-        playerContactHandler = new PlayerContactHandler(this);
         playerModel = this;
+        isHit = false;
+        isImmune = false;
+    }
+
+    public void setPlayerContactHandler() {
+        this.playerContactHandler = new PlayerContactHandler(this);
     }
 
     public static PlayerModel getPlayerModel() {
@@ -49,14 +53,14 @@ public class PlayerModel extends DynamicEntity {
             case 6:
                 stop = false;
                 setForce(new Vector2(15, 0));
-                this.direction = Direction.LEFT;
+                setDirection(Direction.LEFT);
                 setForce(new Vector2(((sprint)) ? 15 : 7, 0));
                 break;
 
             case 4:
                 stop = false;
                 setForce(new Vector2(-15, 0));
-                this.direction = Direction.RIGHT;
+                setDirection(Direction.RIGHT);
                 setForce(new Vector2(((sprint)) ? -15 : -7, 0));
                 break;
 
@@ -82,25 +86,44 @@ public class PlayerModel extends DynamicEntity {
         }
     }
 
+    public void startTimer() {
+        this.startTime = System.currentTimeMillis();
+    }
+
     public void update() {
-        Vector2 velocity = getBody().getLinearVelocity();
-        if (stop) {
-            setForce(velocity.set(velocity.x * -DRAG, 0));
+        if (playerModel.isDead()) {
+            //System.out.println("Player DIED!");
+            playerModel.kill();
         } else {
-            if (velocity.x > MAXSPEED) {
-                getBody().setLinearVelocity(MAXSPEED, velocity.y);
-            } else if (velocity.x < -MAXSPEED) {
-                getBody().setLinearVelocity(-MAXSPEED, velocity.y);
+            if (playerModel.isImmune) {
+                //System.out.println("Player has immune, checking time");
+                endTime = System.currentTimeMillis();
+                //System.out.println("Player has immune, end time: " + endTime );
+                if ((endTime - startTime) / 1000 == 10) {
+                    playerModel.isImmune = false;
+                    //System.out.println("Player immune is GONE ");
+                }
+            }
+            if (playerModel.isHit && !playerModel.isImmune) {
+                //System.out.println("Player has hit and no immune");
+                dropCoin();
+            }
+
+            Vector2 velocity = getBody().getLinearVelocity();
+            if (stop) {
+                setForce(velocity.set(velocity.x * -DRAG, 0));
+            } else {
+                if (velocity.x > MAXSPEED) {
+                    getBody().setLinearVelocity(MAXSPEED, velocity.y);
+                } else if (velocity.x < -MAXSPEED) {
+                    getBody().setLinearVelocity(-MAXSPEED, velocity.y);
+                }
             }
         }
     }
 
     public void sprint() {
         sprint = !sprint;
-    }
-
-    public boolean isGrounded() {
-        return grounded;
     }
 
     public void setGrounded(boolean grounded) {
@@ -136,6 +159,15 @@ public class PlayerModel extends DynamicEntity {
 
     public void kill() {
         this.markedForDelete = true;
+    }
+
+    public void dropCoin() {
+        PlayerModel playerModel = PlayerModel.getPlayerModel();
+        if (playerModel != null) {
+            for (int i = 0; i < playerModel.coinsToDrop; i++) {
+                CoinFactory.getInstance().createCoin(playerModel.getBody().getPosition());
+            }
+        }
     }
 
 }

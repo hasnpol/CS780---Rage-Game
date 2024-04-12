@@ -1,4 +1,4 @@
-package com.ragegame.game.screens;
+package com.ragegame.game.map;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,21 +13,26 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.ragegame.game.objects.DynamicEntity.BoarModel;
+import com.ragegame.game.objects.DynamicEntity.Enemies.BoarModel;
 import com.ragegame.game.objects.DynamicEntity.Coin;
 import com.ragegame.game.objects.DynamicEntity.DynamicEntity;
+import com.ragegame.game.objects.DynamicEntity.Enemies.Drone;
+import com.ragegame.game.objects.DynamicEntity.Enemies.Soldier;
 import com.ragegame.game.objects.DynamicEntity.EnemyModel;
+import com.ragegame.game.objects.DynamicEntity.Enemies.Gunmen;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.StaticEntity.FakePlatform;
 import com.ragegame.game.objects.StaticEntity.HiddenPlatform;
 import com.ragegame.game.objects.StaticEntity.Platform;
 import com.ragegame.game.objects.view.View;
+import static com.ragegame.game.utils.Constants.EnemyConstants.*;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -45,6 +50,7 @@ public class Map {
     public ObjectMap<UUID, Entity> gameObjects;
     public ArrayList<DynamicEntity> dynamicEntities = new ArrayList<>();
     public PlayerModel playerModel;
+
 
     public Map(World world, ObjectMap<UUID, Entity> gameObjects, SpriteBatch batch, OrthographicCamera camera) {
 
@@ -97,15 +103,26 @@ public class Map {
                     createBoar((PolygonMapObject) mapObject);
                 }
                 break;
+            case "drone":
+                if (mapObject instanceof PolygonMapObject) {
+                    createDrone((PolygonMapObject) mapObject);
+                }
+                break;
             case "hidden":
                 if (mapObject instanceof PolygonMapObject) {
                     createHiddenPlatform((PolygonMapObject) mapObject);
+                }
+                break;
+            case "gunmen":
+                if (mapObject instanceof PolygonMapObject) {
+                    createGunmenModel((PolygonMapObject) mapObject);
                 }
                 break;
             case "coin":
                 if (mapObject instanceof PolygonMapObject) {
                     createCoin((PolygonMapObject) mapObject);
                 }
+                break;
             default:
                 break;
         }
@@ -117,8 +134,8 @@ public class Map {
         bodyDef.position.set(mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM);
 
         Body coinBody = world.createBody(bodyDef);
-        PolygonShape coinBox = new PolygonShape();
-        coinBox.setAsBox(0.2f, 0.2f);
+        CircleShape coinBox = new CircleShape();
+        coinBox.setRadius(0.2f);
 
         Coin coin = new Coin(coinBody);
         View view = new View(coin, batch);
@@ -143,21 +160,48 @@ public class Map {
 
         Body enemyBody = world.createBody(enemyBodyDef);
         PolygonShape enemyBox = new PolygonShape();
-        enemyBox.setAsBox(0.5f, 0.25f);
+        enemyBox.setAsBox(0.5f, 0.32f);
 
-        BoarModel enemyModel = new BoarModel(enemyBody);
-        View enemyView = new View(enemyModel, batch);
-        enemyModel.setView(enemyView);
+        BoarModel boarModel = new BoarModel(enemyBody);
+        View boarView = new View(boarModel, batch);
+        boarModel.setView(boarView);
 
-        gameObjects.put(enemyModel.getId(), enemyModel);
+        gameObjects.put(boarModel.getId(), boarModel);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = enemyBox;
-        fixtureDef.density = 2f;  // more density -> bigger mass for the same size
+        fixtureDef.density = 2.5f;  // more density -> bigger mass for the same size
+        fixtureDef.friction = .2f;
+        fixtureDef.restitution = .1f;
+
+        enemyBody.setFixedRotation(false);
+        enemyBody.createFixture(fixtureDef).setUserData(boarModel.getId());
+        enemyBox.dispose();
+        dynamicEntities.add(boarModel);
+    }
+
+    private void createDrone(PolygonMapObject mapObject) {
+        BodyDef enemyBodyDef = new BodyDef();
+        enemyBodyDef.type = BodyDef.BodyType.DynamicBody;
+        enemyBodyDef.position.set(mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM);
+
+        Body enemyBody = world.createBody(enemyBodyDef);
+        PolygonShape enemyBox = new PolygonShape();
+        enemyBox.setAsBox(0.25f, 0.25f);
+
+        Drone drone = new Drone(enemyBody);
+        View droneView = new View(drone, batch);
+        drone.setView(droneView);
+
+        gameObjects.put(drone.getId(), drone);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = enemyBox;
+        fixtureDef.density = DRONE_DENSITY;  // more density -> bigger mass for the same size
+        fixtureDef.friction = 0;
 
         enemyBody.setFixedRotation(true);
-        enemyBody.createFixture(fixtureDef).setUserData(enemyModel.getId());
+        enemyBody.createFixture(fixtureDef).setUserData(drone.getId());
         enemyBox.dispose();
-        dynamicEntities.add(enemyModel);
+        dynamicEntities.add(drone);
     }
 
     public void createFakePlatform(PolygonMapObject mapObject) {
@@ -168,10 +212,12 @@ public class Map {
         bodyDef.type = BodyDef.BodyType.StaticBody;
         Body body = world.createBody(bodyDef);
 
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.isSensor = true;
 
-        FakePlatform platform = new FakePlatform(body, mapObject.getPolygon().getX() / PPM,
-                mapObject.getPolygon().getY()/ PPM, tiledLayer);
-        body.createFixture(shape, 0).setUserData(platform.getId());
+        FakePlatform platform = new FakePlatform(body, mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM, tiledLayer);
+        body.createFixture(fixtureDef).setUserData(platform.getId());
         gameObjects.put(platform.getId(), platform);
     }
 
@@ -191,22 +237,27 @@ public class Map {
     public void createPlayerModel(PolygonMapObject mapObject) {
         BodyDef playerBodyDef = new BodyDef();
         playerBodyDef.type = BodyDef.BodyType.DynamicBody;
-        playerBodyDef.position.set(mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM);
-
+        playerBodyDef.position.set(mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY() / PPM);
         Body playerBody = world.createBody(playerBodyDef);
+
         PolygonShape playerBox = new PolygonShape();
-        playerBox.setAsBox(0.25f, 0.5f);
+        playerBox.setAsBox(0.18f, 0.45f);
 
         this.playerModel = new PlayerModel(playerBody);
+        this.playerModel.setPlayerContactHandler();
         View playerView = new View(playerModel, batch);
         playerModel.setView(playerView);
         gameObjects.put(playerModel.getId(), playerModel);
+
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = playerBox;
-        fixtureDef.density = 2f;  // more density -> bigger mass for the same size
+        fixtureDef.density = 2.5f;  // more density -> bigger mass for the same size
         fixtureDef.friction = 1;
+        fixtureDef.restitution = .1f;
+
         playerBody.setFixedRotation(true);
         playerBody.createFixture(fixtureDef).setUserData(playerModel.getId());
+
         playerBox.dispose();
         dynamicEntities.add(playerModel);
     }
@@ -218,17 +269,43 @@ public class Map {
 
 		Body enemyBody = world.createBody(enemyBodyDef);
 		PolygonShape enemyBox = new PolygonShape();
-		enemyBox.setAsBox(0.25f, 0.5f);
+        enemyBox.setAsBox(0.18f, 0.45f);
 
-		EnemyModel enemyModel = new EnemyModel(enemyBody);
+		EnemyModel enemyModel = new Soldier(enemyBody);
 		View enemyView = new View(enemyModel, batch);
         enemyModel.setView(enemyView);
 
         gameObjects.put(enemyModel.getId(), enemyModel);
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = enemyBox;
-		fixtureDef.density = 2f;  // more density -> bigger mass for the same size
+		fixtureDef.density = 2.5f;  // more density -> bigger mass for the same size
 		fixtureDef.friction = 1;
+        fixtureDef.restitution = .1f;
+
+        enemyBody.setFixedRotation(true);
+        enemyBody.createFixture(fixtureDef).setUserData(enemyModel.getId());
+        enemyBox.dispose();
+        dynamicEntities.add(enemyModel);
+    }
+
+    public void createGunmenModel(PolygonMapObject mapObject) {
+        BodyDef enemyBodyDef = new BodyDef();
+        enemyBodyDef.type = BodyDef.BodyType.DynamicBody;
+        enemyBodyDef.position.set(mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM);
+
+        Body enemyBody = world.createBody(enemyBodyDef);
+        PolygonShape enemyBox = new PolygonShape();
+        enemyBox.setAsBox(0.25f, 0.5f);
+
+        EnemyModel enemyModel = new Gunmen(enemyBody);
+        View enemyView = new View(enemyModel, batch);
+        enemyModel.setView(enemyView);
+
+        gameObjects.put(enemyModel.getId(), enemyModel);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = enemyBox;
+        fixtureDef.density = 2f;  // more density -> bigger mass for the same size
+        fixtureDef.friction = 1;
 
         enemyBody.setFixedRotation(true);
         enemyBody.createFixture(fixtureDef).setUserData(enemyModel.getId());

@@ -1,5 +1,5 @@
 coins_animation.png
-size: 31, 20
+size: 33, 20
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
@@ -19,14 +19,14 @@ coin
   index: 1
 coin
   rotate: false
-  xy: 15, 0
-  size: 6, 10
-  orig: 6, 10
+  xy: 17, 0
+  size: 8, 10
+  orig: 8, 10
   offset: 0, 0
   index: 2
 coin
   rotate: false
-  xy: 23, 0
+  xy: 25, 0
   size: 8, 10
   orig: 8, 10
   offset: 0, 0

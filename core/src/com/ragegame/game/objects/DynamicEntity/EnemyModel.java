@@ -1,8 +1,10 @@
 package com.ragegame.game.objects.DynamicEntity;
 
-import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.ragegame.game.utils.Constants;
+
+import static com.ragegame.game.utils.Constants.*;
 import static com.ragegame.game.utils.Constants.EntityType.*;
 
 public class EnemyModel extends DynamicEntity {
@@ -10,9 +12,11 @@ public class EnemyModel extends DynamicEntity {
     private int health = 100;
     private float speed = 120F;
     private Vector2 movementVector = new Vector2(0, 0);
+    private int enemyState;
+    public boolean isDead;
 
-    public EnemyModel(Body body) {
-        super(body, ENEMY);
+    public EnemyModel(Body body, EnemyConstants.EnemyType enemyType) {
+        super(body, ENEMY.SubType(enemyType));
         this.position = body.getPosition();
     }
 
@@ -23,6 +27,9 @@ public class EnemyModel extends DynamicEntity {
     public void updatePosition(float dt) {
         Vector2 posChange = this.movementVector.cpy().scl(speed * dt);
         this.position.add(posChange);
+        if (this.type == Constants.EntityType.ENEMY && this.type.getSubType() == Constants.EnemyConstants.EnemyType.DRONE) {
+            System.out.println("Could set direction here?: " + ((this.getDirection().getNum() == 1)? "Left": "right"));
+        }
     }
 
     public Vector2 getMovementVector() {
@@ -31,24 +38,36 @@ public class EnemyModel extends DynamicEntity {
 
     public void setMovementVector(Vector2 movementVector) {
         this.movementVector = movementVector;
-    }
-
-    public int getHealth() {
-        return this.health;
-    }
-
-    public void setHealth(int value) {
-        /* positive value for incrementing health
-           negative value for decrementing health
-        */
-        this.health += value;
-    }
-
-    public boolean isDead() {
-        return getHealth() <= 0 || getBody().getPosition().y < 0;
+        setDirection((movementVector.x > 0)? Direction.LEFT : Direction.RIGHT);
     }
 
     public void kill() {
+        this.isDead = true;
         this.markedForDelete = true;
+    }
+
+    public static int isPlayerInRange(int horizontal, int vertical, Vector2 position) {
+        PlayerModel playerModel = PlayerModel.getPlayerModel();
+        if (playerModel != null) {
+            if (Math.abs(playerModel.getBody().getPosition().x - position.x) < horizontal && Math.abs(playerModel.getBody().getPosition().y - position.y) < vertical) {
+                if (playerModel.getBody().getPosition().x > position.x) {
+                    return 6;
+                } else {
+                    return 4;
+                }
+            }
+        }
+        return 0;
+    }
+
+    public void update(float dt) {
+        Vector2 enemyPosition = new Vector2(this.getBody().getPosition());
+        if (enemyPosition.x > 0) {
+            setDirection(Direction.LEFT);
+            this.setMovementVector(new Vector2(1, 0));
+        } else {
+            setDirection(Direction.RIGHT);
+            this.setMovementVector(new Vector2(-1, 0));
+        }
     }
 }

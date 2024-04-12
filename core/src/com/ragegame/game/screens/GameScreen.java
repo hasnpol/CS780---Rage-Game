@@ -3,42 +3,34 @@ package com.ragegame.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.ragegame.game.RageGame;
+import com.ragegame.game.factory.BulletFactory;
 import com.ragegame.game.handlers.BackgroundHandler;
 import com.ragegame.game.handlers.CameraHandler;
 import com.ragegame.game.handlers.ContactHandler;
 import com.ragegame.game.handlers.InputHandler;
 import com.ragegame.game.handlers.PhysicsHandler;
+import com.ragegame.game.map.Map;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.utils.HUD;
+import com.ragegame.game.factory.CoinFactory;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class GameScreen implements Screen {
-
     final RageGame game;
     public OrthographicCamera camera;
-
     public static World world;
     private Box2DDebugRenderer debugRenderer;
     private Map gameMap;
-
     private ObjectMap<UUID, Entity> gameObjectsToDestroy;
     private ObjectMap<UUID, Entity> gameObjects;
     private int screenHeight, screenWidth;
-
-    //private PlayerModel playerModel;
-    //private View playerView;
-    ////private EnemyModel enemyModel;
-    //private View enemyView;
     private PhysicsHandler physicsHandler;
     private CameraHandler cameraHandler;
     private BackgroundHandler backgroundHandler;
@@ -70,12 +62,23 @@ public class GameScreen implements Screen {
         this.gameObjects = new ObjectMap<>();
         this.gameMap = new Map(world, gameObjects, game.batch, camera);
 
+        BulletFactory bulletFactory = BulletFactory.getInstance();
+        bulletFactory.gameObjectsToDestroy = gameObjectsToDestroy;
+        bulletFactory.gameObjects = gameObjects;
+        bulletFactory.world = world;
+
         // Handle InputProcessor and Contact Listener and Physics Handler
         InputHandler inputHandler = new InputHandler(gameMap.playerModel);
         Gdx.input.setInputProcessor(inputHandler);
         ContactHandler contactHandler = new ContactHandler(world, gameObjects);
         world.setContactListener(contactHandler);
         this.physicsHandler = new PhysicsHandler(world, gameObjects);
+
+        // Create Coin Factory to use during enemy vs player collisions.
+        CoinFactory coinFactory = CoinFactory.getInstance();
+        coinFactory.gameObjectsToDestroy = gameObjectsToDestroy;
+        coinFactory.gameObjects = gameObjects;
+        coinFactory.world = world;
     }
 
 
@@ -97,7 +100,10 @@ public class GameScreen implements Screen {
         hud.addCoins(gameMap.playerModel.getCoins());
 
 		// Handle camera logic so that camera follows player within gameMap bounds
-		this.cameraHandler.snapToPlayer(gameMap.playerModel.getBody().getPosition(), gameMap.getWidth(), gameMap.getHeight());
+        if (!gameMap.playerModel.isDead())
+        {
+            this.cameraHandler.snapToPlayer(gameMap.playerModel.getBody().getPosition(), gameMap.getWidth(), gameMap.getHeight());
+        }
 
 		// Draw the background
 		game.batch.begin();
