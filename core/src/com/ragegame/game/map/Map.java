@@ -26,6 +26,7 @@ import com.ragegame.game.objects.DynamicEntity.Enemies.Drone;
 import com.ragegame.game.objects.DynamicEntity.Enemies.Soldier;
 import com.ragegame.game.objects.DynamicEntity.EnemyModel;
 import com.ragegame.game.objects.DynamicEntity.Enemies.Gunmen;
+import com.ragegame.game.objects.DynamicEntity.Medal;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.StaticEntity.FakePlatform;
@@ -84,10 +85,6 @@ public class Map {
                 if (mapObject instanceof PolygonMapObject)
                     createPlayerModel((PolygonMapObject) mapObject);
                 break;
-            case "enemy":
-                if (mapObject instanceof PolygonMapObject)
-                    createEnemyModel((PolygonMapObject) mapObject);
-                break;
             case "platform":
                 if (mapObject instanceof PolygonMapObject) {
                     createPlatform((PolygonMapObject) mapObject);
@@ -123,6 +120,11 @@ public class Map {
                     createCoin((PolygonMapObject) mapObject);
                 }
                 break;
+            case "medal":
+                if (mapObject instanceof PolygonMapObject) {
+                    createMedal((PolygonMapObject) mapObject);
+                }
+                break;
             default:
                 break;
         }
@@ -151,6 +153,31 @@ public class Map {
         coinBody.createFixture(fixtureDef).setUserData(coin.getId());
         coinBox.dispose();
         dynamicEntities.add(coin);
+    }
+
+    private void createMedal(PolygonMapObject mapObject) {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM);
+
+        Body medalBody = world.createBody(bodyDef);
+        CircleShape medalBox = new CircleShape();
+        medalBox.setRadius(1f);
+
+        Medal medal = new Medal(medalBody);
+        View view = new View(medal, batch);
+        medal.setView(view);
+
+        gameObjects.put(medal.getId(), medal);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = medalBox;
+        fixtureDef.isSensor = true;
+        fixtureDef.density = 0;
+
+        medalBody.setFixedRotation(true);
+        medalBody.createFixture(fixtureDef).setUserData(medal.getId());
+        medalBox.dispose();
+        dynamicEntities.add(medal);
     }
 
     private void createBoar(PolygonMapObject mapObject) {

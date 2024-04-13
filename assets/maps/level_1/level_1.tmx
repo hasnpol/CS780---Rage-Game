@@ -734,7 +734,7 @@
    <polygon points="0,0 0,16 6.43478,16.0435 6.43478,-0.0434783"/>
   </object>
  </objectgroup>
- <objectgroup id="9" name="enemy">
+ <objectgroup id="9" name="gunmen">
   <object id="103" x="272" y="528">
    <polygon points="0,0 0,16 6.43478,16.0435 6.43478,-0.0434783"/>
   </object>

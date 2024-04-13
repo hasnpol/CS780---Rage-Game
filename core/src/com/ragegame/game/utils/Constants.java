@@ -17,7 +17,7 @@ public class Constants {
     }
     public enum State { IDLE, RUNNING, JUMPING, HIT, DEAD };
     public enum EntityType {
-        PLAYER(null), ENEMY(null), OBSTACLE(null), RESOURCE(null), COIN(null);
+        PLAYER(null), ENEMY(null), OBSTACLE(null), RESOURCE(null), COIN(null), MEDAL(null);;
         private Object subType;
         EntityType(Object subType) {this.subType = subType;}
 
@@ -30,7 +30,7 @@ public class Constants {
 
     public static class ResourceConstants {
         // Enum Resource Type
-        public enum ResType {COIN}
+        public enum ResType {COIN, MEDAL}
     }
 
     // TODO: add more coin types with different attributes?
