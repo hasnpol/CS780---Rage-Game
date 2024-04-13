@@ -44,27 +44,20 @@ public class HUD {
 
 
     public void addCoins(int value){
-        if (value > coins) {
-            coins += value;
-            int length = String.valueOf(coins).length();
-            if (length == 1) {
-                coinsLabel.setText(String.format("Coins: %01d", coins));
-            } else if (length == 2) {
-                coinsLabel.setText(String.format("Coins: %02d", coins));
-            } else if (length == 3) {
-                coinsLabel.setText(String.format("Coins: %03d", coins));
-            } else if (length == 4) {
-                coinsLabel.setText(String.format("Coins: %04d", coins));
-            }
-
+        int length = String.valueOf(coins).length();
+        if (length == 1) {
+            coinsLabel.setText(String.format("Coins: %01d", value));
+        } else if (length == 2) {
+            coinsLabel.setText(String.format("Coins: %02d", value));
+        } else if (length == 3) {
+            coinsLabel.setText(String.format("Coins: %03d", value));
+        } else if (length == 4) {
+            coinsLabel.setText(String.format("Coins: %04d", value));
         }
     }
 
     public void addMedals(int value){
-        if (value > medals) {
-            medals += value;
-            medalsLabel.setText(String.format("Medals: %01d", medals));
-        }
+            medalsLabel.setText(String.format("Medals: %01d", value));
     }
 
     public void dispose() { stage.dispose(); }
