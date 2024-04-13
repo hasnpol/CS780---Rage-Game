@@ -95,10 +95,6 @@ public class GameScreen implements Screen {
 		// Clear previous images drawn to the screen
 		ScreenUtils.clear(0, 0, 0, 1);
 
-        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
-        hud.stage.draw();
-        hud.addCoins(gameMap.playerModel.getCoins());
-
 		// Handle camera logic so that camera follows player within gameMap bounds
         if (!gameMap.playerModel.isDead())
         {
@@ -106,8 +102,8 @@ public class GameScreen implements Screen {
         }
 
 		// Draw the background
-		game.batch.begin();
-		this.backgroundHandler.render(dt, game.batch, gameMap.getWidth(), gameMap.getHeight(), gameMap.getPPM());
+        game.batch.begin();
+		this.backgroundHandler.render(dt, game.batch, RageGame.V_Width, RageGame.V_Height, gameMap.getPPM());
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.end(); // doing this so that the background is drawn before gameMap don't change this
 
@@ -123,6 +119,10 @@ public class GameScreen implements Screen {
 		this.physicsHandler.doPhysicsStep(dt);
         deleteMarkedObjects();
 		debugRenderer.render(world, camera.combined);
+
+        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+        hud.stage.draw();
+        hud.addCoins(gameMap.playerModel.getCoins());
 
         if (gameMap.playerModel.isDead()) {
             game.account.setCurrency(gameMap.playerModel.getCoins());
