@@ -2,6 +2,7 @@ package com.ragegame.game.handlers.contactHandlers;
 
 import com.ragegame.game.objects.DynamicEntity.Coin;
 import com.ragegame.game.objects.DynamicEntity.EnemyModel;
+import com.ragegame.game.objects.DynamicEntity.Medal;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.StaticEntity.Bullet;
@@ -31,6 +32,9 @@ public class PlayerContactHandler {
         }
         if (entity instanceof Coin) {
             coinStartContact((Coin) entity);
+        }
+        if (entity instanceof Medal) {
+            playerMedalContact((Medal) entity);
         }
     }
 
@@ -125,6 +129,12 @@ public class PlayerContactHandler {
 
     public void playerCoinContact(Coin collectable) {
         playerModel.setCoins(1);
+        // System.out.println("Player Coin: " + playerModel.getCoins());
+        collectable.setCollected();
+    }
+
+    public void playerMedalContact(Medal collectable) {
+        playerModel.setMedal(1);
         // System.out.println("Player Coin: " + playerModel.getCoins());
         collectable.setCollected();
     }

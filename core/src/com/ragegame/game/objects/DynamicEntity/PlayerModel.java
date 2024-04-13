@@ -20,6 +20,7 @@ public class PlayerModel extends DynamicEntity {
     public PlayerContactHandler playerContactHandler;
     private int health = HEALTH;
     private int coins = 100;
+    private int medals = 0;
     public boolean isHit;
     public boolean isImmune;
     long startTime = 0;
@@ -149,12 +150,14 @@ public class PlayerModel extends DynamicEntity {
     public int getCoins() {
         return this.coins;
     }
+    public int getMedals() {return this.medals;}
 
     public void setCoins(int value) {
-        /* positive value for incrementing coins
-           negative value for decrementing coins
-        */
         this.coins += value;
+    }
+
+    public void setMedal(int value) {
+        this.medals += value;
     }
 
     public void kill() {

@@ -103,7 +103,7 @@ public class GameScreen implements Screen {
 
 		// Draw the background
         game.batch.begin();
-		this.backgroundHandler.render(dt, game.batch, RageGame.V_Width, RageGame.V_Height, gameMap.getPPM());
+        this.backgroundHandler.render(dt, game.batch, RageGame.V_Width, RageGame.V_Height, gameMap.getPPM());
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.end(); // doing this so that the background is drawn before gameMap don't change this
 
@@ -123,6 +123,7 @@ public class GameScreen implements Screen {
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
         hud.addCoins(gameMap.playerModel.getCoins());
+        hud.addMedals(gameMap.playerModel.getMedals());
 
         if (gameMap.playerModel.isDead()) {
             game.account.setCurrency(gameMap.playerModel.getCoins());

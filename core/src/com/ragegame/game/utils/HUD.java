@@ -16,13 +16,15 @@ public class HUD {
     public Stage stage;
     private Viewport viewport;
 
-
     private static Integer coins;
+    private static Integer medals;
 
     static Label coinsLabel;
+    static Label medalsLabel;
 
     public HUD(SpriteBatch spriteBatch) {
         coins = 0;
+        medals = 0;
 
         viewport = new FitViewport(RageGame.V_Width, RageGame.V_Height, new OrthographicCamera());
         stage = new Stage(viewport, spriteBatch);
@@ -33,6 +35,8 @@ public class HUD {
 
         coinsLabel = new Label(String.format("Coins: %01d", coins), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         table.add(coinsLabel).expandX().padTop(10);
+        medalsLabel = new Label(String.format("Medals: %01d", medals), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        table.add(medalsLabel).expandX().padTop(10);
 
         stage.addActor(table);
 
@@ -53,6 +57,13 @@ public class HUD {
                 coinsLabel.setText(String.format("Coins: %04d", coins));
             }
 
+        }
+    }
+
+    public void addMedals(int value){
+        if (value > medals) {
+            medals += value;
+            medalsLabel.setText(String.format("Medals: %01d", medals));
         }
     }
 
