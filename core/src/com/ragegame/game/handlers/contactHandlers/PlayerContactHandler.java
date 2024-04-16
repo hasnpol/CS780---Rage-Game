@@ -7,6 +7,7 @@ import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.StaticEntity.Bullet;
 import com.ragegame.game.objects.StaticEntity.Platform;
 import static com.ragegame.game.utils.Constants.EnemyConstants.*;
+import static com.ragegame.game.utils.Constants.EnemyConstants.EnemyType.*;
 import static com.ragegame.game.utils.Constants.PlayerConstants.*;
 
 public class PlayerContactHandler {
@@ -69,17 +70,17 @@ public class PlayerContactHandler {
         float enemy_head;
         float miscalculationThres;
 
-        if (enemyModel.type.getSubType() == EnemyType.SOLDIER) {
+        if (enemyModel.type.isSubType(SOLDIER)) {
             enemy_x_min = enemyModel.getBody().getPosition().x - (SOLDIER_WIDTH / 2);
             enemy_x_max = enemyModel.getBody().getPosition().x + (SOLDIER_WIDTH / 2);
             enemy_head = enemyModel.getBody().getPosition().y + (SOLDIER_HEIGHT / 2);
             miscalculationThres = SOLDIER_HEIGHT * 0.2f;
-        } else if (enemyModel.type.getSubType() == EnemyType.BOAR) {
+        } else if (enemyModel.type.isSubType(BOAR)) {
             enemy_x_min = enemyModel.getBody().getPosition().x - (BOAR_WIDTH / 2);
             enemy_x_max = enemyModel.getBody().getPosition().x + (BOAR_WIDTH / 2);
             enemy_head = enemyModel.getBody().getPosition().y + (BOAR_HEIGHT / 2);
             miscalculationThres = BOAR_HEIGHT * 0.2f;
-        } else if (enemyModel.type.getSubType() == EnemyType.DRONE) {
+        } else if (enemyModel.type.isSubType(DRONE)) {
             enemy_x_min = enemyModel.getBody().getPosition().x - (DRONE_WIDTH / 2);
             enemy_x_max = enemyModel.getBody().getPosition().x + (DRONE_WIDTH / 2);
             enemy_head = enemyModel.getBody().getPosition().y + (DRONE_HEIGHT / 2);

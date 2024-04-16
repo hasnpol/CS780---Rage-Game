@@ -30,7 +30,7 @@ public class CoinFactory {
 
     }
 
-    public void createCoin(Vector2 playerPosition) {
+    public void createCoin(Vector2 playerPosition, SpriteBatch batch) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.gravityScale = 1f;
@@ -39,7 +39,7 @@ public class CoinFactory {
         int randomPos = (int) (Math.random() * (max - min) + min);
         bodyDef.position.set(playerPosition.x + randomPos, playerPosition.y);
         Body body = world.createBody(bodyDef);
-        Coin coin = new Coin(body);
+        Coin coin = new Coin(body, batch);
 
         CircleShape circleShape = new CircleShape();
         circleShape.setRadius(0.2f);
