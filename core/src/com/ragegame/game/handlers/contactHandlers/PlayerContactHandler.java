@@ -1,15 +1,16 @@
 package com.ragegame.game.handlers.contactHandlers;
 
 import com.ragegame.game.objects.DynamicEntity.Coin;
-import com.ragegame.game.objects.DynamicEntity.EnemyModel;
 import com.ragegame.game.objects.DynamicEntity.Medal;
+
+import com.ragegame.game.objects.DynamicEntity.Enemy;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.StaticEntity.Bullet;
 import com.ragegame.game.objects.StaticEntity.Platform;
 import static com.ragegame.game.utils.Constants.EnemyConstants.*;
 import static com.ragegame.game.utils.Constants.EnemyConstants.EnemyType.*;
-import static com.ragegame.game.utils.Constants.PlayerConstants.*;
+import static com.ragegame.game.utils.Constants.PlayerConstants;
 
 public class PlayerContactHandler {
     PlayerModel playerModel;
@@ -24,8 +25,8 @@ public class PlayerContactHandler {
             platformStartContact((Platform) entity);
         }
 
-        if (entity instanceof EnemyModel) {
-            enemyStartContact((EnemyModel) entity);
+        if (entity instanceof Enemy) {
+            enemyStartContact((Enemy) entity);
         }
 
         if (entity instanceof Bullet) {
@@ -44,7 +45,7 @@ public class PlayerContactHandler {
             platformEndContact((Platform) entity);
         }
 
-        if (entity instanceof EnemyModel) {
+        if (entity instanceof Enemy) {
             enemyEndContact();
         }
     }
@@ -61,40 +62,45 @@ public class PlayerContactHandler {
         }
     }
 
-    public void enemyStartContact(EnemyModel enemyModel) {
+    public void enemyStartContact(Enemy enemy) {
         // Find a map for player on x-axis as well as location on y.
         // Note that getPosition returns the center of body.
-        float player_x_min = playerModel.getBody().getPosition().x - (PLAYER_WIDTH / 2);
-        float player_x_max = playerModel.getBody().getPosition().x + (PLAYER_WIDTH / 2);
-        float player_feet = playerModel.getBody().getPosition().y - (PLAYER_HEIGHT / 2);
+        float player_x_min = playerModel.getBody().getPosition().x - (PlayerConstants.WIDTH / 2);
+        float player_x_max = playerModel.getBody().getPosition().x + (PlayerConstants.WIDTH / 2);
+        float player_feet = playerModel.getBody().getPosition().y - (PlayerConstants.HEIGHT / 2);
 
         // Enemy Location on X-axis
         float enemy_x_max;
         float enemy_x_min;
         float enemy_head;
         float miscalculationThres;
+        float enemy_width = 0;
+        float enemy_height = 0;
 
-        if (enemyModel.type.isSubType(SOLDIER)) {
-            enemy_x_min = enemyModel.getBody().getPosition().x - (SOLDIER_WIDTH / 2);
-            enemy_x_max = enemyModel.getBody().getPosition().x + (SOLDIER_WIDTH / 2);
-            enemy_head = enemyModel.getBody().getPosition().y + (SOLDIER_HEIGHT / 2);
-            miscalculationThres = SOLDIER_HEIGHT * 0.2f;
-        } else if (enemyModel.type.isSubType(BOAR)) {
-            enemy_x_min = enemyModel.getBody().getPosition().x - (BOAR_WIDTH / 2);
-            enemy_x_max = enemyModel.getBody().getPosition().x + (BOAR_WIDTH / 2);
-            enemy_head = enemyModel.getBody().getPosition().y + (BOAR_HEIGHT / 2);
-            miscalculationThres = BOAR_HEIGHT * 0.2f;
-        } else if (enemyModel.type.isSubType(DRONE)) {
-            enemy_x_min = enemyModel.getBody().getPosition().x - (DRONE_WIDTH / 2);
-            enemy_x_max = enemyModel.getBody().getPosition().x + (DRONE_WIDTH / 2);
-            enemy_head = enemyModel.getBody().getPosition().y + (DRONE_HEIGHT / 2);
-            miscalculationThres = DRONE_HEIGHT * 0.2f;
-        } else {
+        if (enemy.type.isSubType(SOLDIER)) {
+            enemy_width = SOLDIER_WIDTH;
+            enemy_height = SOLDIER_HEIGHT;
+        } else if (enemy.type.isSubType(BOAR)) {
+            enemy_width = BOAR_WIDTH;
+            enemy_height = BOAR_HEIGHT;
+        } else if (enemy.type.isSubType(DRONE)) {
+            enemy_width = DRONE_WIDTH;
+            enemy_height = DRONE_HEIGHT;
+        } else if (enemy.type.isSubType(PLANE)) {
+            enemy_width = PLANE_WIDTH;
+            enemy_height = PLANE_HEIGHT;
+        }
+        if (enemy_height == 0) {
             System.out.println("HOW DID WE GET HERE???? ENEMY TYPE IS NOT FOUND...");
             enemy_x_min = 1f;
             enemy_x_max = 1f;
             enemy_head = 1f;
             miscalculationThres = 1f;
+        } else {
+            enemy_x_min = enemy.getBody().getPosition().x - (enemy_width / 2);
+            enemy_x_max = enemy.getBody().getPosition().x + (enemy_width / 2);
+            enemy_head = enemy.getBody().getPosition().y + (enemy_height / 2);
+            miscalculationThres = enemy_height * 0.2f;
         }
 
         // Depending on the locations when collision happens, either kill enemy or get hit
@@ -113,7 +119,7 @@ public class PlayerContactHandler {
         } else {
             //System.out.println("Killing Enemy");
             playerModel.setGrounded(true);
-            enemyModel.kill();
+            enemy.kill();
         }
     }
 
@@ -136,7 +142,7 @@ public class PlayerContactHandler {
 
     public void playerMedalContact(Medal collectable) {
         playerModel.setMedal(1);
-        // System.out.println("Player Coin: " + playerModel.getCoins());
+        playerModel.voidRestoreHealth();
         collectable.setCollected();
     }
 
