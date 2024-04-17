@@ -1,17 +1,11 @@
 package com.ragegame.game.handlers.contactHandlers;
 
 import com.ragegame.game.objects.DynamicEntity.Coin;
-import com.ragegame.game.objects.DynamicEntity.EnemyModel;
+import com.ragegame.game.objects.DynamicEntity.Enemy;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.StaticEntity.Bullet;
 import com.ragegame.game.objects.StaticEntity.Platform;
-
-import static com.ragegame.game.utils.Constants.BoarConstants.*;
-import static com.ragegame.game.utils.Constants.DroneConstants.*;
-import static com.ragegame.game.utils.Constants.EntityType.*;
-import static com.ragegame.game.utils.Constants.PlayerConstants.*;
-import static com.ragegame.game.utils.Constants.SoldierConstants.*;
 
 import java.util.Objects;
 
@@ -31,8 +25,8 @@ public class PlayerContactHandler {
             platformStartContact((Platform) entity);
         }
 
-        if (entity instanceof EnemyModel) {
-            enemyStartContact((EnemyModel) entity);
+        if (entity instanceof Enemy) {
+            enemyStartContact((Enemy) entity);
         }
 
         if (entity instanceof Bullet) {
@@ -48,7 +42,7 @@ public class PlayerContactHandler {
             platformEndContact((Platform) entity);
         }
 
-        if (entity instanceof EnemyModel) {
+        if (entity instanceof Enemy) {
             enemyEndContact();
         }
     }
@@ -65,7 +59,7 @@ public class PlayerContactHandler {
         }
     }
 
-    public void enemyStartContact(EnemyModel enemyModel) {
+    public void enemyStartContact(Enemy enemyModel) {
         if (Objects.equals(playerFixtureType, "feet") && Objects.equals(entityFixtureType, "head")) {
             enemyModel.kill();
         } else {

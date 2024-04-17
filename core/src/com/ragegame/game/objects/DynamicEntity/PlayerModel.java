@@ -1,6 +1,9 @@
 package com.ragegame.game.objects.DynamicEntity;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -40,10 +43,10 @@ public class PlayerModel extends DynamicEntity {
         isImmune = false;
 
         this.playerBox = new PolygonShape();
-        playerBox.setAsBox(PLAYER_WIDTH, PLAYER_HEIGHT - .05f);
-        entityFixture.density = PLAYER_DENSITY; // more density -> bigger mass for the same size
-        entityFixture.friction = PLAYER_FRICTION;
-        entityFixture.restitution = PLAYER_RESTITUTION;
+        playerBox.setAsBox(WIDTH * Game.SCALE, HEIGHT * Game.SCALE);
+        entityFixture.density = DENSITY; // more density -> bigger mass for the same size
+        entityFixture.friction = FRICTION;
+        entityFixture.restitution = RESTITUTION;
         entityFixture.shape = playerBox;
 
         this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "body"));
@@ -54,6 +57,14 @@ public class PlayerModel extends DynamicEntity {
         this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "feet"));
 
         this.setPlayerContactHandler();
+    }
+
+    @Override
+    public void draw(SpriteBatch batch, TextureRegion currentAnimationFrame,
+                     float x_position, float y_position, float new_scale) {
+        float scale = (Game.SCALE/2) * new_scale;
+        batch.draw(currentAnimationFrame, x_position - scale, y_position - scale,
+                Game.SCALE * new_scale, Game.SCALE * new_scale);
     }
 
     public void setPlayerContactHandler() {
@@ -164,6 +175,9 @@ public class PlayerModel extends DynamicEntity {
     public int getCoins() {
         return this.coins;
     }
+
+    public float getX() {return this.getBody().getPosition().x;}
+    public float getY() {return this.getBody().getPosition().y;}
 
     public void setCoins(int value) {
         /* positive value for incrementing coins

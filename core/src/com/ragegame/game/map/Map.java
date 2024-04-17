@@ -13,7 +13,6 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.ragegame.game.objects.view.View;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.StaticEntity.*;
 import com.ragegame.game.objects.DynamicEntity.*;
@@ -85,21 +84,22 @@ public class Map {
         enemyBodyDef.position.set(mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY() / PPM);
 
         Body enemyBody = world.createBody(enemyBodyDef);
-        EnemyModel enemyModel;
-
+        Enemy enemy;
         if (Objects.equals(layer, "boar")) {
-            enemyModel = new BoarModel(enemyBody, batch);
+            enemy = new Boar(enemyBody, batch);
         } else if (Objects.equals(layer, "drone")) {
-            enemyModel = new Drone(enemyBody, batch);
+            enemy = new Drone(enemyBody, batch);
         } else if (Objects.equals(layer, "plane")) {
-            enemyModel = new Plane(enemyBody, batch);
+            enemy = new Plane(enemyBody, batch);
         } else { // Default case is for Gunmen
-            enemyModel = new Gunmen(enemyBody, batch);
+            enemy = new Gunmen(enemyBody, batch);
         }
 
-        gameObjects.put(enemyModel.getId(), enemyModel);
-        enemyModel.enemyBox.dispose();
-        dynamicEntities.add(enemyModel);
+        System.out.println(enemy.type);
+
+        gameObjects.put(enemy.getId(), enemy);
+        enemy.enemyBox.dispose();
+        dynamicEntities.add(enemy);
     }
 
     public void createPlatforms(PolygonMapObject mapObject, String layer) {

@@ -626,7 +626,7 @@
   </object>
  </objectgroup>
  <objectgroup id="20" name="plane">
-  <object id="179" x="73" y="659.978">
+  <object id="179" x="49.25" y="625.978">
    <polygon points="0,0 0,8.04325 31.4348,8.06512 31.4348,-0.0218567"/>
   </object>
  </objectgroup>

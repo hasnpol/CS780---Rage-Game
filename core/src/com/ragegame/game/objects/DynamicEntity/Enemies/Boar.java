@@ -1,28 +1,31 @@
 package com.ragegame.game.objects.DynamicEntity.Enemies;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.ragegame.game.objects.DynamicEntity.EnemyModel;
+
 import com.ragegame.game.utils.FixtureDefinition;
 
-import static com.ragegame.game.utils.Constants.BoarConstants.*;
-import static com.ragegame.game.utils.Constants.EntityType.*;
+import com.ragegame.game.objects.DynamicEntity.Enemy;
+import com.ragegame.game.utils.Constants.*;
 
-public class BoarModel extends EnemyModel {
+import static com.ragegame.game.utils.Constants.EnemyConstants.*;
+import static com.ragegame.game.utils.Constants.EnemyConstants.EnemyType.BOAR;
 
 
+public class Boar extends Enemy {
     // 0 is not charging // 1 is starting to charge // 2 is charging
     int charging;
     long chargeFinishTime;
 
     int playerDirection;
 
-    public BoarModel(Body body, SpriteBatch batch) {
+    public Boar(Body body, SpriteBatch batch) {
         super(body, batch, BOAR);
         charging = 0;
         playerDirection = 0;
-        enemyBox.setAsBox(BOAR_WIDTH, BOAR_HEIGHT);
+        enemyBox.setAsBox(BOAR_WIDTH * Game.SCALE, BOAR_HEIGHT * Game.SCALE);
         entityFixture.density = BOAR_DENSITY;
         entityFixture.friction = BOAR_FRICTION;
         entityFixture.restitution = .1f;
@@ -38,9 +41,17 @@ public class BoarModel extends EnemyModel {
     }
 
     @Override
+    public void draw(SpriteBatch batch, TextureRegion currentAnimationFrame,
+                     float x_position, float y_position, float new_scale) {
+        float scale = (Game.SCALE/2);
+        batch.draw(currentAnimationFrame, x_position - scale, y_position - scale,
+                Game.SCALE, Game.SCALE);
+    }
+
+    @Override
     public void update(SpriteBatch batch) {
         if (charging == 0) {
-            playerDirection = EnemyModel.isPlayerInRange(BOAR_HORIZONTALSIGHT, BOAR_VERTICALSIGHT, getPosition());
+            playerDirection = Enemy.isPlayerInRange(BOAR_HORIZONTALSIGHT, BOAR_VERTICALSIGHT, getPosition());
             if (playerDirection != 0) {
                 chargeFinishTime = System.currentTimeMillis() + BOAR_CHARGETIME;
                 charging = 1;
