@@ -6,6 +6,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+
+import com.ragegame.game.objects.DynamicEntity.PlayerModel;
+import com.ragegame.game.utils.FixtureDefinition;
+
 import com.ragegame.game.objects.DynamicEntity.Enemy;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.utils.Constants.*;
@@ -23,7 +27,13 @@ public class Plane extends Enemy {
         entityFixture.density = PLANE_DENSITY;
         entityFixture.friction = 0;
         entityFixture.shape = enemyBox;
-        this.getBody().createFixture(entityFixture).setUserData(this.getId());
+        this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "body"));
+
+        enemyBox.setAsBox(.15f, .05f, new Vector2(0, .25f), 0);
+        entityFixture.shape = enemyBox;
+
+        this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "head"));
+
     }
 
     @Override

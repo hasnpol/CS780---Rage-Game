@@ -4,11 +4,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+
+import com.ragegame.game.utils.FixtureDefinition;
+
 import com.ragegame.game.objects.DynamicEntity.Enemy;
 import com.ragegame.game.utils.Constants.*;
 
 import static com.ragegame.game.utils.Constants.EnemyConstants.*;
 import static com.ragegame.game.utils.Constants.EnemyConstants.EnemyType.BOAR;
+
 
 public class Boar extends Enemy {
     // 0 is not charging // 1 is starting to charge // 2 is charging
@@ -26,7 +30,14 @@ public class Boar extends Enemy {
         entityFixture.friction = BOAR_FRICTION;
         entityFixture.restitution = .1f;
         entityFixture.shape = enemyBox;
-        this.getBody().createFixture(entityFixture).setUserData(this.getId());
+
+        this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "body"));
+
+        enemyBox.setAsBox(.40f, .02f, new Vector2(0, .45f), 0);
+        entityFixture.shape = enemyBox;
+
+        this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "head"));
+
     }
 
     @Override

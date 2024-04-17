@@ -5,12 +5,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.ragegame.game.utils.Constants.*;
 
-import static com.ragegame.game.utils.Constants.EnemyConstants.BOAR_DENSITY;
-import static com.ragegame.game.utils.Constants.EnemyConstants.BOAR_FRICTION;
 import static com.ragegame.game.utils.Constants.EntityType.*;
 import static com.ragegame.game.utils.Constants.ResourceConstants.COIN_DENSITY;
 import static com.ragegame.game.utils.Constants.ResourceConstants.COIN_RADIUS;
 import static com.ragegame.game.utils.Constants.ResourceConstants.ResType.COIN;
+
+import com.ragegame.game.utils.FixtureDefinition;
 import com.ragegame.game.utils.UtilTypes;
 
 public class Coin extends Collectable {
@@ -20,7 +20,7 @@ public class Coin extends Collectable {
         entityFixture.density = COIN_DENSITY;
         entityFixture.isSensor = true;
         entityFixture.shape = collectableCircle;
-        this.getBody().createFixture(entityFixture).setUserData(this.getId());
+        this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "body"));
     }
 
     @Override

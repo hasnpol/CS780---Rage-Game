@@ -1,3 +1,4 @@
+
 package com.ragegame.game.utils;
 
 import com.ragegame.game.utils.Constants.*;

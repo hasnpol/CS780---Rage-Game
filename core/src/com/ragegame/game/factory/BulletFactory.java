@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.StaticEntity.Bullet;
 import com.ragegame.game.utils.Constants;
+import com.ragegame.game.utils.FixtureDefinition;
 
 import java.util.UUID;
 
@@ -46,7 +47,7 @@ public class BulletFactory {
         fixtureDef.shape = circleShape;
         gameObjects.put(bullet.getId(), bullet);
 
-        body.createFixture(fixtureDef).setUserData(bullet.getId());
+        body.createFixture(fixtureDef).setUserData(new FixtureDefinition(bullet.getId(), "body"));
         body.setLinearVelocity(getVelocity(initialPos, destination, speed));
 
         circleShape.dispose();

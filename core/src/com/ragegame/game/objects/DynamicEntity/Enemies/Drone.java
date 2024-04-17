@@ -1,17 +1,27 @@
 package com.ragegame.game.objects.DynamicEntity.Enemies;
 
+
+import static com.ragegame.game.utils.Constants.EnemyConstants.*;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+
+import com.ragegame.game.objects.DynamicEntity.Enemy;
+import com.ragegame.game.objects.DynamicEntity.PlayerModel;
+import com.ragegame.game.utils.FixtureDefinition;
+
+
 import com.ragegame.game.objects.DynamicEntity.Enemy;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.utils.Constants.*;
 
 import static com.ragegame.game.utils.Constants.EnemyConstants.*;
 import static com.ragegame.game.utils.Constants.EnemyConstants.EnemyType.DRONE;
+
 
 public class Drone extends Enemy {
 
@@ -22,7 +32,13 @@ public class Drone extends Enemy {
         entityFixture.density = DRONE_DENSITY;
         entityFixture.friction = 0;
         entityFixture.shape = enemyBox;
-        this.getBody().createFixture(entityFixture).setUserData(this.getId());
+        this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "body"));
+
+        enemyBox.setAsBox(.25f, .02f, new Vector2(0, .25f), 0);
+        entityFixture.shape = enemyBox;
+
+        this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "head"));
+
     }
 
     @Override

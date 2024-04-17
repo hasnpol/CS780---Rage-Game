@@ -12,6 +12,7 @@ import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.StaticEntity.Bullet;
 import com.ragegame.game.objects.StaticEntity.FakePlatform;
 import com.ragegame.game.objects.StaticEntity.HiddenPlatform;
+import com.ragegame.game.utils.FixtureDefinition;
 
 import java.util.UUID;
 
@@ -31,24 +32,34 @@ public class ContactHandler implements ContactListener {
         Fixture fixtureB = contact.getFixtureB();
         Entity objA = null;
         Entity objB = null;
+        String fixtureTypeA = "";
+        String fixtureTypeB = "";
 
-        if (fixtureA.getUserData() != null && fixtureA.getUserData() instanceof UUID) {
-            UUID objId = (UUID) fixtureA.getUserData();
+        if (fixtureA.getUserData() != null && fixtureA.getUserData() instanceof FixtureDefinition) {
+            FixtureDefinition def = (FixtureDefinition) fixtureA.getUserData();
+            UUID objId = def.id;
+            fixtureTypeA = def.fixtureType;
             objA = gameObjects.get(objId);
         }
 
-        if (fixtureB.getUserData() != null && fixtureB.getUserData() instanceof UUID) {
-            UUID objId = (UUID) fixtureB.getUserData();
+        if (fixtureB.getUserData() != null && fixtureB.getUserData() instanceof FixtureDefinition) {
+            FixtureDefinition def = (FixtureDefinition) fixtureB.getUserData();
+            UUID objId = def.id;
+            fixtureTypeB = def.fixtureType;
             objB = gameObjects.get(objId);
         }
 
         if (objB instanceof PlayerModel) {
             PlayerModel playerModel = (PlayerModel) objB;
+            playerModel.playerContactHandler.playerFixtureType = fixtureTypeB;
+            playerModel.playerContactHandler.entityFixtureType = fixtureTypeA;
             playerModel.playerContactHandler.startContact(objA);
         }
 
         if (objA instanceof PlayerModel) {
             PlayerModel playerModel = (PlayerModel) objA;
+            playerModel.playerContactHandler.playerFixtureType = fixtureTypeA;
+            playerModel.playerContactHandler.entityFixtureType = fixtureTypeB;
             playerModel.playerContactHandler.startContact(objB);
         }
 
@@ -86,29 +97,39 @@ public class ContactHandler implements ContactListener {
 
     @Override
     public void endContact(Contact contact) {
+
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
-
         Entity objA = null;
         Entity objB = null;
+        String fixtureTypeA = "";
+        String fixtureTypeB = "";
 
-        if (fixtureA.getUserData() != null && fixtureA.getUserData() instanceof UUID) {
-            UUID objId = (UUID) fixtureA.getUserData();
+        if (fixtureA.getUserData() != null && fixtureA.getUserData() instanceof FixtureDefinition) {
+            FixtureDefinition def = (FixtureDefinition) fixtureA.getUserData();
+            UUID objId = def.id;
+            fixtureTypeA = def.fixtureType;
             objA = gameObjects.get(objId);
         }
 
-        if (fixtureB.getUserData() != null && fixtureB.getUserData() instanceof UUID) {
-            UUID objId = (UUID) fixtureB.getUserData();
+        if (fixtureB.getUserData() != null && fixtureB.getUserData() instanceof FixtureDefinition) {
+            FixtureDefinition def = (FixtureDefinition) fixtureB.getUserData();
+            UUID objId = def.id;
+            fixtureTypeB = def.fixtureType;
             objB = gameObjects.get(objId);
         }
 
         if (objB instanceof PlayerModel) {
             PlayerModel playerModel = (PlayerModel) objB;
+            playerModel.playerContactHandler.playerFixtureType = fixtureTypeB;
+            playerModel.playerContactHandler.entityFixtureType = fixtureTypeA;
             playerModel.playerContactHandler.endContact(objA);
         }
 
         if (objA instanceof PlayerModel) {
             PlayerModel playerModel = (PlayerModel) objA;
+            playerModel.playerContactHandler.playerFixtureType = fixtureTypeA;
+            playerModel.playerContactHandler.entityFixtureType = fixtureTypeB;
             playerModel.playerContactHandler.endContact(objB);
         }
 
