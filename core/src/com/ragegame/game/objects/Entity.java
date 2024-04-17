@@ -1,6 +1,8 @@
 package com.ragegame.game.objects;
 
 import java.awt.Graphics;
+
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
@@ -13,7 +15,8 @@ public class Entity {
     /// This super class is used for game objects that has physics
     public final EntityType type;
     private final Body body;
-    protected Rectangle2D.Float hitbox;
+    protected float width;
+    protected float height;
     private UUID id;
     private Vector2 force;
 
@@ -50,20 +53,6 @@ public class Entity {
 
     public void setMovementVector(Vector2 movementVector) {
         this.movementVector = movementVector;
-    }
-
-    protected void drawHitbox(Graphics g) {
-        // For debugging the hitbox
-        g.setColor(Color.PINK);
-        g.drawRect((int) hitbox.x, (int) hitbox.y, (int) hitbox.width, (int) hitbox.height);
-    }
-
-    protected void initHitbox(float x, float y, int width, int height) {
-        hitbox = new Rectangle2D.Float(x, y, width, height);
-    }
-
-    public Rectangle2D.Float getHitbox() {
-        return hitbox;
     }
 
     public boolean needsDeletion() {

@@ -12,7 +12,7 @@ public class BackgroundHandler {
     ArrayList<Float> backgroundOffsets = new ArrayList<>(); // Offsets for parallax
 
     public BackgroundHandler() {
-        backgrounds.add(new Texture(Gdx.files.internal("maps/desert/BG.png")));
+        backgrounds.add(new Texture(Gdx.files.internal("maps/level_1/grassy_plains_by_theodenn.jpg")));
     }
 
     public void render(float deltaTime, SpriteBatch batch, float worldWidth, float worldHeight, float PPM) {
