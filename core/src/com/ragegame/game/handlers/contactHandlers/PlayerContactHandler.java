@@ -98,7 +98,7 @@ public class PlayerContactHandler {
             if (!playerModel.isImmune) {
                 playerModel.isHit = true;
                 //System.out.println("Player Got Hit!");
-                playerModel.setHealth(-1);
+                playerModel.setHealth(-100);
                 playerModel.coinsToDrop = (int) (playerModel.getCoins() * .1);
                 //System.out.println("No immunity!");
                 //System.out.println("\tHealth: " + playerModel.getHealth());
@@ -114,7 +114,7 @@ public class PlayerContactHandler {
 
     public void playerBulletContact(Bullet bullet) {
         playerModel.setCoins((int) (-playerModel.getCoins() * .1));
-        playerModel.setHealth(-10);
+        playerModel.setHealth(-100);
         playerModel.getBody().getPosition().y = -10;
         System.out.println("Player Coin: " + playerModel.getCoins());
         System.out.println("Player Health: " + playerModel.getHealth());

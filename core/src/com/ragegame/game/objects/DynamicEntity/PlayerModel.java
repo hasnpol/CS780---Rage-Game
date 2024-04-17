@@ -18,7 +18,7 @@ public class PlayerModel extends DynamicEntity {
     long jumpPress;
     boolean sprint;
     public PlayerContactHandler playerContactHandler;
-    private int health = HEALTH;
+    private int health = HEALTH;//1000
     private int coins = 100;
     public boolean isHit;
     public boolean isImmune;
