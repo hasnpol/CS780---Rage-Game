@@ -75,7 +75,7 @@ public class Map {
     }
 
     private void createMapObject(PolygonMapObject mapObject, String layer) {
-        ArrayList<String> enemies = new ArrayList<>(Arrays.asList("enemy", "drone", "boar", "plane"));
+        ArrayList<String> enemies = new ArrayList<>(Arrays.asList("enemy", "drone", "boar", "plane", "gunmen"));
         ArrayList<String> platforms = new ArrayList<>(Arrays.asList("fake", "platform", "hidden"));
         if (mapObject instanceof PolygonMapObject) {
             if (platforms.contains(layer)) {
@@ -106,8 +106,10 @@ public class Map {
             enemyModel = new Drone(enemyBody, batch);
         } else if (Objects.equals(layer, "plane")) {
             enemyModel = new Plane(enemyBody, batch);
-        } else { // Default case is for Gunmen
+        } else if (Objects.equals(layer, "gunmen")) { // Default case is for Gunmen
             enemyModel = new Gunmen(enemyBody, batch);
+        } else {
+            enemyModel = null;
         }
 
         gameObjects.put(enemyModel.getId(), enemyModel);
