@@ -11,16 +11,16 @@ import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 
 import static com.ragegame.game.utils.Constants.*;
 import static com.ragegame.game.utils.Constants.EnemyConstants.*;
-import static com.ragegame.game.utils.Constants.EnemyConstants.EnemyType.DRONE;
+import static com.ragegame.game.utils.Constants.EnemyConstants.EnemyType.PLANE;
 
-public class Drone extends EnemyModel {
+public class Plane extends EnemyModel {
     private float elapsedTime = 0; // Time elapsed since the start of the movement
 
-    public Drone(Body body, SpriteBatch batch) {
-        super(body, batch, DRONE);
+    public Plane(Body body, SpriteBatch batch) {
+        super(body, batch, PLANE);
         this.getBody().setGravityScale(0);
-        enemyBox.setAsBox(DRONE_WIDTH, DRONE_HEIGHT); // 0.25f, 0.25f
-        entityFixture.density = DRONE_DENSITY;
+        enemyBox.setAsBox(PLANE_WIDTH, PLANE_HEIGHT);
+        entityFixture.density = PLANE_DENSITY;
         entityFixture.friction = 0;
         entityFixture.shape = enemyBox;
         this.getBody().createFixture(entityFixture).setUserData(this.getId());
@@ -37,18 +37,18 @@ public class Drone extends EnemyModel {
 //        float sinusoidalOffset = MathUtils.sin(elapsedTime * DRONE_FREQUENCY) * DRONE_AMPLITUDE;
 
         // Applied the sinusoidal up and down "bounce" movement
-        float sinusoidalVelocity = DRONE_AMPLITUDE * MathUtils.sin(MathUtils.PI2 * DRONE_FREQUENCY * elapsedTime);
+        float sinusoidalVelocity = PLANE_AMPLITUDE * MathUtils.sin(MathUtils.PI2 * PLANE_FREQUENCY * elapsedTime);
         getBody().applyForceToCenter(0, sinusoidalVelocity, true);
 
 
         Vector2 currentVelocity = getBody().getLinearVelocity();
         getBody().setLinearVelocity(currentVelocity.x, sinusoidalVelocity);
 
-//        float angle = MathUtils.atan2(playerPosition.y - dronePosition.y, playerPosition.x - dronePosition.x);
-        Vector2 pursuitMovement = new Vector2(MathUtils.cos(0) * DRONE_SPEED, MathUtils.sin(0) * DRONE_SPEED);
+        float angle = MathUtils.atan2(playerPosition.y - dronePosition.y, playerPosition.x - dronePosition.x);
+        Vector2 pursuitMovement = new Vector2(MathUtils.cos(angle) * PLANE_SPEED, MathUtils.sin(angle) * PLANE_SPEED);
 //        Vector2 combinedMovement = pursuitMovement.add(0, sinusoidalOffset);
         dronePosition.add(pursuitMovement);
-        getBody().setTransform(dronePosition, 0); // sets the angle, could be used for a gun?
+        getBody().setTransform(dronePosition, angle); // sets the angle, could be used for a gun?
 
 //        float angle = MathUtils.atan2(playerPosition.y - dronePosition.y, playerPosition.x - dronePosition.x);
 //
@@ -71,7 +71,7 @@ public class Drone extends EnemyModel {
     // Method to calculate the seek behavior towards the player
     private Vector2 seek(Vector2 target, float deltaTime) {
         Vector2 desired = target.sub(getBody().getPosition());
-        desired.setLength(DRONE_SPEED * deltaTime);
+        desired.setLength(PLANE_SPEED * deltaTime);
         return desired;
     }
 }

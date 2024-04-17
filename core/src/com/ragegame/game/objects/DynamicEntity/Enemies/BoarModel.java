@@ -1,9 +1,9 @@
 package com.ragegame.game.objects.DynamicEntity.Enemies;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.ragegame.game.objects.DynamicEntity.EnemyModel;
-import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 
 import static com.ragegame.game.utils.Constants.EnemyConstants.*;
 import static com.ragegame.game.utils.Constants.EnemyConstants.EnemyType.BOAR;
@@ -17,14 +17,20 @@ public class BoarModel extends EnemyModel {
 
     int playerDirection;
 
-    public BoarModel(Body body) {
-        super(body, BOAR);
+    public BoarModel(Body body, SpriteBatch batch) {
+        super(body, batch, BOAR);
         charging = 0;
         playerDirection = 0;
+        enemyBox.setAsBox(BOAR_WIDTH, BOAR_HEIGHT);
+        entityFixture.density = BOAR_DENSITY;
+        entityFixture.friction = BOAR_FRICTION;
+        entityFixture.restitution = .1f;
+        entityFixture.shape = enemyBox;
+        this.getBody().createFixture(entityFixture).setUserData(this.getId());
     }
 
     @Override
-    public void update() {
+    public void update(SpriteBatch batch) {
         if (charging == 0) {
             playerDirection = EnemyModel.isPlayerInRange(BOAR_HORIZONTALSIGHT, BOAR_VERTICALSIGHT, getPosition());
             if (playerDirection != 0) {

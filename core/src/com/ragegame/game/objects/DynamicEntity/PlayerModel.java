@@ -1,16 +1,22 @@
 package com.ragegame.game.objects.DynamicEntity;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.ragegame.game.handlers.contactHandlers.PlayerContactHandler;
 import com.ragegame.game.factory.CoinFactory;
 
+import static com.ragegame.game.utils.Constants.EnemyConstants.BOAR_HEIGHT;
+import static com.ragegame.game.utils.Constants.EnemyConstants.BOAR_WIDTH;
+import static com.ragegame.game.utils.Constants.EnemyConstants.PLANE_DENSITY;
 import static com.ragegame.game.utils.Constants.EntityType.*;
 import static com.ragegame.game.utils.Constants.PlayerConstants.*;
 import static com.ragegame.game.utils.Constants.*;
 
 
 public class PlayerModel extends DynamicEntity {
+    public PolygonShape playerBox;
     private static PlayerModel playerModel = null;
     float DRAG = 3f;
     boolean stop;
@@ -27,8 +33,8 @@ public class PlayerModel extends DynamicEntity {
     long endTime;
     public int coinsToDrop = 0;
 
-    public PlayerModel(Body body) {
-        super(body, PLAYER);
+    public PlayerModel(Body body, SpriteBatch batch) {
+        super(body, batch, PLAYER);
         stop = false;
         grounded = false;
         jumpPress = 0L;
@@ -36,6 +42,14 @@ public class PlayerModel extends DynamicEntity {
         playerModel = this;
         isHit = false;
         isImmune = false;
+        this.playerBox = new PolygonShape();
+        playerBox.setAsBox(PLAYER_WIDTH, PLAYER_HEIGHT);
+        entityFixture.density = PLAYER_DENSITY; // more density -> bigger mass for the same size
+        entityFixture.friction = PLAYER_FRICTION;
+        entityFixture.restitution = PLAYER_RESTITUTION;
+        entityFixture.shape = playerBox;
+        this.getBody().createFixture(entityFixture).setUserData(this.getId());
+        this.setPlayerContactHandler();
     }
 
     public void setPlayerContactHandler() {
@@ -48,27 +62,22 @@ public class PlayerModel extends DynamicEntity {
 
     // Look at your numpad for values for directions.
     // This is called numpad notation btw and is common in fighting game discourse
-    public void move(int direction) {
+    public void move(Direction direction) {
         if (isDead()) return;
+        stop = direction == Direction.STOP;
         switch (direction) {
-            case 6:
-                stop = false;
+            case RIGHT:
                 setForce(new Vector2(15, 0));
                 setDirection(Direction.LEFT);
                 setForce(new Vector2(((sprint)) ? 15 : 7, 0));
                 break;
-
-            case 4:
-                stop = false;
+            case LEFT:
                 setForce(new Vector2(-15, 0));
                 setDirection(Direction.RIGHT);
                 setForce(new Vector2(((sprint)) ? -15 : -7, 0));
                 break;
-
-            case 5:
-                stop = true;
+            case STOP:
                 break;
-
             default:
                 System.out.println("How did we get here: " + direction);
         }
@@ -91,7 +100,8 @@ public class PlayerModel extends DynamicEntity {
         this.startTime = System.currentTimeMillis();
     }
 
-    public void update() {
+    @Override
+    public void update(SpriteBatch batch) {
         if (playerModel.isDead()) {
             //System.out.println("Player DIED!");
             playerModel.kill();
@@ -107,7 +117,7 @@ public class PlayerModel extends DynamicEntity {
             }
             if (playerModel.isHit && !playerModel.isImmune) {
                 //System.out.println("Player has hit and no immune");
-                dropCoin();
+                dropCoin(batch);
             }
 
             Vector2 velocity = getBody().getLinearVelocity();
@@ -164,11 +174,11 @@ public class PlayerModel extends DynamicEntity {
         this.markedForDelete = true;
     }
 
-    public void dropCoin() {
+    public void dropCoin(SpriteBatch batch) {
         PlayerModel playerModel = PlayerModel.getPlayerModel();
         if (playerModel != null) {
             for (int i = 0; i < playerModel.coinsToDrop; i++) {
-                CoinFactory.getInstance().createCoin(playerModel.getBody().getPosition());
+                CoinFactory.getInstance().createCoin(playerModel.getBody().getPosition(), batch);
             }
         }
     }

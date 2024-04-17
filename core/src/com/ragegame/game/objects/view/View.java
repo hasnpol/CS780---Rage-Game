@@ -7,11 +7,14 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.ragegame.game.objects.DynamicEntity.Coin;
+import com.ragegame.game.objects.DynamicEntity.Enemies.*;
 import com.ragegame.game.objects.DynamicEntity.EnemyModel;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.DynamicEntity.DynamicEntity;
+import com.ragegame.game.utils.Constants.*;
 import com.ragegame.game.utils.Constants.State;
 import com.ragegame.game.utils.Constants.EntityType;
+import com.ragegame.game.utils.Constants.EnemyConstants.*;
 import com.ragegame.game.utils.HelpMethods;
 import com.ragegame.game.utils.UtilTypes;
 
@@ -31,9 +34,6 @@ public class View {
     public View(DynamicEntity model, SpriteBatch batch) {
         this.model = model;
         this.batch = batch;
-        if (model.type == EntityType.RESOURCE) {
-            int x = 0;
-        }
         UtilTypes sprite_textures = HelpMethods.GetTextureAtlas(model.type);
         assert sprite_textures != null;
         this.textureAtlas = new TextureAtlas(sprite_textures.resPath);
@@ -90,12 +90,19 @@ public class View {
         if (currentAnimationFrame.isFlipX() != shouldFlip) {
             currentAnimationFrame.flip(true, false); // Flip horizontally without flipping vertically
         }
+        float x_position = this.model.getBody().getPosition().x;
+        float y_position = this.model.getBody().getPosition().y;
         if (model instanceof Coin) {
-            batch.draw(currentAnimationFrame, this.model.getBody().getPosition().x - .25f,
-                    this.model.getBody().getPosition().y - .25f, (float) 1/2, (float) 1/2);
-        } else {
-            batch.draw(currentAnimationFrame, this.model.getBody().getPosition().x - (float) 1 / 2,
-                    this.model.getBody().getPosition().y - (float) 1 / 2, 1, 1);
+            batch.draw(currentAnimationFrame, x_position - 0.25f, y_position - 0.25f,
+                    (float) 1/2, (float) 1/2);
+        }
+        else if (model instanceof Plane) {
+            batch.draw(currentAnimationFrame, x_position - 0.5f, y_position - 0.5f,
+                    2, 1);
+        }
+        else {
+            batch.draw(currentAnimationFrame, x_position - 0.5f, y_position - 0.5f,
+                    1, 1);
         }
     }
 
@@ -103,6 +110,7 @@ public class View {
         if (this.model.type == EntityType.RESOURCE) {
             return 0; // Collectables will probably have only one animation?
         } else {
+            // TODO ADD ATTACKING ANIMATION
             if (isDead) {
                 return State.DEAD.ordinal();
             } else if (this.model.getMovementVector().y != 0) { // If JUMPING

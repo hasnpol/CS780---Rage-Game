@@ -4,6 +4,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
+import com.ragegame.game.utils.Constants.*;
+import com.ragegame.game.utils.Constants.Direction.*;
 
 public class InputHandler implements InputProcessor {
     PlayerModel playerModel;
@@ -13,10 +15,10 @@ public class InputHandler implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.D) {
-            playerModel.move(6);
+            playerModel.move(Direction.RIGHT);
             playerModel.setMovementVector(new Vector2(1, 0));
         } else if (keycode == Input.Keys.A) {
-            playerModel.move(4);
+            playerModel.move(Direction.LEFT);
             playerModel.setMovementVector(new Vector2(-1, 0));
         } else if (keycode == Input.Keys.SPACE) {
             playerModel.jumpStart();
@@ -28,7 +30,7 @@ public class InputHandler implements InputProcessor {
     @Override
     public boolean keyUp(int keycode) {
         if (keycode == Input.Keys.D || keycode == Input.Keys.A) {
-            playerModel.move(5);
+            playerModel.move(Direction.STOP);
             playerModel.setMovementVector(new Vector2(0, 0));
         } else if (keycode == Input.Keys.SPACE) {
             playerModel.jumpEnd();
