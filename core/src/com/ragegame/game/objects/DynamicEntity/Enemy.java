@@ -1,13 +1,18 @@
 package com.ragegame.game.objects.DynamicEntity;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.ragegame.game.utils.Constants;
 
 import static com.ragegame.game.utils.Constants.*;
 import static com.ragegame.game.utils.Constants.EntityType.*;
 
-public class EnemyModel extends DynamicEntity {
+public class Enemy extends DynamicEntity {
+    public PolygonShape enemyBox;
+
     private Vector2 position;
     private int health = 100;
     private float speed = 120F;
@@ -15,10 +20,15 @@ public class EnemyModel extends DynamicEntity {
     private int enemyState;
     public boolean isDead;
 
-    public EnemyModel(Body body, EnemyConstants.EnemyType enemyType) {
-        super(body, ENEMY.SubType(enemyType));
+    public Enemy(Body body, SpriteBatch batch, EnemyConstants.EnemyType enemyType) {
+        super(body, batch, ENEMY.SubType(enemyType));
+        this.enemyBox = new PolygonShape();
         this.position = body.getPosition();
     }
+
+    @Override
+    public void draw(SpriteBatch batch, TextureRegion currentAnimationFrame,
+                     float x_position, float y_position, float new_scale) {}
 
     public Vector2 getPosition() {
         return position;

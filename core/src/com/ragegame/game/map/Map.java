@@ -11,31 +11,28 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.Shape;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.ragegame.game.objects.DynamicEntity.Enemies.BoarModel;
+
 import com.ragegame.game.objects.DynamicEntity.Coin;
 import com.ragegame.game.objects.DynamicEntity.DynamicEntity;
 import com.ragegame.game.objects.DynamicEntity.Enemies.Drone;
-import com.ragegame.game.objects.DynamicEntity.Enemies.Soldier;
-import com.ragegame.game.objects.DynamicEntity.EnemyModel;
+
 import com.ragegame.game.objects.DynamicEntity.Enemies.Gunmen;
+import com.ragegame.game.objects.DynamicEntity.Medal;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.StaticEntity.FakePlatform;
 import com.ragegame.game.objects.StaticEntity.HiddenPlatform;
 import com.ragegame.game.objects.StaticEntity.Platform;
-import com.ragegame.game.objects.view.View;
-import static com.ragegame.game.utils.Constants.EnemyConstants.*;
 
-import java.util.ArrayList;
-import java.util.UUID;
+import com.ragegame.game.objects.Entity;
+import com.ragegame.game.objects.StaticEntity.*;
+import com.ragegame.game.objects.DynamicEntity.*;
+import com.ragegame.game.objects.DynamicEntity.Enemies.*;
+import com.ragegame.game.utils.FixtureDefinition;
+
+import java.util.*;
 
 public class Map {
 
@@ -73,140 +70,57 @@ public class Map {
     private void createMapLayers(MapLayers layers) {
         for (MapLayer mapLayer : layers) {
             for (MapObject mapObject : mapLayer.getObjects()) {
-                createMapObject(mapObject, mapLayer.getName());
+                createMapObject((PolygonMapObject) mapObject, mapLayer.getName());
             }
         }
     }
 
-    private void createMapObject(MapObject mapObject, String layer) {
-        switch (layer) {
-            case "player":
-                if (mapObject instanceof PolygonMapObject)
-                    createPlayerModel((PolygonMapObject) mapObject);
-                break;
-            case "enemy":
-                if (mapObject instanceof PolygonMapObject)
-                    createEnemyModel((PolygonMapObject) mapObject);
-                break;
-            case "platform":
-                if (mapObject instanceof PolygonMapObject) {
-                    createPlatform((PolygonMapObject) mapObject);
-                }
-                break;
-            case "fake":
-                if (mapObject instanceof PolygonMapObject) {
-                    createFakePlatform((PolygonMapObject) mapObject);
-                }
-                break;
-            case "boar":
-                if (mapObject instanceof PolygonMapObject) {
-                    createBoar((PolygonMapObject) mapObject);
-                }
-                break;
-            case "drone":
-                if (mapObject instanceof PolygonMapObject) {
-                    createDrone((PolygonMapObject) mapObject);
-                }
-                break;
-            case "hidden":
-                if (mapObject instanceof PolygonMapObject) {
-                    createHiddenPlatform((PolygonMapObject) mapObject);
-                }
-                break;
-            case "gunmen":
-                if (mapObject instanceof PolygonMapObject) {
-                    createGunmenModel((PolygonMapObject) mapObject);
-                }
-                break;
-            case "coin":
-                if (mapObject instanceof PolygonMapObject) {
-                    createCoin((PolygonMapObject) mapObject);
-                }
-                break;
-            default:
-                break;
+    private void createMapObject(PolygonMapObject mapObject, String layer) {
+        ArrayList<String> enemies = new ArrayList<>(Arrays.asList("enemy", "drone", "boar", "plane", "gunmen"));
+        ArrayList<String> platforms = new ArrayList<>(Arrays.asList("fake", "platform", "hidden"));
+        if (mapObject instanceof PolygonMapObject) {
+            if (platforms.contains(layer)) {
+                createPlatforms((PolygonMapObject) mapObject, layer);
+            } else if (Objects.equals(layer, "player")) {
+                createPlayerModel((PolygonMapObject) mapObject);
+            } else if (enemies.contains(layer)) {
+                createEnemies((PolygonMapObject) mapObject, layer);
+            } else if (Objects.equals(layer, "coin")) {
+                createCoin((PolygonMapObject) mapObject);
+            } else if (Objects.equals(layer, "medal")) {
+                createMedal((PolygonMapObject) mapObject);
+            }
         }
     }
 
-    private void createCoin(PolygonMapObject mapObject) {
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM);
-
-        Body coinBody = world.createBody(bodyDef);
-        CircleShape coinBox = new CircleShape();
-        coinBox.setRadius(0.2f);
-
-        Coin coin = new Coin(coinBody);
-        View view = new View(coin, batch);
-        coin.setView(view);
-
-        gameObjects.put(coin.getId(), coin);
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = coinBox;
-        fixtureDef.isSensor = true;
-        fixtureDef.density = 0;
-
-        coinBody.setFixedRotation(true);
-        coinBody.createFixture(fixtureDef).setUserData(coin.getId());
-        coinBox.dispose();
-        dynamicEntities.add(coin);
-    }
-
-    private void createBoar(PolygonMapObject mapObject) {
+    private void createEnemies(PolygonMapObject mapObject, String layer) {
         BodyDef enemyBodyDef = new BodyDef();
         enemyBodyDef.type = BodyDef.BodyType.DynamicBody;
-        enemyBodyDef.position.set(mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM);
+        enemyBodyDef.position.set(mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY() / PPM);
 
         Body enemyBody = world.createBody(enemyBodyDef);
-        PolygonShape enemyBox = new PolygonShape();
-        enemyBox.setAsBox(0.5f, 0.32f);
+        Enemy enemy;
+        if (Objects.equals(layer, "boar")) {
+            enemy = new Boar(enemyBody, batch);
+        } else if (Objects.equals(layer, "drone")) {
+            enemy = new Drone(enemyBody, batch);
+        } else if (Objects.equals(layer, "plane")) {
+            enemy = new Plane(enemyBody, batch);
+        } else if (Objects.equals(layer, "gunmen")) { // Default case is for Gunmen
+            enemy = new Gunmen(enemyBody, batch);
+        } else {
+            enemy = null;
+        }
 
-        BoarModel boarModel = new BoarModel(enemyBody);
-        View boarView = new View(boarModel, batch);
-        boarModel.setView(boarView);
+        System.out.println(enemy.type);
 
-        gameObjects.put(boarModel.getId(), boarModel);
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = enemyBox;
-        fixtureDef.density = 2.5f;  // more density -> bigger mass for the same size
-        fixtureDef.friction = .2f;
-        fixtureDef.restitution = .1f;
-
-        enemyBody.setFixedRotation(false);
-        enemyBody.createFixture(fixtureDef).setUserData(boarModel.getId());
-        enemyBox.dispose();
-        dynamicEntities.add(boarModel);
+        gameObjects.put(enemy.getId(), enemy);
+        enemy.enemyBox.dispose();
+        dynamicEntities.add(enemy);
     }
 
-    private void createDrone(PolygonMapObject mapObject) {
-        BodyDef enemyBodyDef = new BodyDef();
-        enemyBodyDef.type = BodyDef.BodyType.DynamicBody;
-        enemyBodyDef.position.set(mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM);
-
-        Body enemyBody = world.createBody(enemyBodyDef);
-        PolygonShape enemyBox = new PolygonShape();
-        enemyBox.setAsBox(0.25f, 0.25f);
-
-        Drone drone = new Drone(enemyBody);
-        View droneView = new View(drone, batch);
-        drone.setView(droneView);
-
-        gameObjects.put(drone.getId(), drone);
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = enemyBox;
-        fixtureDef.density = DRONE_DENSITY;  // more density -> bigger mass for the same size
-        fixtureDef.friction = 0;
-
-        enemyBody.setFixedRotation(true);
-        enemyBody.createFixture(fixtureDef).setUserData(drone.getId());
-        enemyBox.dispose();
-        dynamicEntities.add(drone);
-    }
-
-    public void createFakePlatform(PolygonMapObject mapObject) {
-        MapLayer tiledLayer = map.getLayers().get(mapObject.getName());
-
+    public void createPlatforms(PolygonMapObject mapObject, String layer) {
+        MapLayer tiledLayer;
         BodyDef bodyDef = new BodyDef();
         Shape shape = createPolygonShape(mapObject, bodyDef);
         bodyDef.type = BodyDef.BodyType.StaticBody;
@@ -214,23 +128,25 @@ public class Map {
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.isSensor = true;
 
-        FakePlatform platform = new FakePlatform(body, mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM, tiledLayer);
-        body.createFixture(fixtureDef).setUserData(platform.getId());
-        gameObjects.put(platform.getId(), platform);
-    }
-
-    public void createHiddenPlatform(PolygonMapObject mapObject) {
-        MapLayer tiledLayer = map.getLayers().get(mapObject.getName());
-
-        BodyDef bodyDef = new BodyDef();
-        Shape shape = createPolygonShape(mapObject, bodyDef);
-        bodyDef.type = BodyDef.BodyType.StaticBody;
-        Body body = world.createBody(bodyDef);
-
-        HiddenPlatform platform = new HiddenPlatform(body, mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM, tiledLayer);
-        body.createFixture(shape, 0).setUserData(platform.getId());
+        Platform platform;
+        switch(layer) {
+            case "fake":
+                tiledLayer = map.getLayers().get(mapObject.getName());
+                platform = new FakePlatform(body, mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM, tiledLayer);
+                fixtureDef.isSensor = true;
+                break;
+            case "hidden":
+                tiledLayer = map.getLayers().get(mapObject.getName());
+                platform = new HiddenPlatform(body, mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM, tiledLayer);
+                fixtureDef.density = 0;
+                break;
+            default:
+                platform = new Platform(body, mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM);
+                fixtureDef.density = 10000;
+                break;
+        }
+        body.createFixture(fixtureDef).setUserData(new FixtureDefinition(platform.getId(), "body"));
         gameObjects.put(platform.getId(), platform);
     }
 
@@ -240,92 +156,34 @@ public class Map {
         playerBodyDef.position.set(mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY() / PPM);
         Body playerBody = world.createBody(playerBodyDef);
 
-        PolygonShape playerBox = new PolygonShape();
-        playerBox.setAsBox(0.18f, 0.45f);
-
-        this.playerModel = new PlayerModel(playerBody);
-        this.playerModel.setPlayerContactHandler();
-        View playerView = new View(playerModel, batch);
-        playerModel.setView(playerView);
+        this.playerModel = new PlayerModel(playerBody, batch);
         gameObjects.put(playerModel.getId(), playerModel);
-
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = playerBox;
-        fixtureDef.density = 2.5f;  // more density -> bigger mass for the same size
-        fixtureDef.friction = 1;
-        fixtureDef.restitution = .1f;
-
-        playerBody.setFixedRotation(true);
-        playerBody.createFixture(fixtureDef).setUserData(playerModel.getId());
-
-        playerBox.dispose();
+        this.playerModel.playerBox.dispose();
         dynamicEntities.add(playerModel);
     }
 
-    public void createEnemyModel(PolygonMapObject mapObject) {
-		BodyDef enemyBodyDef = new BodyDef();
-		enemyBodyDef.type = BodyDef.BodyType.DynamicBody;
-		enemyBodyDef.position.set(mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM);
-
-		Body enemyBody = world.createBody(enemyBodyDef);
-		PolygonShape enemyBox = new PolygonShape();
-        enemyBox.setAsBox(0.18f, 0.45f);
-
-		EnemyModel enemyModel = new Soldier(enemyBody);
-		View enemyView = new View(enemyModel, batch);
-        enemyModel.setView(enemyView);
-
-        gameObjects.put(enemyModel.getId(), enemyModel);
-		FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.shape = enemyBox;
-		fixtureDef.density = 2.5f;  // more density -> bigger mass for the same size
-		fixtureDef.friction = 1;
-        fixtureDef.restitution = .1f;
-
-        enemyBody.setFixedRotation(true);
-        enemyBody.createFixture(fixtureDef).setUserData(enemyModel.getId());
-        enemyBox.dispose();
-        dynamicEntities.add(enemyModel);
-    }
-
-    public void createGunmenModel(PolygonMapObject mapObject) {
-        BodyDef enemyBodyDef = new BodyDef();
-        enemyBodyDef.type = BodyDef.BodyType.DynamicBody;
-        enemyBodyDef.position.set(mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM);
-
-        Body enemyBody = world.createBody(enemyBodyDef);
-        PolygonShape enemyBox = new PolygonShape();
-        enemyBox.setAsBox(0.25f, 0.5f);
-
-        EnemyModel enemyModel = new Gunmen(enemyBody);
-        View enemyView = new View(enemyModel, batch);
-        enemyModel.setView(enemyView);
-
-        gameObjects.put(enemyModel.getId(), enemyModel);
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = enemyBox;
-        fixtureDef.density = 2f;  // more density -> bigger mass for the same size
-        fixtureDef.friction = 1;
-
-        enemyBody.setFixedRotation(true);
-        enemyBody.createFixture(fixtureDef).setUserData(enemyModel.getId());
-        enemyBox.dispose();
-        dynamicEntities.add(enemyModel);
-    }
-
-    private void createPlatform(PolygonMapObject polygonMapObject) {
-
+    private void createCoin(PolygonMapObject mapObject) {
         BodyDef bodyDef = new BodyDef();
-        Shape shape = createPolygonShape(polygonMapObject, bodyDef);
-
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        Body body = world.createBody(bodyDef);
+        bodyDef.position.set(mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM);
+        Body coinBody = world.createBody(bodyDef);
+        Coin coin = new Coin(coinBody, batch);
 
-        Platform platform = new Platform(body, polygonMapObject.getPolygon().getX() / PPM, polygonMapObject.getPolygon().getY()/ PPM);
+        gameObjects.put(coin.getId(), coin);
+        coin.collectableCircle.dispose();
+        dynamicEntities.add(coin);
+    }
 
-        body.createFixture(shape, 10000).setUserData(platform.getId());
+    private void createMedal(PolygonMapObject mapObject) {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(mapObject.getPolygon().getX() / PPM, mapObject.getPolygon().getY()/ PPM);
+        Body coinBody = world.createBody(bodyDef);
+        Medal medal = new Medal(coinBody, batch);
 
-        gameObjects.put(platform.getId(), platform);
+        gameObjects.put(medal.getId(), medal);
+        medal.collectableCircle.dispose();
+        dynamicEntities.add(medal);
     }
 
     private Shape createPolygonShape(PolygonMapObject polygonMapObject, BodyDef bodyDef) {
@@ -374,7 +232,7 @@ public class Map {
 
     public void updateDynamic() {
         for (DynamicEntity dynamicEntity: dynamicEntities) {
-            dynamicEntity.update();
+            dynamicEntity.update(batch);
         }
     }
 }

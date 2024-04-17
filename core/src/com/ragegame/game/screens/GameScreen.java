@@ -2,7 +2,9 @@ package com.ragegame.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -17,6 +19,7 @@ import com.ragegame.game.handlers.InputHandler;
 import com.ragegame.game.handlers.PhysicsHandler;
 import com.ragegame.game.map.Map;
 import com.ragegame.game.objects.Entity;
+import com.ragegame.game.utils.HUD;
 import com.ragegame.game.factory.CoinFactory;
 
 import java.util.UUID;
@@ -34,6 +37,10 @@ public class GameScreen implements Screen {
     private CameraHandler cameraHandler;
     private BackgroundHandler backgroundHandler;
 
+    Texture blank;
+
+    private HUD hud;
+
 
     public GameScreen(RageGame game) {
         this.game = game;
@@ -41,8 +48,11 @@ public class GameScreen implements Screen {
         // Init Camera
         this.screenWidth = Gdx.graphics.getWidth();
         this.screenHeight =  Gdx.graphics.getHeight();
-        this.camera = new OrthographicCamera(15 , 15 * ((float) screenHeight / screenWidth));
+        this.camera = new OrthographicCamera(15, 15 * ((float) screenHeight / screenWidth));
+        this.hud = new HUD(game.batch);
         this.cameraHandler = new CameraHandler(camera);
+
+        this.blank = new Texture("blank.png");
 
         // Init backgrounds
         this.backgroundHandler = new BackgroundHandler();
@@ -98,8 +108,8 @@ public class GameScreen implements Screen {
         }
 
 		// Draw the background
-		game.batch.begin();
-		this.backgroundHandler.render(dt, game.batch, gameMap.getWidth(), gameMap.getHeight(), gameMap.getPPM());
+        game.batch.begin();
+        this.backgroundHandler.render(dt, game.batch, RageGame.V_Width, RageGame.V_Height, gameMap.getPPM());
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.end(); // doing this so that the background is drawn before gameMap don't change this
 
@@ -116,7 +126,30 @@ public class GameScreen implements Screen {
         deleteMarkedObjects();
 		debugRenderer.render(world, camera.combined);
 
+        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+        hud.stage.draw();
+        hud.addCoins(gameMap.playerModel.getCoins());
+        hud.addMedals(gameMap.playerModel.getMedals());
+
+
+        game.batch.begin();
+        //Draw health
+        if (gameMap.playerModel.getHealth() > 600f) {
+            game.batch.setColor(Color.GREEN);
+        }else if (gameMap.playerModel.getHealth() > 200f){
+            game.batch.setColor(Color.ORANGE);
+        }else {
+            game.batch.setColor(Color.RED);
+        }
+
+        game.batch.draw(blank, 20, 190, (RageGame.V_Width *
+                ((float) gameMap.playerModel.getHealth() / 1000))/10, 5);
+        game.batch.setColor(Color.WHITE);
+        game.batch.end();
+
         if (gameMap.playerModel.isDead()) {
+            game.account.setCurrency(gameMap.playerModel.getCoins());
+            game.account.flush();
             game.changeScreen(new GameOver(game));
             this.dispose();
         }
@@ -161,5 +194,6 @@ public class GameScreen implements Screen {
         this.gameMap.dispose();
         world.dispose();
         this.debugRenderer.dispose();
+        hud.dispose();
     }
 }

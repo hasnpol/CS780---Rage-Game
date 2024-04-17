@@ -1,3 +1,4 @@
+
 package com.ragegame.game.utils;
 
 import com.ragegame.game.utils.Constants.*;
@@ -13,6 +14,8 @@ public class HelpMethods {
                         return LoadSave.EnemySprite.BOAR_SPRITE;
                     case DRONE:
                         return LoadSave.EnemySprite.DRONE_SPRITE;
+                    case PLANE:
+                        return LoadSave.EnemySprite.PLANE_SPRITE;
                     default:
                         return LoadSave.EnemySprite.SOLDIER_SPRITE;
                 }
