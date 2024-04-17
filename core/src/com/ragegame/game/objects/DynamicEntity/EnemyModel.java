@@ -19,8 +19,8 @@ public class EnemyModel extends DynamicEntity {
     private int enemyState;
     public boolean isDead;
 
-    public EnemyModel(Body body, SpriteBatch batch, EnemyConstants.EnemyType enemyType) {
-        super(body, batch, ENEMY.SubType(enemyType));
+    public EnemyModel(Body body, SpriteBatch batch, EntityType enemyType) {
+        super(body, batch, enemyType);
         this.enemyBox = new PolygonShape();
         this.position = body.getPosition();
     }
@@ -32,7 +32,7 @@ public class EnemyModel extends DynamicEntity {
     public void updatePosition(float dt) {
         Vector2 posChange = this.movementVector.cpy().scl(speed * dt);
         this.position.add(posChange);
-        if (this.type == Constants.EntityType.ENEMY && this.type.getSubType() == Constants.EnemyConstants.EnemyType.DRONE) {
+        if (this.type == Constants.EntityType.DRONE) {
             System.out.println("Could set direction here?: " + ((this.getDirection().getNum() == 1)? "Left": "right"));
         }
     }

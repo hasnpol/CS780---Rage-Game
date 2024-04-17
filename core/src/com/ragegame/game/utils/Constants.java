@@ -1,12 +1,5 @@
 package com.ragegame.game.utils;
 
-/** DESCRIPTION:
- * This file is intended to be used for constants that entities use
- * DOES NOT INCLUDE LOADING TEXTURES!!
- *  Texture and data loading should be done in the loadSave file
- * */
-
-
 public class Constants {
     // TODO make an abstract GetSpriteAmount() for each standard state
     public enum Direction {
@@ -17,19 +10,14 @@ public class Constants {
     }
     public enum State { IDLE, RUNNING, JUMPING, HIT, DEAD, ATTACKING };
     public enum EntityType {
-        PLAYER(null), ENEMY(null), OBSTACLE(null), RESOURCE(null), COIN(null);
-        private Object subType;
-        EntityType(Object subType) {this.subType = subType;}
-
-        public EntityType SubType(Object subType) {
-            this.subType = subType;
-            return this;
-        }
-        public Object getSubType() {return subType;}
-        public boolean isSubType(Object type) {
-            return (this.subType == null && this == type) // This SHOULD only happen in instance of Player type
-                    || (this.subType != null && this.subType == type);
-        }
+        PLAYER,
+        OBSTACLE,
+        RESOURCE,
+        COIN,
+        DRONE,
+        BOAR,
+        SOLDIER,
+        PLANE;
     }
 
     public static class PlayerConstants {
@@ -52,56 +40,12 @@ public class Constants {
         public static final float PLAYER_RESTITUTION = 0.1f;
     }
 
-    public static class ResourceConstants {
-        // Enum Resource Type
-        public enum ResType {COIN}
-
+    public class CoinConstants {
         public static final float COIN_RADIUS = .2f;
         public static final float COIN_DENSITY = 0;
     }
 
-    // TODO: add more coin types with different attributes?
-    public enum CoinType {COIN}
-
-    public static class EnemyConstants {
-        // Enum Enemy Type
-        public enum EnemyType {SOLDIER, BOAR, DRONE, PLANE}
-
-        // Enemy State
-        public enum EnemyState {IDLE, RUNNING, ATTACK, HIT, DEAD}
-
-        // Values for SOLDIER
-        public static final int SOLDIER_WIDTH_DEFAULT = 72;
-        public static final int SOLDIER_HEIGHT_DEFAULT = 32;
-        public static final float SOLDIER_WIDTH = 0.18f;
-        public static final float SOLDIER_HEIGHT = 0.45f;
-        public static final float SOLDIER_DENSITY = 2f;
-        public static final float SOLDIER_FRICTION = 1;
-
-        // Values for BOAR
-        public static final int BOAR_WIDTH_DEFAULT = 72;
-        public static final int BOAR_HEIGHT_DEFAULT = 32;
-        public static final float BOAR_WIDTH = 0.5f;
-        public static final float BOAR_HEIGHT = .32f;
-        public static final float BOAR_DENSITY = .5f;
-        public static final float BOAR_FRICTION = 0.2f;
-        public static final int BOAR_CHARGESPEED = 4;
-        public static final int BOAR_CHARGETIME = 1000;
-        public static final int BOAR_HORIZONTALSIGHT = 7;
-        public static final int BOAR_VERTICALSIGHT = 2;
-
-        // Values for DRONE
-        public static final int DRONE_WIDTH_DEFAULT = 4;
-        public static final int DRONE_HEIGHT_DEFAULT = 4;
-        public static final float DRONE_WIDTH = 0.25f;
-        public static final float DRONE_HEIGHT = 0.25f;
-        public static final float DRONE_SPEED = 0.01f; // Drone speed
-        public static final float DRONE_DENSITY = 0.25f; // Drone speed
-        public static final float DRONE_AMPLITUDE = 5.0f; // Amplitude of the sinusoidal movement
-        public static final float DRONE_FREQUENCY = 1.0f; // Frequency of the sinusoidal movement
-        public static final int DRONE_HORIZONTALSIGHT = 7; // Frequency of the sinusoidal movement
-        public static final int DRONE_VERTICALSIGHT = 2; // Frequency of the sinusoidal movement
-
+    public class PlaneConstants {
         public static final int PLANE_WIDTH_DEFAULT = 162;
         public static final int PLANE_HEIGHT_DEFAULT = 32;
         public static final float PLANE_WIDTH = 1.0f;
@@ -113,53 +57,45 @@ public class Constants {
         public static final int PLANE_HORIZONTALSIGHT = 7; // Frequency of the sinusoidal movement
         public static final int PLANE_VERTICALSIGHT = 2; // Frequency of the sinusoidal movement
 
-        // TODO Implement this later to easily get state from type and state
-        public static int GetSpriteAmount(EnemyType enemy_type, EnemyState enemy_state) {
-            switch(enemy_type) {
-                case SOLDIER:
-                    switch (enemy_state) {
-                        case IDLE:
-                            return 9;
-                        case RUNNING:
-                            return 6;
-                        case ATTACK:
-                            return 7;
-                        case HIT:
-                            return 4;
-                        case DEAD:
-                            return 5;
-                    }
-                case BOAR:
-                    switch (enemy_state) {
-                        case IDLE:
-                            return 0;
-                        case RUNNING:
-                            return 6;
-                        case ATTACK:
-                            return 7;
-                        case HIT:
-                            return 4;
-                        case DEAD:
-                            return 5;
-                    }
-                case DRONE:
-                    switch (enemy_state) {
-                        case IDLE:
-                            return 0;
-                        case RUNNING:
-                            return 6;
-                        case ATTACK:
-                            return 7;
-                        case HIT:
-                            return 4;
-                        case DEAD:
-                            return 5;
-                    }
-            }
-            return 0;
-        }
     }
 
+    public static class DroneConstants {
+        // Values for DRONE
+        public static final int DRONE_WIDTH_DEFAULT = 4;
+        public static final int DRONE_HEIGHT_DEFAULT = 4;
+        public static final float DRONE_WIDTH = 0.25f;
+        public static final float DRONE_HEIGHT = 0.25f;
+        public static final float DRONE_SPEED = 0.01f; // Drone speed
+        public static final float DRONE_DENSITY = 0.25f; // Drone speed
+        public static final float DRONE_AMPLITUDE = 5.0f; // Amplitude of the sinusoidal movement
+        public static final float DRONE_FREQUENCY = 1.0f; // Frequency of the sinusoidal movement
+        public static final int DRONE_HORIZONTALSIGHT = 7; // Frequency of the sinusoidal movement
+        public static final int DRONE_VERTICALSIGHT = 2; // Frequency of the sinusoidal movement
+    }
+
+    public static class BoarConstants {
+        // Values for BOAR
+        public static final int BOAR_WIDTH_DEFAULT = 72;
+        public static final int BOAR_HEIGHT_DEFAULT = 32;
+        public static final float BOAR_WIDTH = 0.5f;
+        public static final float BOAR_HEIGHT = .32f;
+        public static final float BOAR_DENSITY = .5f;
+        public static final float BOAR_FRICTION = 0.2f;
+        public static final int BOAR_CHARGESPEED = 4;
+        public static final int BOAR_CHARGETIME = 1000;
+        public static final int BOAR_HORIZONTALSIGHT = 7;
+        public static final int BOAR_VERTICALSIGHT = 2;
+    }
+
+    public static class SoldierConstants {
+        // Values for SOLDIER
+        public static final int SOLDIER_WIDTH_DEFAULT = 72;
+        public static final int SOLDIER_HEIGHT_DEFAULT = 32;
+        public static final float SOLDIER_WIDTH = 0.18f;
+        public static final float SOLDIER_HEIGHT = 0.45f;
+        public static final float SOLDIER_DENSITY = 2f;
+        public static final float SOLDIER_FRICTION = 1;
+    }
     public static class Game {
         public static final int HEIGHT = 800;
         public static final int WIDTH = 1000;

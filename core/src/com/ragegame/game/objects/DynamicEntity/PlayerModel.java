@@ -6,14 +6,11 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.ragegame.game.handlers.contactHandlers.PlayerContactHandler;
 import com.ragegame.game.factory.CoinFactory;
+import com.ragegame.game.utils.FixtureDefinition;
 
-import static com.ragegame.game.utils.Constants.EnemyConstants.BOAR_HEIGHT;
-import static com.ragegame.game.utils.Constants.EnemyConstants.BOAR_WIDTH;
-import static com.ragegame.game.utils.Constants.EnemyConstants.PLANE_DENSITY;
 import static com.ragegame.game.utils.Constants.EntityType.*;
 import static com.ragegame.game.utils.Constants.PlayerConstants.*;
 import static com.ragegame.game.utils.Constants.*;
-
 
 public class PlayerModel extends DynamicEntity {
     public PolygonShape playerBox;
@@ -41,13 +38,21 @@ public class PlayerModel extends DynamicEntity {
         playerModel = this;
         isHit = false;
         isImmune = false;
+
         this.playerBox = new PolygonShape();
-        playerBox.setAsBox(PLAYER_WIDTH, PLAYER_HEIGHT);
+        playerBox.setAsBox(PLAYER_WIDTH, PLAYER_HEIGHT - .05f);
         entityFixture.density = PLAYER_DENSITY; // more density -> bigger mass for the same size
         entityFixture.friction = PLAYER_FRICTION;
         entityFixture.restitution = PLAYER_RESTITUTION;
         entityFixture.shape = playerBox;
-        this.getBody().createFixture(entityFixture).setUserData(this.getId());
+
+        this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "body"));
+
+        playerBox.setAsBox(.15f, .05f, new Vector2(0, -.45f), 0);
+        entityFixture.shape = playerBox;
+
+        this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "feet"));
+
         this.setPlayerContactHandler();
     }
 
@@ -102,21 +107,21 @@ public class PlayerModel extends DynamicEntity {
     @Override
     public void update(SpriteBatch batch) {
         if (playerModel.isDead()) {
-            //System.out.println("Player DIED!");
             playerModel.kill();
         } else {
             if (playerModel.isImmune) {
-                //System.out.println("Player has immune, checking time");
+                System.out.println("Immune");
                 endTime = System.currentTimeMillis();
-                //System.out.println("Player has immune, end time: " + endTime );
                 if ((endTime - startTime) / 1000 == 10) {
                     playerModel.isImmune = false;
-                    //System.out.println("Player immune is GONE ");
                 }
             }
+
             if (playerModel.isHit && !playerModel.isImmune) {
-                //System.out.println("Player has hit and no immune");
+                System.out.println("Player has hit and no immune");
                 dropCoin(batch);
+                playerModel.isImmune = true;
+                playerModel.startTimer();
             }
 
             Vector2 velocity = getBody().getLinearVelocity();

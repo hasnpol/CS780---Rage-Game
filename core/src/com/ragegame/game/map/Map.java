@@ -18,6 +18,7 @@ import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.StaticEntity.*;
 import com.ragegame.game.objects.DynamicEntity.*;
 import com.ragegame.game.objects.DynamicEntity.Enemies.*;
+import com.ragegame.game.utils.FixtureDefinition;
 
 import java.util.*;
 
@@ -128,7 +129,7 @@ public class Map {
                 fixtureDef.density = 10000;
                 break;
         }
-        body.createFixture(fixtureDef).setUserData(platform.getId());
+        body.createFixture(fixtureDef).setUserData(new FixtureDefinition(platform.getId(), "body"));
         gameObjects.put(platform.getId(), platform);
     }
 

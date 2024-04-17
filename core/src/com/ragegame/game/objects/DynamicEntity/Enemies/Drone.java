@@ -1,17 +1,17 @@
 package com.ragegame.game.objects.DynamicEntity.Enemies;
 
+import static com.ragegame.game.utils.Constants.DroneConstants.*;
+import static com.ragegame.game.utils.Constants.EntityType.DRONE;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.ragegame.game.objects.DynamicEntity.EnemyModel;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
+import com.ragegame.game.utils.FixtureDefinition;
 
-import static com.ragegame.game.utils.Constants.*;
-import static com.ragegame.game.utils.Constants.EnemyConstants.*;
-import static com.ragegame.game.utils.Constants.EnemyConstants.EnemyType.DRONE;
 
 public class Drone extends EnemyModel {
     private float elapsedTime = 0; // Time elapsed since the start of the movement
@@ -23,7 +23,13 @@ public class Drone extends EnemyModel {
         entityFixture.density = DRONE_DENSITY;
         entityFixture.friction = 0;
         entityFixture.shape = enemyBox;
-        this.getBody().createFixture(entityFixture).setUserData(this.getId());
+        this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "body"));
+
+        enemyBox.setAsBox(.15f, .05f, new Vector2(0, .25f), 0);
+        entityFixture.shape = enemyBox;
+
+        this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "head"));
+
     }
 
     @Override

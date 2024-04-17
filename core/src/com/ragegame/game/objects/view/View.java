@@ -14,7 +14,6 @@ import com.ragegame.game.objects.DynamicEntity.DynamicEntity;
 import com.ragegame.game.utils.Constants.*;
 import com.ragegame.game.utils.Constants.State;
 import com.ragegame.game.utils.Constants.EntityType;
-import com.ragegame.game.utils.Constants.EnemyConstants.*;
 import com.ragegame.game.utils.HelpMethods;
 import com.ragegame.game.utils.UtilTypes;
 
