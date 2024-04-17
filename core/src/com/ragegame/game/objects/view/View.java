@@ -36,18 +36,18 @@ public class View {
         this.model = model;
         this.batch = batch;
         UtilTypes sprite_textures = HelpMethods.GetTextureAtlas(model.type);
-        UtilTypes clothes_textures = HelpMethods.GetClothesTextureAtlas();
+//        UtilTypes clothes_textures = HelpMethods.GetClothesTextureAtlas();
         assert sprite_textures != null;
         this.textureAtlas = new TextureAtlas(sprite_textures.resPath);
-        this.clothes_textureAtlas = new TextureAtlas(clothes_textures.resPath);
+//        this.clothes_textureAtlas = new TextureAtlas(clothes_textures.resPath);
         for (String texture : sprite_textures.animations) {
             animationFrames.add(textureAtlas.createSprites(texture));
         }
         currentAnimation = new Animation<>(this.animationFrameDuration, animationFrames.get(0));
-        for (String texture : clothes_textures.animations) {
-            clothes_animationFrames.add(clothes_textureAtlas.createSprites(texture));
-        }
-        clothes_currentAnimation = new Animation<>(this.animationFrameDuration, clothes_animationFrames.get(0));
+//        for (String texture : clothes_textures.animations) {
+//            clothes_animationFrames.add(clothes_textureAtlas.createSprites(texture));
+//        }
+//        clothes_currentAnimation = new Animation<>(this.animationFrameDuration, clothes_animationFrames.get(0));
         stateTime = 0f;
     }
 
@@ -85,24 +85,24 @@ public class View {
         if (currentAnimationSequence != nextAnimationSequence) {
             Array<Sprite> spriteList = animationFrames.get(nextAnimationSequence);
             currentAnimation = new Animation<>(this.animationFrameDuration, spriteList);
-            Array<Sprite> clothes_spriteList = clothes_animationFrames.get(nextAnimationSequence);
-            clothes_currentAnimation = new Animation<>(this.animationFrameDuration, clothes_spriteList);
+//            Array<Sprite> clothes_spriteList = clothes_animationFrames.get(nextAnimationSequence);
+//            clothes_currentAnimation = new Animation<>(this.animationFrameDuration, clothes_spriteList);
             currentAnimationSequence = nextAnimationSequence;
         }
 
         stateTime += dt;
         currentAnimationFrame = (TextureRegion) currentAnimation.getKeyFrame(stateTime, true);
-        clothes_currentAnimationFrame = (TextureRegion) clothes_currentAnimation.getKeyFrame(stateTime, true);
+//        clothes_currentAnimationFrame = (TextureRegion) clothes_currentAnimation.getKeyFrame(stateTime, true);
         if (currentAnimationFrame.isFlipX() != shouldFlip) {// Flip horizontally without flipping vertically
             currentAnimationFrame.flip(true, false);
-            clothes_currentAnimationFrame.flip(true, false);
+//            clothes_currentAnimationFrame.flip(true, false);
         }
         float x_position = this.model.getBody().getPosition().x;
         float y_position = this.model.getBody().getPosition().y;
         model.draw(batch, currentAnimationFrame, x_position, y_position, 1.0f);
-        if (isPlayerModel) {
-            model.draw(batch, clothes_currentAnimationFrame, x_position-0.1f, y_position-0.4f, 0.5f);
-        }
+//        if (isPlayerModel) {
+//            model.draw(batch, clothes_currentAnimationFrame, x_position-0.1f, y_position-0.4f, 0.5f);
+//        }
     }
 
     public int getAnimationSequenceFromMovementDirection(boolean isDead) {

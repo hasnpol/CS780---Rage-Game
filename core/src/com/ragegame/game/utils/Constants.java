@@ -76,7 +76,7 @@ public class Constants {
         // Values for DRONE
         public static final float DRONE_WIDTH = 0.25f;
         public static final float DRONE_HEIGHT = 0.25f;
-        public static final float DRONE_SPEED = 1.0f; // Drone speed
+        public static final float DRONE_SPEED = 1.25f; // Drone speed
         public static final float DRONE_DENSITY = 0.25f; // Drone speed
 
         public static final float PLANE_WIDTH = 1.0f;
