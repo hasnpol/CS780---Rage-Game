@@ -52,7 +52,8 @@ public class PlayerModel extends DynamicEntity {
 
         this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "body"));
 
-        playerBox.setAsBox(.15f, .05f, new Vector2(0, -.45f), 0);
+        playerBox.setAsBox(WIDTH * Game.SCALE, .05f,
+                new Vector2(0, -(HEIGHT + .05f) * Game.SCALE), 0);
         entityFixture.shape = playerBox;
 
         this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "feet"));
@@ -122,7 +123,6 @@ public class PlayerModel extends DynamicEntity {
             playerModel.kill();
         } else {
             if (playerModel.isImmune) {
-                // System.out.println("Immune");
                 endTime = System.currentTimeMillis();
                 if ((endTime - startTime) / 1000 == 1) {
                     playerModel.isImmune = false;
@@ -130,7 +130,6 @@ public class PlayerModel extends DynamicEntity {
             }
 
             if (playerModel.isHit && !playerModel.isImmune) {
-                // System.out.println("Player has hit and no immune");
                 dropCoin(batch);
                 playerModel.isImmune = true;
                 playerModel.startTimer();
