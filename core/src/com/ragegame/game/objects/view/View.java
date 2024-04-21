@@ -108,7 +108,10 @@ public class View {
     public int getAnimationSequenceFromMovementDirection(boolean isDead) {
         if (this.model.type == EntityType.RESOURCE) {
             return 0; // Collectables will probably have only one animation?
-        } else {
+        } else if (this.model.type == EntityType.OBSTACLE) {
+            return 0;
+        }
+        else {
             // TODO ADD ATTACKING ANIMATION
             if (isDead) {
                 return State.DEAD.ordinal();

@@ -6,7 +6,7 @@ import com.ragegame.game.objects.DynamicEntity.Medal;
 import com.ragegame.game.objects.DynamicEntity.Enemy;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.Entity;
-import com.ragegame.game.objects.StaticEntity.Bullet;
+import com.ragegame.game.objects.DynamicEntity.Bullet;
 import com.ragegame.game.objects.StaticEntity.Platform;
 
 import java.util.Objects;
