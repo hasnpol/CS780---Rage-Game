@@ -24,7 +24,7 @@ public class PlayerContactHandler {
 
 
         if (entity instanceof Platform) {
-            platformStartContact((Platform) entity);
+            platformStartContact();
         }
 
         if (entity instanceof Enemy) {
@@ -32,7 +32,7 @@ public class PlayerContactHandler {
         }
 
         if (entity instanceof Bullet) {
-            playerBulletContact((Bullet) entity);
+            playerBulletContact();
         }
         if (entity instanceof Coin) {
             coinStartContact((Coin) entity);
@@ -44,7 +44,7 @@ public class PlayerContactHandler {
 
     public void endContact(Entity entity) {
         if (entity instanceof Platform) {
-            platformEndContact((Platform) entity);
+            platformEndContact();
         }
 
         if (entity instanceof Enemy) {
@@ -52,15 +52,15 @@ public class PlayerContactHandler {
         }
     }
 
-    public void platformStartContact(Platform platform) {
-        if(Objects.equals(playerFixtureType, "feet")) {
-            playerModel.setGrounded(true);
+    public void platformStartContact() {
+        if (Objects.equals(playerFixtureType, "feet")) {
+            playerModel.groundTouchCount += 1;
         }
     }
 
-    public void platformEndContact(Platform platform) {
+    public void platformEndContact() {
         if (Objects.equals(playerFixtureType, "feet")) {
-            playerModel.setGrounded(false);
+            playerModel.groundTouchCount -= 1;
         }
     }
 
@@ -68,23 +68,16 @@ public class PlayerContactHandler {
         if (Objects.equals(playerFixtureType, "feet") && Objects.equals(entityFixtureType, "head")) {
             enemyModel.kill();
         } else {
-            // System.out.println("Hit");
             playerModel.isHit = true;
             playerModel.coinsToDrop = (int) ((playerModel.getCoins() * .1));
             playerModel.setHealth(-100);
         }
     }
 
-    public void playerBulletContact(Bullet bullet) {
+    public void playerBulletContact() {
         playerModel.setCoins((int) (-playerModel.getCoins() * .1));
         playerModel.setHealth(-100);
         playerModel.getBody().getPosition().y = -10;
-    }
-
-    public void playerCoinContact(Coin collectable) {
-        playerModel.setCoins(1);
-        // System.out.println("Player Coin: " + playerModel.getCoins());
-        collectable.setCollected();
     }
 
     public void playerMedalContact(Medal collectable) {

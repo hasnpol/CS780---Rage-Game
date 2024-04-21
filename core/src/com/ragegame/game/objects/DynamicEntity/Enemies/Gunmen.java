@@ -39,7 +39,8 @@ public class Gunmen extends Enemy {
         entityFixture.shape = enemyBox;
         this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "body"));
 
-        enemyBox.setAsBox(.15f, .05f, new Vector2(0, .45f), 0);
+        enemyBox.setAsBox(SOLDIER_WIDTH * Game.SCALE, .05f,
+                new Vector2(0, (SOLDIER_HEIGHT + .05f) * Game.SCALE), 0);
         entityFixture.shape = enemyBox;
 
         this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "head"));
