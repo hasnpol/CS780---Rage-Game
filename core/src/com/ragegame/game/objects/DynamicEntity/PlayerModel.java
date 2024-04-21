@@ -32,6 +32,7 @@ public class PlayerModel extends DynamicEntity {
     long startTime = 0;
     long endTime;
     public int coinsToDrop = 0;
+    public int groundTouchCount = 0;
 
     public PlayerModel(Body body, SpriteBatch batch) {
         super(body, batch, PLAYER);
@@ -119,31 +120,34 @@ public class PlayerModel extends DynamicEntity {
 
     @Override
     public void update(SpriteBatch batch) {
+        playerModel.setGrounded(playerModel.groundTouchCount > 0);
+
         if (playerModel.isDead()) {
             playerModel.kill();
+            return;
+        }
+
+        if (playerModel.isImmune) {
+            endTime = System.currentTimeMillis();
+            if ((endTime - startTime) / 1000 == 1) {
+                playerModel.isImmune = false;
+            }
+        }
+
+        if (playerModel.isHit && !playerModel.isImmune) {
+            dropCoin(batch);
+            playerModel.isImmune = true;
+            playerModel.startTimer();
+        }
+
+        Vector2 velocity = getBody().getLinearVelocity();
+        if (stop) {
+            setForce(velocity.set(velocity.x * -DRAG, 0));
         } else {
-            if (playerModel.isImmune) {
-                endTime = System.currentTimeMillis();
-                if ((endTime - startTime) / 1000 == 1) {
-                    playerModel.isImmune = false;
-                }
-            }
-
-            if (playerModel.isHit && !playerModel.isImmune) {
-                dropCoin(batch);
-                playerModel.isImmune = true;
-                playerModel.startTimer();
-            }
-
-            Vector2 velocity = getBody().getLinearVelocity();
-            if (stop) {
-                setForce(velocity.set(velocity.x * -DRAG, 0));
-            } else {
-                if (velocity.x > MAXSPEED) {
-                    getBody().setLinearVelocity(MAXSPEED, velocity.y);
-                } else if (velocity.x < -MAXSPEED) {
-                    getBody().setLinearVelocity(-MAXSPEED, velocity.y);
-                }
+            if (velocity.x > MAXSPEED) {
+                getBody().setLinearVelocity(MAXSPEED, velocity.y);
+            } else if (velocity.x < -MAXSPEED) {
+                getBody().setLinearVelocity(-MAXSPEED, velocity.y);
             }
         }
     }

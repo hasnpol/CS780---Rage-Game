@@ -53,14 +53,14 @@ public class PlayerContactHandler {
     }
 
     public void platformStartContact() {
-        if(Objects.equals(playerFixtureType, "feet")) {
-            playerModel.setGrounded(true);
+        if (Objects.equals(playerFixtureType, "feet")) {
+            playerModel.groundTouchCount += 1;
         }
     }
 
     public void platformEndContact() {
         if (Objects.equals(playerFixtureType, "feet")) {
-            playerModel.setGrounded(false);
+            playerModel.groundTouchCount -= 1;
         }
     }
 
