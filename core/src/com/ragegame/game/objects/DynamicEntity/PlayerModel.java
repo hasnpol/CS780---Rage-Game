@@ -53,8 +53,8 @@ public class PlayerModel extends DynamicEntity {
 
         this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "body"));
 
-        playerBox.setAsBox(WIDTH * Game.SCALE, .05f,
-                new Vector2(0, -(HEIGHT + .05f) * Game.SCALE), 0);
+        playerBox.setAsBox(WIDTH * Game.SCALE, .03f,
+                new Vector2(0, -(HEIGHT + .03f) * Game.SCALE), 0);
         entityFixture.shape = playerBox;
 
         this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "feet"));
