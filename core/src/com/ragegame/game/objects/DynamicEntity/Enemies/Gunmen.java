@@ -22,16 +22,13 @@ import static com.ragegame.game.utils.Constants.EnemyConstants.EnemyType.SOLDIER
 
 
 public class Gunmen extends Enemy {
-    int GUNMEN_HORIZONTAL_SIGHT = 7;
-    int GUNMEN_VERTICAL_SIGHT = 2;
-    float GUNMEN_BULLET_SPEED = 1f;
     long SHOTRATE = 750;
     long nextShot;
-    int playerDirection;
+    Direction playerDirection;
 
     public Gunmen(Body body, SpriteBatch batch) {
         super(body, batch, SOLDIER);
-        playerDirection = 0;
+        playerDirection = Direction.STOP;
         nextShot = 0L;
         enemyBox.setAsBox(SOLDIER_WIDTH * Game.SCALE, SOLDIER_HEIGHT * Game.SCALE);
         entityFixture.density = SOLDIER_DENSITY;
@@ -53,7 +50,7 @@ public class Gunmen extends Enemy {
             return;
         }
         playerDirection = isPlayerInRange(GUNMEN_HORIZONTAL_SIGHT, GUNMEN_VERTICAL_SIGHT, getPosition());
-        if (playerDirection != 0) {
+        if (playerDirection != Direction.STOP) {
             shoot();
         }
     }
@@ -69,7 +66,7 @@ public class Gunmen extends Enemy {
     public void shoot() {
         PlayerModel playerModel = PlayerModel.getPlayerModel();
         if (playerModel != null) {
-            float offset = ((playerDirection == 4)) ? -0.5f : 0.5f;
+            float offset = ((playerDirection == Direction.LEFT)) ? -0.5f : 0.5f;
             long currentTime = System.currentTimeMillis();
             if (currentTime > nextShot) {
                 BulletFactory.getInstance().createBullet(getPosition().add(offset, 0), playerModel.getBody().getPosition(), GUNMEN_BULLET_SPEED);

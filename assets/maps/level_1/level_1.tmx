@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="100" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="24" nextobjectid="303">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="100" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="24" nextobjectid="304">
  <tileset firstgid="1" source="level 1.tsx"/>
  <layer id="1" name="background" width="100" height="50">
   <data encoding="csv">
@@ -793,9 +793,6 @@
   </object>
  </objectgroup>
  <objectgroup id="20" name="drone">
-  <object id="179" x="64.5" y="640.478">
-   <polygon points="0,0 0,8.04325 8.43478,8.06512 8.43478,-0.0218567"/>
-  </object>
   <object id="293" x="788" y="680.5">
    <polygon points="0,0 0,8.04325 8.43478,8.06512 8.43478,-0.0218567"/>
   </object>
@@ -840,6 +837,9 @@
  </objectgroup>
  <objectgroup id="23" name="plane">
   <object id="288" x="592" y="304">
+   <polygon points="0,0 32,0 32,16 0,16"/>
+  </object>
+  <object id="303" x="40.5" y="623.5">
    <polygon points="0,0 32,0 32,16 0,16"/>
   </object>
  </objectgroup>

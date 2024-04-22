@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.ragegame.game.RageGame;
+import com.ragegame.game.factory.BombFactory;
 import com.ragegame.game.factory.BulletFactory;
 import com.ragegame.game.handlers.BackgroundHandler;
 import com.ragegame.game.handlers.CameraHandler;
@@ -71,6 +72,11 @@ public class GameScreen implements Screen {
         bulletFactory.gameObjectsToDestroy = gameObjectsToDestroy;
         bulletFactory.gameObjects = gameObjects;
         bulletFactory.world = world;
+
+        BombFactory bombFactory = BombFactory.getInstance();
+        bombFactory.gameObjectsToDestroy = gameObjectsToDestroy;
+        bombFactory.gameObjects = gameObjects;
+        bombFactory.world = world;
 
         // Handle InputProcessor and Contact Listener and Physics Handler
         InputHandler inputHandler = new InputHandler(gameMap.playerModel);

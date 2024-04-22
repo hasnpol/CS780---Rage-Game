@@ -7,11 +7,11 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
+import com.ragegame.game.factory.BombFactory;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.utils.FixtureDefinition;
 
 import com.ragegame.game.objects.DynamicEntity.Enemy;
-import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.utils.Constants.*;
 
 import static com.ragegame.game.utils.Constants.EnemyConstants.*;
@@ -19,6 +19,9 @@ import static com.ragegame.game.utils.Constants.EnemyConstants.EnemyType.PLANE;
 
 public class Plane extends Enemy {
     private float elapsedTime = 0; // Time elapsed since the start of the movement
+    long SHOTRATE = 750;
+    long nextShot;
+    Direction playerDirection;
 
     public Plane(Body body, SpriteBatch batch) {
         super(body, batch, PLANE);
@@ -39,50 +42,37 @@ public class Plane extends Enemy {
 
     @Override
     public void update(SpriteBatch batch) {
+        if (isDead) {
+            return;
+        }
         float deltaTime = Gdx.graphics.getDeltaTime();
         PlayerModel player = PlayerModel.getPlayerModel();
         Vector2 playerPosition = new Vector2(player.getBody().getPosition());
         Vector2 dronePosition = new Vector2(this.getBody().getPosition());
         elapsedTime += deltaTime;
 
-//        float sinusoidalOffset = MathUtils.sin(elapsedTime * DRONE_FREQUENCY) * DRONE_AMPLITUDE;
-
         // Applied the sinusoidal up and down "bounce" movement
         float sinusoidalVelocity = PLANE_AMPLITUDE * MathUtils.sin(MathUtils.PI2 * PLANE_FREQUENCY * elapsedTime);
         getBody().applyForceToCenter(0, sinusoidalVelocity, true);
-
 
         Vector2 currentVelocity = getBody().getLinearVelocity();
         getBody().setLinearVelocity(currentVelocity.x, sinusoidalVelocity);
 
         float angle = MathUtils.atan2(playerPosition.y - dronePosition.y, playerPosition.x - dronePosition.x);
         Vector2 pursuitMovement = new Vector2(MathUtils.cos(angle) * PLANE_SPEED, 0);
-//        Vector2 combinedMovement = pursuitMovement.add(0, sinusoidalOffset);
         dronePosition.add(pursuitMovement);
         getBody().setTransform(dronePosition, 0); // sets the angle, could be used for a gun?
 
-//        float angle = MathUtils.atan2(playerPosition.y - dronePosition.y, playerPosition.x - dronePosition.x);
-//
-//        // Calculate the direct pursuit movement
-//        Vector2 pursuitMovement = new Vector2(MathUtils.cos(angle) * DRONE_SPEED, MathUtils.sin(angle) * DRONE_SPEED);
-//
-//        // Calculate the sinusoidal movement
-//
-//
-//        // Combine the movements
-//        Vector2 combinedMovement = pursuitMovement.add(0, sinusoidalOffset);
-//        // Update the drone's position
-//        dronePosition.add(combinedMovement);
-//
-//        System.out.println("Offset: " + sinusoidalOffset);
-//
-//        getBody().applyForceToCenter(0, sinusoidalOffset, true);
+        playerDirection = isPlayerInRange(PLANE_HORIZONTAL_SIGHT, PLANE_VERTICAL_SIGHT, getPosition());
+        if (playerDirection != Direction.STOP) {
+           dropBomb();
+        }
     }
 
     @Override
     public void draw(SpriteBatch batch, TextureRegion currentAnimationFrame,
                      float x_position, float y_position, float new_scale) {
-        batch.draw(currentAnimationFrame, x_position - Game.SCALE, y_position - (Game.SCALE/2),
+        batch.draw(currentAnimationFrame, x_position-Game.SCALE, y_position-(Game.SCALE/2),
                 Game.SCALE*2, Game.SCALE);
     }
 
@@ -91,5 +81,17 @@ public class Plane extends Enemy {
         Vector2 desired = target.sub(getBody().getPosition());
         desired.setLength(PLANE_SPEED * deltaTime);
         return desired;
+    }
+
+    public void dropBomb() {
+        PlayerModel playerModel = PlayerModel.getPlayerModel();
+        if (playerModel != null) {
+            float offset = ((playerDirection == Direction.LEFT)) ? -0.5f : 0.5f;
+            long currentTime = System.currentTimeMillis();
+            if (currentTime > nextShot) {
+                BombFactory.getInstance().createBomb(getPosition().add(offset, 0), playerModel.getBody().getPosition(), PLANE_BOMB_SPEED);
+                nextShot = currentTime + SHOTRATE;
+            }
+        }
     }
 }

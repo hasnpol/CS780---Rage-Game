@@ -19,12 +19,12 @@ public class Boar extends Enemy {
     int charging;
     long chargeFinishTime;
 
-    int playerDirection;
+    Direction playerDirection;
 
     public Boar(Body body, SpriteBatch batch) {
         super(body, batch, BOAR);
         charging = 0;
-        playerDirection = 0;
+        playerDirection = Direction.STOP;
         enemyBox.setAsBox(BOAR_WIDTH * Game.SCALE, BOAR_HEIGHT * Game.SCALE);
         entityFixture.density = BOAR_DENSITY;
         entityFixture.friction = BOAR_FRICTION;
@@ -53,7 +53,7 @@ public class Boar extends Enemy {
     public void update(SpriteBatch batch) {
         if (charging == 0) {
             playerDirection = Enemy.isPlayerInRange(BOAR_HORIZONTALSIGHT, BOAR_VERTICALSIGHT, getPosition());
-            if (playerDirection != 0) {
+            if (playerDirection != Direction.STOP) {
                 chargeFinishTime = System.currentTimeMillis() + BOAR_CHARGETIME;
                 charging = 1;
             }
@@ -64,7 +64,7 @@ public class Boar extends Enemy {
 
     public void charge() {
         if (charging == 1 && chargeFinishTime < System.currentTimeMillis()) {
-            Vector2 chargeVector = new Vector2((playerDirection == 6)?
+            Vector2 chargeVector = new Vector2((playerDirection == Direction.RIGHT)?
                     BOAR_CHARGESPEED: -BOAR_CHARGESPEED, 0);
             setMovementVector(chargeVector);
             getBody().setLinearVelocity(chargeVector);
