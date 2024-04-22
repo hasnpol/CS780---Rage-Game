@@ -22,7 +22,7 @@ import static com.ragegame.game.utils.Constants.EnemyConstants.EnemyType.SOLDIER
 
 
 public class Gunmen extends Enemy {
-    long SHOTRATE = 750;
+    long SHOTRATE = 1000L;
     long nextShot;
     Direction playerDirection;
 

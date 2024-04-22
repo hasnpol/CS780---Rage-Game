@@ -62,7 +62,7 @@ public class Constants {
 
     public static class EnemyConstants {
         // Enum Enemy Type
-        public enum EnemyType {SOLDIER, BOAR, DRONE, PLANE}
+        public enum EnemyType {SOLDIER, BOAR, DRONE, PLANE, BULLET}
 
         // Values for SOLDIER
         public static final float SOLDIER_WIDTH = 0.18f;

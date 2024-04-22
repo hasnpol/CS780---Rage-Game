@@ -1,6 +1,8 @@
 
 package com.ragegame.game.utils;
 
+import static com.ragegame.game.utils.Constants.EntityType.ENEMY;
+
 import com.ragegame.game.utils.Constants.*;
 
 public class HelpMethods {
@@ -19,6 +21,8 @@ public class HelpMethods {
                     default:
                         return LoadSave.EnemySprite.SOLDIER_SPRITE;
                 }
+            case BULLET:
+                return LoadSave.EnemySprite.BULLET;
             case RESOURCE:
                 switch ((ResourceConstants.ResType) entityType.getSubType()) {
                     case COIN:
