@@ -8,7 +8,7 @@ import com.ragegame.game.utils.Constants;
 
 public class Bullet extends DynamicEntity {
     public Bullet(Body body, SpriteBatch batch) {
-        super(body, batch, Constants.EntityType.BULLET);
+        super(body, batch, Constants.EntityType.ENEMY);
     }
 
 
