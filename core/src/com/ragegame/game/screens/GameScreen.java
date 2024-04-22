@@ -72,7 +72,6 @@ public class GameScreen implements Screen {
         bulletFactory.gameObjectsToDestroy = gameObjectsToDestroy;
         bulletFactory.gameObjects = gameObjects;
         bulletFactory.world = world;
-        bulletFactory.batch = this.game.batch;
 
         // Handle InputProcessor and Contact Listener and Physics Handler
         InputHandler inputHandler = new InputHandler(gameMap.playerModel);

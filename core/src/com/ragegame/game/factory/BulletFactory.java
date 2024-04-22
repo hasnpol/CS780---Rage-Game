@@ -1,15 +1,15 @@
 package com.ragegame.game.factory;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.ragegame.game.objects.Entity;
-import com.ragegame.game.objects.DynamicEntity.Bullet;
+import com.ragegame.game.objects.StaticEntity.Bullet;
 import com.ragegame.game.utils.Constants;
 import com.ragegame.game.utils.FixtureDefinition;
 
@@ -20,7 +20,6 @@ public class BulletFactory {
     public World world;
     public ObjectMap<UUID, Entity> gameObjectsToDestroy;
     public ObjectMap<UUID, Entity> gameObjects;
-    public SpriteBatch batch;
 
     public static synchronized BulletFactory getInstance() {
         if (instance == null) {
@@ -39,7 +38,7 @@ public class BulletFactory {
         bodyDef.gravityScale = 0;
         bodyDef.position.set(initialPos);
         Body body = world.createBody(bodyDef);
-        Bullet bullet = new Bullet(body, batch, Constants.EntityType.OBSTACLE);
+        Bullet bullet = new Bullet(body, Constants.EntityType.OBSTACLE);
 
         CircleShape circleShape = new CircleShape();
         circleShape.setRadius(0.05f);

@@ -26,9 +26,6 @@ public class HelpMethods {
                     default:
                         return LoadSave.COIN_SPRITE;
                 }
-            case OBSTACLE:
-                System.out.println("HERE?");
-                return LoadSave.COIN_SPRITE;
             default:
                 return null;
         }
