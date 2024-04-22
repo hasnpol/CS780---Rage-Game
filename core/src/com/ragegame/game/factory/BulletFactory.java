@@ -44,7 +44,7 @@ public class BulletFactory {
         Bullet bullet = new Bullet(body, batch);
 
         CircleShape circleShape = new CircleShape();
-        circleShape.setRadius(0.05f);
+        circleShape.setRadius(0.10f);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = 0;
         fixtureDef.shape = circleShape;

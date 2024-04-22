@@ -232,8 +232,8 @@ public class Map {
     public float getPPM() { return this.PPM; }
 
     public void updateDynamic() {
-        for (DynamicEntity dynamicEntity: dynamicEntities) {
-            dynamicEntity.update(batch);
+        for (int i = 0; i < dynamicEntities.size(); i++) {
+            dynamicEntities.get(i).update(batch);
         }
     }
 }
