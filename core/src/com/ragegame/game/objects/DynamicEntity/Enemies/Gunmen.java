@@ -25,7 +25,7 @@ public class Gunmen extends Enemy {
     int GUNMEN_HORIZONTAL_SIGHT = 7;
     int GUNMEN_VERTICAL_SIGHT = 2;
     float GUNMEN_BULLET_SPEED = 1f;
-    long SHOTRATE = 750;
+    long SHOTRATE = 1000L;
     long nextShot;
     int playerDirection;
 

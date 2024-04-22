@@ -51,6 +51,11 @@ public class LoadSave {
                     put(State.ATTACKING, "dropping");
                 }}
         );
+        public static final SPRITE BULLET = new SPRITE("sprites/textureatlas_bullet.txt",
+                new HashMap<State, String>() {{
+                    put(State.IDLE, "idle");
+                }}
+        );
         public static final SPRITE SOLDIER_SPRITE = new SPRITE("sprites/enemy_walk.txt",
                 new HashMap<State, String>() {{
                     put(State.IDLE, "enemy_left_idle");
