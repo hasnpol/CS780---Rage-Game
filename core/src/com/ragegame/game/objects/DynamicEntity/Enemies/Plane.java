@@ -29,7 +29,8 @@ public class Plane extends Enemy {
         entityFixture.shape = enemyBox;
         this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "body"));
 
-        enemyBox.setAsBox(.15f, .05f, new Vector2(0, .25f), 0);
+        enemyBox.setAsBox(PLANE_WIDTH * Game.SCALE, .05f,
+                new Vector2(0, (PLANE_HEIGHT + .05f) * Game.SCALE), 0);
         entityFixture.shape = enemyBox;
 
         this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "head"));

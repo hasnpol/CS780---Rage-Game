@@ -112,8 +112,6 @@ public class Map {
             enemy = null;
         }
 
-        System.out.println(enemy.type);
-
         gameObjects.put(enemy.getId(), enemy);
         enemy.enemyBox.dispose();
         dynamicEntities.add(enemy);
