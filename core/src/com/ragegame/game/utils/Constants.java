@@ -64,6 +64,9 @@ public class Constants {
         public static final float SOLDIER_HEIGHT = 0.45f;
         public static final float SOLDIER_DENSITY = 2f;
         public static final float SOLDIER_FRICTION = 1;
+        public static final int GUNMEN_HORIZONTAL_SIGHT = 7;
+        public static final int GUNMEN_VERTICAL_SIGHT = 2;
+        public static final float GUNMEN_BULLET_SPEED = 1f;
 
         // Values for BOAR
         public static final float BOAR_WIDTH = 0.5f;
@@ -87,10 +90,13 @@ public class Constants {
         public static final float PLANE_DENSITY = 0.25f; // Drone speed
         public static final float PLANE_AMPLITUDE = 5.0f; // Amplitude of the sinusoidal movement
         public static final float PLANE_FREQUENCY = 1.0f; // Frequency of the sinusoidal movement
+        public static final int PLANE_HORIZONTAL_SIGHT = 2;
+        public static final int PLANE_VERTICAL_SIGHT = 10;
+        public static final float PLANE_BOMB_SPEED = 2f;
     }
 
     public static class Game {
-        public static final int HEIGHT = 800;
+        public static final int HEIGHT = 1000;
         public static final int WIDTH = 1000;
         public static final float SCALE = 1;
     }
