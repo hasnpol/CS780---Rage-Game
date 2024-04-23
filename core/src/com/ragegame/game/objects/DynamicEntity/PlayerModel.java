@@ -1,14 +1,11 @@
 package com.ragegame.game.objects.DynamicEntity;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.ragegame.game.handlers.contactHandlers.PlayerContactHandler;
-import com.ragegame.game.factory.CoinFactory;
 import com.ragegame.game.utils.FixtureDefinition;
 
 import static com.ragegame.game.utils.Constants.EntityType.*;
@@ -32,6 +29,7 @@ public class PlayerModel extends DynamicEntity {
     long startTime = 0;
     long endTime;
     public int coinsToDrop = 0;
+    public int groundTouchCount = 0;
 
     public PlayerModel(Body body, SpriteBatch batch) {
         super(body, batch, PLAYER);
@@ -52,8 +50,10 @@ public class PlayerModel extends DynamicEntity {
 
         this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "body"));
 
-        playerBox.setAsBox(.15f, .05f, new Vector2(0, -.45f), 0);
+        playerBox.setAsBox(WIDTH * Game.SCALE, .05f,
+                new Vector2(0, -(HEIGHT + .05f) * Game.SCALE), 0);
         entityFixture.shape = playerBox;
+        entityFixture.isSensor = true;
 
         this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "feet"));
 
@@ -107,7 +107,7 @@ public class PlayerModel extends DynamicEntity {
     public void jumpEnd() {
         if (isDead()) return;
         if (grounded) {
-            getBody().applyLinearImpulse(new Vector2(0,  Math.min(8f, (System.currentTimeMillis() - jumpPress) * 0.01f)),
+            getBody().applyLinearImpulse(new Vector2(0,  Math.min(8.1f, (System.currentTimeMillis() - jumpPress) * 0.01f)),
                     getBody().getPosition(), true);
         }
     }
@@ -118,33 +118,33 @@ public class PlayerModel extends DynamicEntity {
 
     @Override
     public void update(SpriteBatch batch) {
+        playerModel.setGrounded(playerModel.groundTouchCount > 0);
+
         if (playerModel.isDead()) {
             playerModel.kill();
+            return;
+        }
+
+        if (playerModel.isImmune) {
+            endTime = System.currentTimeMillis();
+            if ((endTime - startTime) / 1000 == 1) {
+                playerModel.isImmune = false;
+            }
+        }
+
+        if (playerModel.isHit && !playerModel.isImmune) {
+            playerModel.isImmune = true;
+            playerModel.startTimer();
+        }
+
+        Vector2 velocity = getBody().getLinearVelocity();
+        if (stop) {
+            setForce(velocity.set(velocity.x * -DRAG, 0));
         } else {
-            if (playerModel.isImmune) {
-                // System.out.println("Immune");
-                endTime = System.currentTimeMillis();
-                if ((endTime - startTime) / 1000 == 1) {
-                    playerModel.isImmune = false;
-                }
-            }
-
-            if (playerModel.isHit && !playerModel.isImmune) {
-                // System.out.println("Player has hit and no immune");
-                dropCoin(batch);
-                playerModel.isImmune = true;
-                playerModel.startTimer();
-            }
-
-            Vector2 velocity = getBody().getLinearVelocity();
-            if (stop) {
-                setForce(velocity.set(velocity.x * -DRAG, 0));
-            } else {
-                if (velocity.x > MAXSPEED) {
-                    getBody().setLinearVelocity(MAXSPEED, velocity.y);
-                } else if (velocity.x < -MAXSPEED) {
-                    getBody().setLinearVelocity(-MAXSPEED, velocity.y);
-                }
+            if (velocity.x > MAXSPEED) {
+                getBody().setLinearVelocity(MAXSPEED, velocity.y);
+            } else if (velocity.x < -MAXSPEED) {
+                getBody().setLinearVelocity(-MAXSPEED, velocity.y);
             }
         }
     }
@@ -195,15 +195,6 @@ public class PlayerModel extends DynamicEntity {
 
     public void kill() {
         this.markedForDelete = true;
-    }
-
-    public void dropCoin(SpriteBatch batch) {
-        PlayerModel playerModel = PlayerModel.getPlayerModel();
-        if (playerModel != null) {
-            for (int i = 0; i < playerModel.coinsToDrop; i++) {
-                CoinFactory.getInstance().createCoin(playerModel.getBody().getPosition(), batch);
-            }
-        }
     }
 
 }
