@@ -8,7 +8,7 @@ import com.ragegame.game.utils.Constants;
 public class Bomb extends DynamicEntity {
 
     public Bomb(Body body, SpriteBatch batch) {
-        super(body, batch, Constants.EntityType.ENEMY);
+        super(body, batch, Constants.EntityType.BOMB);
     }
 
     @Override

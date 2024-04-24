@@ -17,7 +17,7 @@ public class Constants {
     public enum State { IDLE, RUNNING, JUMPING, HIT, DEAD, ATTACKING };
 
     public enum EntityType {
-        PLAYER(null), ENEMY(null), OBSTACLE(null), RESOURCE(null), AMMO(null), COIN(null), MEDAL(null), BULLET(null);;
+        PLAYER(null), ENEMY(null), OBSTACLE(null), RESOURCE(null), MEDAL(null), BULLET(null), BOMB(null);
         private Object subType;
         EntityType(Object subType) {this.subType = subType;}
 
@@ -53,11 +53,6 @@ public class Constants {
         public enum ResType {COIN, MEDAL}
         public static final float COIN_RADIUS = .2f;
         public static final float COIN_DENSITY = 0;
-    }
-
-    public static class AmmoConstants {
-        // Enum Enemy Type
-        public enum AmmoType {BULLET, BOMB}
     }
 
     public static class EnemyConstants {

@@ -23,6 +23,8 @@ public class HelpMethods {
                 }
             case BULLET:
                 return LoadSave.EnemySprite.BULLET;
+            case BOMB:
+                return LoadSave.EnemySprite.BOMB_SPRITE;
             case RESOURCE:
                 switch ((ResourceConstants.ResType) entityType.getSubType()) {
                     case COIN:
@@ -30,14 +32,6 @@ public class HelpMethods {
                     default:
                         return LoadSave.COIN_SPRITE;
                 }
-            case AMMO:
-                switch ((AmmoConstants.AmmoType) entityType.getSubType()) {
-                    case BOMB:
-                        return LoadSave.EnemySprite.BOMB_SPRITE;
-                    default:
-                        return LoadSave.EnemySprite.BULLET_SPRITE;
-                }
-
             default:
                 return null;
         }
