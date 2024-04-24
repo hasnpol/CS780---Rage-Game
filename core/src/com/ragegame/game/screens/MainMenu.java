@@ -15,10 +15,15 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -47,36 +52,57 @@ public class MainMenu implements Screen {
     Texture background;
 
     Table table;
-
-    public Stage stage;
-    private final Viewport viewport;
+    private ScreenViewport screenViewport;
+    private Skin skin;
+    private Stage stage;
+    private Dialog dialog;
 
     public MainMenu (RageGame game) {
         this.game = game;
         playButtonActive = new Texture("menu/play_button_active.png");
         playButtonInactive = new Texture("menu/play_button_inactive.png");
         background = new Texture("menu/Title_screen_background.png");
-        viewport = new FillViewport((float) Game.WIDTH /2, (float) Game.HEIGHT /2);
+
+        screenViewport = new ScreenViewport();
+        skin = new Skin(Gdx.files.internal("menu/Particle Park UI.json"));//find file
+        stage = new Stage(screenViewport, this.game.batch);
+        Gdx.input.setInputProcessor(stage);
+
+        dialog = new Dialog("Russian RageGame", skin);
+        dialog.getTitleLabel().setAlignment(Align.center);
+        Table table = dialog.getContentTable();
+        table.pad(10);
+
+        table.row();
+        table.defaults().width(150);
+        TextButton playButton = new TextButton("Play", skin);
+        table.add(playButton);
+
+        table.row();
+        TextButton quitButton = new TextButton("Quit", skin);
+        table.add(quitButton);
+        dialog.show(stage);
         screen_h = Game.HEIGHT;
         screen_w = Game.WIDTH;
 
-        final MainMenu mainMenuScreen = this;
-
-        Gdx.input.setInputProcessor(new InputAdapter() {
-
+        playButton.addListener(new ActorGestureListener() {
             @Override
-            public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                super.tap(event, x, y, count, button);
 
-                //Play game button
-                int x = screen_w / 2 - PLAY_BUTTON_WIDTH / 2;
-                if (Gdx.input.getX() < x + PLAY_BUTTON_WIDTH && Gdx.input.getX() > x && screen_h - Gdx.input.getY() < PLAY_BUTTON_Y + PLAY_BUTTON_HEIGHT && screen_h - Gdx.input.getY() > PLAY_BUTTON_Y) {
-                    mainMenuScreen.dispose();
-                    game.setScreen(new GameScreen(game));
-                }
+                game.setScreen(new GameScreen(game));
 
-                return super.touchUp(screenX, screenY, pointer, button);
             }
+        });
 
+        quitButton.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                super.tap(event, x, y, count, button);
+
+                Gdx.app.exit();
+
+            }
         });
     }
 
@@ -88,32 +114,21 @@ public class MainMenu implements Screen {
     @Override
     public void render(float delta) {
 
-        Gdx.gl.glClearColor(0,0,0,1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        ScreenUtils.clear(Color.DARK_GRAY);
+        screenViewport.apply();
+        stage.act();
+        stage.getBatch().begin();
+        stage.getBatch().draw(background, 0, 0, screen_w*2, screen_h*2);
+        stage.getBatch().end();
+        stage.draw();
 
-        viewport.apply();
-        //game.batch.setProjectionMatrix(viewport.getCamera().combined);
-        game.batch.begin();
-
-        //System.out.println("Main 1");
-
-        game.batch.draw(background, 0, 0);
-
-        int x = screen_w / 2 - PLAY_BUTTON_WIDTH / 2;//350
-        if (Gdx.input.getX() < x + PLAY_BUTTON_WIDTH && Gdx.input.getX() > x && screen_h - Gdx.input.getY() < PLAY_BUTTON_Y + PLAY_BUTTON_HEIGHT && screen_h - Gdx.input.getY() > PLAY_BUTTON_Y) {
-            game.batch.draw(playButtonActive, 350, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
-        } else {
-            game.batch.draw(playButtonInactive, 350, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
-        }
-
-        game.batch.end();
     }
 
     @Override
     public void resize(int width, int height) {
-        screen_w = width;
-        screen_h = height;
-        viewport.update(width, height);
+        screenViewport.update(width, height, true);
+        dialog.setPosition(Math.round((stage.getWidth() - dialog.getWidth()) / 2),
+                Math.round((stage.getHeight() - dialog.getHeight()) / 2));
     }
 
     @Override
@@ -133,6 +148,7 @@ public class MainMenu implements Screen {
 
     @Override
     public void dispose() {
-
+        stage.dispose();
+        skin.dispose();
     }
 }
