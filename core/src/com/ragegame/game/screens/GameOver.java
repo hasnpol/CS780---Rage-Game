@@ -8,7 +8,18 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ragegame.game.RageGame;
 import com.ragegame.game.utils.Constants.Game;
 
@@ -17,18 +28,68 @@ public class GameOver implements Screen {
     private static final int BANNER_WIDTH = 350;
     private static final int BANNER_HEIGHT = 100;
 
+    private int screen_w;
+    private int screen_h;
+
+    private Viewport viewport;
+
     final RageGame game;
 
     Texture gameOverBanner;
+    Texture background;
     BitmapFont scoreFont;
+
+    private ScreenViewport screenViewport;
+    private Skin skin;
+    private Stage stage;
+    private Dialog dialog;
 
     public GameOver (RageGame game) {
         this.game = game;
-
-        //Load textures and fonts
+        screen_h = Game.HEIGHT;
+        screen_w = Game.WIDTH;
         gameOverBanner = new Texture("game_over.png");
-        scoreFont = new BitmapFont(Gdx.files.internal("fonts/score.fnt"));
-        //System.out.println(game.account.getCurrency());
+        background = new Texture("menu/Title_screen_background.png");
+
+        screenViewport = new ScreenViewport();
+        skin = new Skin(Gdx.files.internal("menu/Particle Park UI.json"));//find file
+        stage = new Stage(screenViewport, this.game.batch);
+        Gdx.input.setInputProcessor(stage);
+
+        dialog = new Dialog("You Suck, Game Over", skin);
+        dialog.getTitleLabel().setAlignment(Align.center);
+        Table table = dialog.getContentTable();
+        table.pad(10);
+
+        table.row();
+        table.defaults().width(150);
+        TextButton tryAgainButton = new TextButton("Try Again", skin);
+        table.add(tryAgainButton);
+
+        table.row();
+        TextButton quitButton = new TextButton("Quit", skin);
+        table.add(quitButton);
+        dialog.show(stage);
+
+        tryAgainButton.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                super.tap(event, x, y, count, button);
+
+                game.setScreen(new GameScreen(game));
+
+            }
+        });
+
+        quitButton.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                super.tap(event, x, y, count, button);
+
+                Gdx.app.exit();
+
+            }
+        });
     }
 
     @Override
@@ -36,80 +97,46 @@ public class GameOver implements Screen {
 
     @Override
     public void render (float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        game.batch.begin();
 
-        game.batch.draw(gameOverBanner, Game.WIDTH / 2 - BANNER_WIDTH / 2, Game.HEIGHT - BANNER_HEIGHT - 15, BANNER_WIDTH, BANNER_HEIGHT);
-        //System.out.println("Game Over");
-        GlyphLayout tryAgainLayout = new GlyphLayout(scoreFont, "Try Again");
-        GlyphLayout mainMenuLayout = new GlyphLayout(scoreFont, "Main Menu");
-
-        float tryAgainX = Game.WIDTH / 2 - tryAgainLayout.width /2;
-        float tryAgainY = Game.HEIGHT / 2 - tryAgainLayout.height / 2;
-        float mainMenuX = Game.WIDTH / 2 - mainMenuLayout.width /2;
-        float mainMenuY = Game.HEIGHT / 2 - mainMenuLayout.height / 2 - tryAgainLayout.height - 15;
-
-        //Checks if hovering over try again button
-        if (Gdx.input.getX() >= tryAgainX && Gdx.input.getX() < tryAgainX + tryAgainLayout.width && Gdx.input.getY() >= tryAgainY - tryAgainLayout.height - 15 && Gdx.input.getY() < tryAgainY)
-            tryAgainLayout.setText(scoreFont, "Try Again", Color.YELLOW, 0, Align.left, false);
-
-        //Checks if hovering over main menu button
-        if (Gdx.input.getX() >= mainMenuX && Gdx.input.getX() < mainMenuX + mainMenuLayout.width && Gdx.input.getY() >= mainMenuY - mainMenuLayout.height - 15 && Gdx.input.getY() < mainMenuY)
-            mainMenuLayout.setText(scoreFont, "Main Menu", Color.YELLOW, 0, Align.left, false);
-
-        //If try again and main menu is being pressed
-        if (Gdx.input.isTouched()) {
-            //Try again
-            if (Gdx.input.getX() > tryAgainX && Gdx.input.getX() < tryAgainX + tryAgainLayout.width && Gdx.input.getY() > tryAgainY - tryAgainLayout.height && Gdx.input.getY() < tryAgainY) {
-                game.batch.end();
-                game.setScreen(new GameScreen(game));
-                return;
-            }
-
-            //main menu
-            if (Gdx.input.getX() > mainMenuX && Gdx.input.getX() < mainMenuX + mainMenuLayout.width && Gdx.input.getY() > mainMenuY - mainMenuLayout.height && Gdx.input.getY() < mainMenuY) {
-                game.batch.end();
-                game.setScreen(new MainMenu(game));
-                return;
-            }
-        }
-
-        //Draw buttons
-        scoreFont.draw(game.batch, tryAgainLayout, tryAgainX, tryAgainY + 60);
-        scoreFont.draw(game.batch, mainMenuLayout, mainMenuX, mainMenuY + 140);
-
-        game.batch.end();
+        ScreenUtils.clear(Color.DARK_GRAY);
+        screenViewport.apply();
+        stage.act();
+        stage.getBatch().begin();
+        stage.getBatch().draw(background, 0, 0, screen_w*2, screen_h*2);
+        //stage.getBatch().draw(gameOverBanner, screen_w / 2 - BANNER_WIDTH / 2, screen_h - BANNER_HEIGHT - 15, BANNER_WIDTH, BANNER_HEIGHT);
+        stage.getBatch().end();
+        stage.draw();
     }
 
     @Override
     public void resize(int width, int height) {
-        // TODO Auto-generated method stub
+        screenViewport.update(width, height, true);
+        dialog.setPosition(Math.round((stage.getWidth() - dialog.getWidth()) / 2),
+                Math.round((stage.getHeight() - dialog.getHeight()) / 2));
 
     }
 
     @Override
     public void pause() {
-        // TODO Auto-generated method stub
+
 
     }
 
     @Override
     public void resume() {
-        // TODO Auto-generated method stub
+
 
     }
 
     @Override
     public void hide() {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void dispose() {
-        // TODO Auto-generated method stub
-
+        stage.dispose();
+        skin.dispose();
     }
 
 }
