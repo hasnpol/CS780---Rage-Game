@@ -62,7 +62,7 @@ public class LoadSave {
 
         public static final SPRITE BULLET = new SPRITE("sprites/textureatlas_bullet.txt",
                 new HashMap<State, String>() {{
-                    put(State.IDLE, "idle");
+                    put(State.IDLE, "bullet");
                 }}
         );
 

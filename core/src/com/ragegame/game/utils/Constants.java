@@ -67,6 +67,7 @@ public class Constants {
         public static final int GUNMEN_HORIZONTAL_SIGHT = 7;
         public static final int GUNMEN_VERTICAL_SIGHT = 2;
         public static final float GUNMEN_BULLET_SPEED = 1f;
+        public static final float GUNMEN_BULLET_RADIUS = 0.10f;
 
         // Values for BOAR
         public static final float BOAR_WIDTH = 0.5f;
@@ -93,6 +94,7 @@ public class Constants {
         public static final int PLANE_HORIZONTAL_SIGHT = 2;
         public static final int PLANE_VERTICAL_SIGHT = 10;
         public static final float PLANE_BOMB_SPEED = 2f;
+        public static final long PLANE_BOMB_RATE = 4000;
     }
 
     public static class Game {

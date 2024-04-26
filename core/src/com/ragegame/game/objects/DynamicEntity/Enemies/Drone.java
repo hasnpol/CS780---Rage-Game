@@ -39,7 +39,6 @@ public class Drone extends Enemy {
         entityFixture.shape = enemyBox;
 
         this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "head"));
-
     }
 
     @Override

@@ -16,10 +16,6 @@ public abstract class Collectable extends DynamicEntity {
         this.isCollected = false;
     }
 
-    @Override
-    public void draw(SpriteBatch batch, TextureRegion currentAnimationFrame,
-                     float x_position, float y_position, float new_scale) {}
-
     public void setCollected() {
         this.isCollected = true;
         this.markedForDelete = true;

@@ -31,36 +31,18 @@ public class BulletFactory {
         return instance;
     }
 
-    private BulletFactory() {
+    private BulletFactory() {}
 
-    }
-
-    public void createBullet(Vector2 initialPos, Vector2 destination, float speed) {
+    public void createBullet(Vector2 initialPos, Vector2 destination) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.gravityScale = 0;
         bodyDef.position.set(initialPos);
         Body body = world.createBody(bodyDef);
-        Bullet bullet = new Bullet(body, batch);
-
-        CircleShape circleShape = new CircleShape();
-        circleShape.setRadius(0.10f);
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.density = 0;
-        fixtureDef.shape = circleShape;
+        Bullet bullet = new Bullet(body, batch, initialPos, destination);
         gameObjects.put(bullet.getId(), bullet);
 
-
-        body.createFixture(fixtureDef).setUserData(new FixtureDefinition(bullet.getId(), "body"));
-        body.setLinearVelocity(getVelocity(initialPos, destination, speed));
-
-        circleShape.dispose();
+        ((CircleShape) bullet.objectBox).dispose();
         dynamicEntities.add(bullet);
     }
-
-    public Vector2 getVelocity(Vector2 initial, Vector2 destination, float speed) {
-        return new Vector2((destination.x - initial.x) * speed, (destination.y - initial.y) * speed);
-    }
-
-
 }

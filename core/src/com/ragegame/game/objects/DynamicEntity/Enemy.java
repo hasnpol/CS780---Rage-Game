@@ -12,6 +12,7 @@ import static com.ragegame.game.utils.Constants.EntityType.*;
 
 public class Enemy extends DynamicEntity {
     public PolygonShape enemyBox;
+    public Direction playerDirection;
 
     private Vector2 position;
     private int health = 100;
@@ -22,6 +23,7 @@ public class Enemy extends DynamicEntity {
 
     public Enemy(Body body, SpriteBatch batch, EnemyConstants.EnemyType enemyType) {
         super(body, batch, ENEMY.SubType(enemyType));
+        playerDirection = Direction.STOP;
         this.enemyBox = new PolygonShape();
         this.position = body.getPosition();
     }

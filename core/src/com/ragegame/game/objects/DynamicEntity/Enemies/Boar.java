@@ -19,18 +19,14 @@ public class Boar extends Enemy {
     int charging;
     long chargeFinishTime;
 
-    Direction playerDirection;
-
     public Boar(Body body, SpriteBatch batch) {
         super(body, batch, BOAR);
         charging = 0;
-        playerDirection = Direction.STOP;
         enemyBox.setAsBox(BOAR_WIDTH * Game.SCALE, BOAR_HEIGHT * Game.SCALE);
         entityFixture.density = BOAR_DENSITY;
         entityFixture.friction = BOAR_FRICTION;
         entityFixture.restitution = .1f;
         entityFixture.shape = enemyBox;
-
         this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "body"));
 
         enemyBox.setAsBox(BOAR_WIDTH * Game.SCALE, .05f,
@@ -38,7 +34,6 @@ public class Boar extends Enemy {
         entityFixture.shape = enemyBox;
 
         this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "head"));
-
     }
 
     @Override

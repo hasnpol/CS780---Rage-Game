@@ -24,11 +24,9 @@ import static com.ragegame.game.utils.Constants.EnemyConstants.EnemyType.SOLDIER
 public class Gunmen extends Enemy {
     long SHOTRATE = 1000L;
     long nextShot;
-    Direction playerDirection;
 
     public Gunmen(Body body, SpriteBatch batch) {
         super(body, batch, SOLDIER);
-        playerDirection = Direction.STOP;
         nextShot = 0L;
         enemyBox.setAsBox(SOLDIER_WIDTH * Game.SCALE, SOLDIER_HEIGHT * Game.SCALE);
         entityFixture.density = SOLDIER_DENSITY;
@@ -46,13 +44,9 @@ public class Gunmen extends Enemy {
 
     @Override
     public  void update(SpriteBatch batch) {
-        if (isDead) {
-            return;
-        }
-        playerDirection = isPlayerInRange(GUNMEN_HORIZONTAL_SIGHT, GUNMEN_VERTICAL_SIGHT, getPosition());
-        if (playerDirection != Direction.STOP) {
-            shoot();
-        }
+        if (isDead) {return;}
+        this.playerDirection = isPlayerInRange(GUNMEN_HORIZONTAL_SIGHT, GUNMEN_VERTICAL_SIGHT, getPosition());
+        if (playerDirection != Direction.STOP) {shoot();}
     }
 
     @Override
@@ -69,7 +63,8 @@ public class Gunmen extends Enemy {
             float offset = ((playerDirection == Direction.LEFT)) ? -0.5f : 0.5f;
             long currentTime = System.currentTimeMillis();
             if (currentTime > nextShot) {
-                BulletFactory.getInstance().createBullet(getPosition().add(offset, 0), playerModel.getBody().getPosition(), GUNMEN_BULLET_SPEED);
+                BulletFactory.getInstance().createBullet(getPosition().add(offset, 0),
+                        playerModel.getBody().getPosition());
                 nextShot = currentTime + SHOTRATE;
             }
         }

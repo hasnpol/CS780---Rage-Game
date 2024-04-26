@@ -14,6 +14,7 @@ import com.ragegame.game.utils.Constants.*;
 public class DynamicEntity extends Entity {
     public FixtureDef entityFixture;
     private Direction direction = Direction.RIGHT;
+    public Object objectBox;
 
     private final View view;
 

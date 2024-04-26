@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
+import com.ragegame.game.objects.DynamicEntity.Bomb;
+import com.ragegame.game.objects.DynamicEntity.Bullet;
 import com.ragegame.game.objects.DynamicEntity.Coin;
 import com.ragegame.game.objects.DynamicEntity.Enemies.*;
 import com.ragegame.game.objects.DynamicEntity.Enemy;
@@ -68,6 +70,7 @@ public class View {
             if (enemy.isDead) {return;}
         }
 
+        // FIXME when this is removed, and a coin is collected, enemies will fire coins?????
         if (model instanceof Coin) {
             Coin coin;
             coin = (Coin) model;
@@ -90,6 +93,9 @@ public class View {
             currentAnimationSequence = nextAnimationSequence;
         }
 
+        if (model instanceof Bullet) {
+            int x = 0;
+        }
         stateTime += dt;
         currentAnimationFrame = (TextureRegion) currentAnimation.getKeyFrame(stateTime, true);
 //        clothes_currentAnimationFrame = (TextureRegion) clothes_currentAnimation.getKeyFrame(stateTime, true);

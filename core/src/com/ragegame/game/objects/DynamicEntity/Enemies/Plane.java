@@ -19,9 +19,7 @@ import static com.ragegame.game.utils.Constants.EnemyConstants.EnemyType.PLANE;
 
 public class Plane extends Enemy {
     private float elapsedTime = 0; // Time elapsed since the start of the movement
-    long SHOTRATE = 750;
     long nextShot;
-    Direction playerDirection;
 
     public Plane(Body body, SpriteBatch batch) {
         super(body, batch, PLANE);
@@ -37,7 +35,6 @@ public class Plane extends Enemy {
         entityFixture.shape = enemyBox;
 
         this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "head"));
-
     }
 
     @Override
@@ -90,7 +87,7 @@ public class Plane extends Enemy {
             long currentTime = System.currentTimeMillis();
             if (currentTime > nextShot) {
                 BombFactory.getInstance().createBomb(getPosition().add(offset, 0), playerModel.getBody().getPosition(), PLANE_BOMB_SPEED);
-                nextShot = currentTime + SHOTRATE;
+                nextShot = currentTime + PLANE_BOMB_RATE;
             }
         }
     }
