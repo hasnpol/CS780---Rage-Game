@@ -86,7 +86,7 @@ public class Plane extends Enemy {
             float offset = ((playerDirection == Direction.LEFT)) ? -0.5f : 0.5f;
             long currentTime = System.currentTimeMillis();
             if (currentTime > nextShot) {
-                BombFactory.getInstance().createBomb(getPosition().add(offset, 0), playerModel.getBody().getPosition(), PLANE_BOMB_SPEED);
+                BombFactory.getInstance().createBomb(getPosition().add(offset, - .5f), playerModel.getBody().getPosition(), PLANE_BOMB_SPEED);
                 nextShot = currentTime + PLANE_BOMB_RATE;
             }
         }

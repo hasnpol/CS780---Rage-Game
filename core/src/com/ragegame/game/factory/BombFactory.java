@@ -1,5 +1,6 @@
 package com.ragegame.game.factory;
 
+import static com.ragegame.game.utils.Constants.EnemyConstants.PLANE_BOMB_RATE;
 import static com.ragegame.game.utils.Constants.EnemyConstants.PLANE_HEIGHT;
 import static com.ragegame.game.utils.Constants.EnemyConstants.PLANE_WIDTH;
 
@@ -40,13 +41,13 @@ public class BombFactory {
     public void createBomb(Vector2 initialPos, Vector2 destination, float speed) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.gravityScale = 0;
+        bodyDef.gravityScale = .1f;
         bodyDef.position.set(initialPos);
         Body body = world.createBody(bodyDef);
         Bomb bomb = new Bomb(body, batch);
 
         PolygonShape bombShape = new PolygonShape();
-        bombShape.setAsBox((PLANE_WIDTH / 2) * Constants.Game.SCALE,
+        bombShape.setAsBox((PLANE_WIDTH / 4) * Constants.Game.SCALE,
                 (PLANE_HEIGHT / 2) * Constants.Game.SCALE);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = 0;

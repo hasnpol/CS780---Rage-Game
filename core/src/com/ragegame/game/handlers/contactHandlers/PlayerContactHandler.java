@@ -1,5 +1,6 @@
 package com.ragegame.game.handlers.contactHandlers;
 
+import com.ragegame.game.objects.DynamicEntity.Bomb;
 import com.ragegame.game.objects.DynamicEntity.Coin;
 import com.ragegame.game.objects.DynamicEntity.Medal;
 
@@ -21,16 +22,12 @@ public class PlayerContactHandler {
     }
 
     public void startContact(Entity entity) {
-
-
         if (entity instanceof Platform) {
             platformStartContact();
         }
-
         if (entity instanceof Enemy) {
             enemyStartContact((Enemy) entity);
         }
-
         if (entity instanceof Bullet) {
             playerBulletContact();
         }
@@ -39,6 +36,9 @@ public class PlayerContactHandler {
         }
         if (entity instanceof Medal) {
             playerMedalContact((Medal) entity);
+        }
+        if (entity instanceof Bomb) {
+            playerBombContact();
         }
     }
 
@@ -75,15 +75,17 @@ public class PlayerContactHandler {
     }
 
     public void playerBulletContact() {
-        playerModel.setCoins((int) (-playerModel.getCoins() * .1));
         playerModel.setHealth(-100);
-        playerModel.getBody().getPosition().y = -10;
     }
 
     public void playerMedalContact(Medal collectable) {
         playerModel.setMedal(1);
         playerModel.voidRestoreHealth();
         collectable.setCollected();
+    }
+
+    public void playerBombContact() {
+        playerModel.setHealth(-100);
     }
 
     public void enemyEndContact() {
