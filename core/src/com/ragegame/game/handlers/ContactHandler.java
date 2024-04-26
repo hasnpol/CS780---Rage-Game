@@ -7,6 +7,8 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.ragegame.game.objects.DynamicEntity.Bomb;
+import com.ragegame.game.objects.DynamicEntity.Enemies.Plane;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.DynamicEntity.Bullet;
@@ -49,28 +51,22 @@ public class ContactHandler implements ContactListener {
             objB = gameObjects.get(objId);
         }
 
-        if (objB instanceof PlayerModel) {
-            PlayerModel playerModel = (PlayerModel) objB;
-            playerModel.playerContactHandler.playerFixtureType = fixtureTypeB;
-            playerModel.playerContactHandler.entityFixtureType = fixtureTypeA;
-            playerModel.playerContactHandler.startContact(objA);
+        if (objB instanceof PlayerModel || objA instanceof PlayerModel) {
+            if (objA instanceof PlayerModel) {
+                handlePlayerContact((PlayerModel) objA, objB, fixtureTypeA, fixtureTypeB, true);
+            } else {
+                handlePlayerContact((PlayerModel) objB, objA, fixtureTypeB, fixtureTypeA, true);
+            }
         }
 
-        if (objA instanceof PlayerModel) {
-            PlayerModel playerModel = (PlayerModel) objA;
-            playerModel.playerContactHandler.playerFixtureType = fixtureTypeA;
-            playerModel.playerContactHandler.entityFixtureType = fixtureTypeB;
-            playerModel.playerContactHandler.startContact(objB);
-        }
-
-        if (objB instanceof Bullet) {
-            Bullet bullet = (Bullet) objB;
+        if (objB instanceof Bullet || objA instanceof Bullet) {
+            Bullet bullet = (Bullet) ((objA instanceof Bullet)? objA: objB);
             bullet.markedForDelete = true;
         }
 
-        if (objA instanceof Bullet) {
-            Bullet bullet = (Bullet) objA;
-            bullet.markedForDelete = true;
+        if (objA instanceof Bomb && !(objB instanceof Plane) || objB instanceof Bomb && !(objA instanceof Plane)) {
+            Bomb bomb = (Bomb) ((objA instanceof Bomb)? objA: objB);
+            bomb.markedForDelete = true;
         }
 
         if (objA instanceof FakePlatform && objB instanceof PlayerModel) {
@@ -119,18 +115,12 @@ public class ContactHandler implements ContactListener {
             objB = gameObjects.get(objId);
         }
 
-        if (objB instanceof PlayerModel) {
-            PlayerModel playerModel = (PlayerModel) objB;
-            playerModel.playerContactHandler.playerFixtureType = fixtureTypeB;
-            playerModel.playerContactHandler.entityFixtureType = fixtureTypeA;
-            playerModel.playerContactHandler.endContact(objA);
-        }
-
-        if (objA instanceof PlayerModel) {
-            PlayerModel playerModel = (PlayerModel) objA;
-            playerModel.playerContactHandler.playerFixtureType = fixtureTypeA;
-            playerModel.playerContactHandler.entityFixtureType = fixtureTypeB;
-            playerModel.playerContactHandler.endContact(objB);
+        if (objB instanceof PlayerModel || objA instanceof PlayerModel) {
+            if (objA instanceof PlayerModel) {
+                handlePlayerContact((PlayerModel) objA, objB, fixtureTypeA, fixtureTypeB, false);
+            } else {
+                handlePlayerContact((PlayerModel) objB, objA, fixtureTypeB, fixtureTypeA, false);
+            }
         }
 
         if (objA instanceof HiddenPlatform && objB instanceof PlayerModel) {
@@ -146,12 +136,19 @@ public class ContactHandler implements ContactListener {
     }
 
     @Override
-    public void preSolve(Contact contact, Manifold oldManifold) {
-
-    }
+    public void preSolve(Contact contact, Manifold oldManifold) {}
 
     @Override
-    public void postSolve(Contact contact, ContactImpulse impulse) {
+    public void postSolve(Contact contact, ContactImpulse impulse) {}
 
+    private void handlePlayerContact(PlayerModel playerModel, Entity obj, String playerFixture,
+                                     String entityFixture, boolean isStartContact) {
+        playerModel.playerContactHandler.playerFixtureType = playerFixture;
+        playerModel.playerContactHandler.entityFixtureType = entityFixture;
+        if (isStartContact) {
+            playerModel.playerContactHandler.startContact(obj);
+        } else {
+            playerModel.playerContactHandler.endContact(obj);
+        }
     }
 }
