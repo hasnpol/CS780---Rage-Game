@@ -36,13 +36,16 @@ public class View {
 
     public View(DynamicEntity model, SpriteBatch batch) {
         this.model = model;
+        System.out.println("Type " + this.model);
         this.batch = batch;
         UtilTypes sprite_textures = HelpMethods.GetTextureAtlas(model.type);
 //        UtilTypes clothes_textures = HelpMethods.GetClothesTextureAtlas();
         assert sprite_textures != null;
+        System.out.println("resPath " + sprite_textures.resPath);
         this.textureAtlas = new TextureAtlas(sprite_textures.resPath);
 //        this.clothes_textureAtlas = new TextureAtlas(clothes_textures.resPath);
         for (String texture : sprite_textures.animations) {
+            System.out.println("texture " + texture);
             animationFrames.add(textureAtlas.createSprites(texture));
         }
         currentAnimation = new Animation<>(this.animationFrameDuration, animationFrames.get(0));

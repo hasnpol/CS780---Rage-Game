@@ -1,6 +1,5 @@
 package com.ragegame.game.factory;
 
-import static com.ragegame.game.utils.Constants.EnemyConstants.PLANE_BOMB_RATE;
 import static com.ragegame.game.utils.Constants.EnemyConstants.PLANE_HEIGHT;
 import static com.ragegame.game.utils.Constants.EnemyConstants.PLANE_WIDTH;
 
@@ -12,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.ragegame.game.objects.DynamicEntity.Bullet;
 import com.ragegame.game.objects.DynamicEntity.DynamicEntity;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.DynamicEntity.Bomb;

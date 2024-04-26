@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.ObjectMap;
 
+import com.ragegame.game.factory.BombFactory;
 import com.ragegame.game.factory.BulletFactory;
 import com.ragegame.game.objects.DynamicEntity.Coin;
 import com.ragegame.game.objects.DynamicEntity.DynamicEntity;
@@ -63,6 +64,8 @@ public class Map {
         this.PPM = (float) properties.get("tilewidth", Integer.class);
         BulletFactory.getInstance().dynamicEntities = dynamicEntities;
         BulletFactory.getInstance().batch = batch;
+        BombFactory.getInstance().dynamicEntities = dynamicEntities;
+        BombFactory.getInstance().batch = batch;
 
         this.orthogonalTiledMapRenderer = new OrthogonalTiledMapRenderer(map, 1/PPM);
 

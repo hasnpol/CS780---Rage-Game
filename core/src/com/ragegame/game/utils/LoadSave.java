@@ -52,11 +52,9 @@ public class LoadSave {
                 }}
         );
 
-        public static final SPRITE BOMB_SPRITE = new SPRITE("sprites/textureatlas_plane.txt",
+        public static final SPRITE BOMB_SPRITE = new SPRITE("sprites/textureatlas_bomb.txt",
                 new HashMap<State, String>() {{
                     put(State.IDLE, "bomb");
-                    put(State.RUNNING, "bomb");
-                    put(State.ATTACKING, "bomb");
                 }}
         );
 
