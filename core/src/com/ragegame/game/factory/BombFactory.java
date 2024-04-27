@@ -44,25 +44,11 @@ public class BombFactory {
         bodyDef.gravityScale = .1f;
         bodyDef.position.set(initialPos);
         Body body = world.createBody(bodyDef);
-        Bomb bomb = new Bomb(body, batch);
-
-        PolygonShape bombShape = new PolygonShape();
-        bombShape.setAsBox((PLANE_WIDTH / 4) * Constants.Game.SCALE,
-                (PLANE_HEIGHT / 2) * Constants.Game.SCALE);
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.density = 0;
-        fixtureDef.shape = bombShape;
+        Bomb bomb = new Bomb(body, batch, initialPos, destination, speed);
         gameObjects.put(bomb.getId(), bomb);
 
-        body.createFixture(fixtureDef).setUserData(new FixtureDefinition(bomb.getId(), "body"));
-        body.setLinearVelocity(getVelocity(initialPos, destination, speed));
-
-        bombShape.dispose();
+        ((PolygonShape) bomb.objectBox).dispose();
         dynamicEntities.add(bomb);
-    }
-
-    public Vector2 getVelocity(Vector2 initial, Vector2 destination, float speed) {
-        return new Vector2((destination.x - initial.x) * speed, (destination.y - initial.y) * speed);
     }
 
 }
