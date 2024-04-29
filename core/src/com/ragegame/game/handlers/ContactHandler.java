@@ -66,7 +66,8 @@ public class ContactHandler implements ContactListener {
 
         if (objA instanceof Bomb && !(objB instanceof Plane) || objB instanceof Bomb && !(objA instanceof Plane)) {
             Bomb bomb = (Bomb) ((objA instanceof Bomb)? objA: objB);
-            bomb.markedForDelete = true;
+            bomb.isAttacking = true;
+            bomb.attackTime = System.currentTimeMillis();
         }
 
         if (objA instanceof FakePlatform && objB instanceof PlayerModel) {
