@@ -93,6 +93,8 @@ public class Constants {
         public static final float PLANE_FREQUENCY = 1.0f; // Frequency of the sinusoidal movement
         public static final int PLANE_HORIZONTAL_SIGHT = 2;
         public static final int PLANE_VERTICAL_SIGHT = 10;
+        public static final float BOMB_WIDTH = 0.5f;
+        public static final float BOMB_HEIGHT = 0.25f;
         public static final float PLANE_BOMB_SPEED = 2f;
         public static final long PLANE_BOMB_RATE = 2000;
     }
