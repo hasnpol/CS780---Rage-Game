@@ -46,10 +46,13 @@ public class Entity {
 
     public Vector2 getMovementVector() {return movementVector;}
     public void setMovementVector(Vector2 movementVector) {
-        if (movementVector.y != 0) {this.state = State.JUMPING;}
-        else if (movementVector.x != 0) {this.state = State.RUNNING;}
-        else {this.state = State.IDLE;}
         this.movementVector = movementVector;
+        handleStateChange();
+    }
+
+    public void handleStateChange() {
+        if (this.movementVector.x != 0) {this.state = State.RUNNING;}
+        else {this.state = State.IDLE;}
     }
 
     public boolean isDead() {return this.state == State.DEAD;}

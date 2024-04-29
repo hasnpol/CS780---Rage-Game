@@ -155,7 +155,11 @@ public class PlayerModel extends DynamicEntity {
     public void setGrounded(boolean grounded) {
         DRAG = ((grounded)) ? 6f : 0.75f;
         this.grounded = grounded;
-        this.state = (!grounded)? State.JUMPING : (this.state == State.JUMPING)? State.IDLE : this.state;
+        if (!grounded) {
+            this.state = State.JUMPING;
+        } else {
+            handleStateChange();
+        }
     }
 
     public int getHealth() {return this.health;}
