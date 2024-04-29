@@ -67,7 +67,7 @@ public class View {
         if (model instanceof Bomb && model.isAttacking) {
             Bomb bomb;
             bomb = (Bomb) model;
-            if ((System.currentTimeMillis() - bomb.attackTime) == 200)
+            if ((System.currentTimeMillis() - bomb.attackTime) > 200)
             {
                 bomb.markedForDelete = true;
             }
