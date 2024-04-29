@@ -14,6 +14,7 @@ import java.util.UUID;
 public class Entity {
     /// This super class is used for game objects that has physics
     public final EntityType type;
+    public State state;
     private final Body body;
     protected float width;
     protected float height;
@@ -21,7 +22,6 @@ public class Entity {
     private Vector2 force;
     private Vector2 movementVector = new Vector2(0, 0);
     public boolean markedForDelete = false;
-    public boolean isAttacking = false;
     public long attackTime = System.currentTimeMillis();
 
     public Entity(Body body, EntityType type) {
@@ -29,6 +29,7 @@ public class Entity {
         this.force = new Vector2();
         this.id = UUID.randomUUID();
         this.type = type;
+        this.state = State.IDLE;
     }
     public void setForce(Vector2 forceVector) {
         this.force = forceVector;
@@ -43,18 +44,16 @@ public class Entity {
         this.body.applyForceToCenter(this.force, true);
     }
 
-    public void updatePosition(float dt) {
-        Vector2 posChange = this.movementVector.cpy().scl(PlayerConstants.speed * dt);
-        this.body.getPosition().add(posChange);
-    }
-
-    public Vector2 getMovementVector() {
-        return movementVector;
-    }
-
+    public Vector2 getMovementVector() {return movementVector;}
     public void setMovementVector(Vector2 movementVector) {
+        if (movementVector.y != 0) {this.state = State.JUMPING;}
+        else if (movementVector.x != 0) {this.state = State.RUNNING;}
+        else {this.state = State.IDLE;}
         this.movementVector = movementVector;
     }
+
+    public boolean isDead() {return this.state == State.DEAD;}
+    public boolean isAttacking() {return this.state == State.ATTACKING;}
 
     public boolean needsDeletion() {
         return this.markedForDelete;

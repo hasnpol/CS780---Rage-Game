@@ -1,14 +1,9 @@
 package com.ragegame.game.handlers.contactHandlers;
 
-import com.ragegame.game.objects.DynamicEntity.Bomb;
-import com.ragegame.game.objects.DynamicEntity.Coin;
-import com.ragegame.game.objects.DynamicEntity.Medal;
-
-import com.ragegame.game.objects.DynamicEntity.Enemy;
-import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.Entity;
-import com.ragegame.game.objects.DynamicEntity.Bullet;
+import com.ragegame.game.objects.DynamicEntity.*;
 import com.ragegame.game.objects.StaticEntity.Platform;
+import static com.ragegame.game.utils.Constants.*;
 
 import java.util.Objects;
 
@@ -85,7 +80,7 @@ public class PlayerContactHandler {
     }
 
     public void playerBombContact() {
-        playerModel.setHealth(-100);
+        playerModel.setHealth(-300);
     }
 
     public void enemyEndContact() {

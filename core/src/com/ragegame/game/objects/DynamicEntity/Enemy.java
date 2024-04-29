@@ -36,14 +36,6 @@ public class Enemy extends DynamicEntity {
         return position;
     }
 
-    public void updatePosition(float dt) {
-        Vector2 posChange = this.movementVector.cpy().scl(speed * dt);
-        this.position.add(posChange);
-        if (this.type == Constants.EntityType.ENEMY && this.type.getSubType() == Constants.EnemyConstants.EnemyType.DRONE) {
-            System.out.println("Could set direction here?: " + ((this.getDirection().getNum() == 1)? "Left": "right"));
-        }
-    }
-
     public Vector2 getMovementVector() {
         return movementVector;
     }

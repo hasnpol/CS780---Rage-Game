@@ -20,6 +20,7 @@ import com.ragegame.game.handlers.InputHandler;
 import com.ragegame.game.handlers.PhysicsHandler;
 import com.ragegame.game.map.Map;
 import com.ragegame.game.objects.Entity;
+import com.ragegame.game.utils.Constants;
 import com.ragegame.game.utils.HUD;
 
 import java.util.UUID;
@@ -46,8 +47,8 @@ public class GameScreen implements Screen {
         this.game = game;
 
         // Init Camera
-        this.screenWidth = Gdx.graphics.getWidth();
-        this.screenHeight =  Gdx.graphics.getHeight();
+        this.screenWidth = Constants.Game.WIDTH;
+        this.screenHeight =  Constants.Game.HEIGHT;
         this.camera = new OrthographicCamera(15, 15 * ((float) screenHeight / screenWidth));
         this.hud = new HUD(game.batch);
         this.cameraHandler = new CameraHandler(camera);
@@ -102,8 +103,7 @@ public class GameScreen implements Screen {
 		ScreenUtils.clear(0, 0, 0, 1);
 
 		// Handle camera logic so that camera follows player within gameMap bounds
-        if (!gameMap.playerModel.isDead())
-        {
+        if (!gameMap.playerModel.isDead()) {
             this.cameraHandler.snapToPlayer(gameMap.playerModel.getBody().getPosition(), gameMap.getWidth(), gameMap.getHeight());
         }
 

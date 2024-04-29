@@ -1,5 +1,8 @@
 package com.ragegame.game.handlers;
 
+import static com.ragegame.game.utils.Constants.*;
+import static com.ragegame.game.utils.Constants.EnemyConstants.*;
+
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -64,10 +67,13 @@ public class ContactHandler implements ContactListener {
             bullet.markedForDelete = true;
         }
 
-        if (objA instanceof Bomb && !(objB instanceof Plane) || objB instanceof Bomb && !(objA instanceof Plane)) {
+        if (objA instanceof Bomb || objB instanceof Bomb) {
             Bomb bomb = (Bomb) ((objA instanceof Bomb)? objA: objB);
-            bomb.isAttacking = true;
-            bomb.attackTime = System.currentTimeMillis();
+            Entity otherEntity = (objA instanceof Bomb)? objB: objA;
+            if (otherEntity.type != EntityType.RESOURCE && !(otherEntity instanceof Plane)) {
+                bomb.state = State.ATTACKING;
+                bomb.attackTime = System.currentTimeMillis();
+            }
         }
 
         if (objA instanceof FakePlatform && objB instanceof PlayerModel) {
@@ -89,7 +95,6 @@ public class ContactHandler implements ContactListener {
             HiddenPlatform hiddenPlatform = (HiddenPlatform) objB;
             hiddenPlatform.reveal();
         }
-
     }
 
     @Override

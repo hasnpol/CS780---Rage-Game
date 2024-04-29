@@ -93,15 +93,18 @@ public class Constants {
         public static final float PLANE_FREQUENCY = 1.0f; // Frequency of the sinusoidal movement
         public static final int PLANE_HORIZONTAL_SIGHT = 2;
         public static final int PLANE_VERTICAL_SIGHT = 10;
-        public static final float BOMB_WIDTH = 0.5f;
-        public static final float BOMB_HEIGHT = 0.25f;
+        public static final float BOMB_WIDTH = 0.375f;
+        public static final float BOMB_HEIGHT = 0.1875f;
         public static final float PLANE_BOMB_SPEED = 2f;
         public static final long PLANE_BOMB_RATE = 2000;
+                public static final float BOMB_EXPLODE_ANIMATION = 0.0415f;
+//        public static final float BOMB_EXPLODE_ANIMATION = 0.0115f;
+
     }
 
     public static class Game {
         public static final int HEIGHT = 1000;
-        public static final int WIDTH = 1000;
+        public static final int WIDTH = 2000;
         public static final float SCALE = 1;
     }
 }

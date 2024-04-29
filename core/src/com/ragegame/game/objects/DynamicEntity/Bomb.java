@@ -12,13 +12,9 @@ import static com.ragegame.game.utils.Constants.*;
 import com.ragegame.game.utils.FixtureDefinition;
 
 public class Bomb extends DynamicEntity {
-    public boolean hasBeenTouched;
-    public boolean hasExploded;
 
     public Bomb(Body body, SpriteBatch batch, Vector2 initialPos, Vector2 destination, float speed) {
         super(body, batch, EntityType.BOMB);
-        this.hasBeenTouched = false;
-        this.hasExploded = false;
         this.objectBox = (PolygonShape) new PolygonShape();
         ((PolygonShape) this.objectBox).setAsBox(BOMB_WIDTH * Game.SCALE,
                 BOMB_HEIGHT * Game.SCALE);
@@ -37,10 +33,16 @@ public class Bomb extends DynamicEntity {
     @Override
     public void draw(SpriteBatch batch, TextureRegion currentAnimationFrame,
                      float x_position, float y_position, float new_scale) {
-        float scale = (Game.SCALE/4);
-        if (! markedForDelete) {
-            batch.draw(currentAnimationFrame, x_position - scale, y_position - scale,
-                    Game.SCALE/2, Game.SCALE/2);
+        if (!markedForDelete) {
+            if (this.isAttacking()) {
+                float scale = (Game.SCALE*2);
+                batch.draw(currentAnimationFrame, x_position - (scale/2), y_position - (scale/4),
+                        scale, scale);
+            } else {
+                float scale = (Game.SCALE/3);
+                batch.draw(currentAnimationFrame, x_position - scale, y_position - (scale),
+                        scale * 2, scale*2);
+            }
         }
     }
 }

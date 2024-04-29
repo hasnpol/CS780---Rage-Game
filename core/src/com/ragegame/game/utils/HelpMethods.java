@@ -3,6 +3,7 @@ package com.ragegame.game.utils;
 
 import static com.ragegame.game.utils.Constants.EntityType.ENEMY;
 
+import com.ragegame.game.objects.DynamicEntity.DynamicEntity;
 import com.ragegame.game.utils.Constants.*;
 
 public class HelpMethods {

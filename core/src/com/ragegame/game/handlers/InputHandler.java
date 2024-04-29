@@ -14,29 +14,33 @@ public class InputHandler implements InputProcessor {
     }
     @Override
     public boolean keyDown(int keycode) {
-        if (keycode == Input.Keys.D) {
-            playerModel.move(Direction.RIGHT);
-            playerModel.setMovementVector(new Vector2(1, 0));
-        } else if (keycode == Input.Keys.A) {
-            playerModel.move(Direction.LEFT);
-            playerModel.setMovementVector(new Vector2(-1, 0));
-        } else if (keycode == Input.Keys.SPACE) {
-            playerModel.jumpStart();
-        } else if (keycode == Input.Keys.SHIFT_LEFT) {
-            playerModel.sprint();
+        if (!playerModel.isDead()) {
+            if (keycode == Input.Keys.D) {
+                playerModel.move(Direction.RIGHT);
+                playerModel.setMovementVector(new Vector2(1, 0));
+            } else if (keycode == Input.Keys.A) {
+                playerModel.move(Direction.LEFT);
+                playerModel.setMovementVector(new Vector2(-1, 0));
+            } else if (keycode == Input.Keys.SPACE) {
+                playerModel.jumpStart();
+            } else if (keycode == Input.Keys.SHIFT_LEFT) {
+                playerModel.sprint();
+            }
         }
         return false;
     }
     @Override
     public boolean keyUp(int keycode) {
-        if (keycode == Input.Keys.D || keycode == Input.Keys.A) {
-            playerModel.move(Direction.STOP);
-            playerModel.setMovementVector(new Vector2(0, 0));
-        } else if (keycode == Input.Keys.SPACE) {
-            playerModel.jumpEnd();
-            playerModel.setMovementVector(new Vector2(playerModel.getMovementVector().x, 1));
-        } else if (keycode == Input.Keys.SHIFT_LEFT) {
-            playerModel.sprint();
+        if (!playerModel.isDead()) {
+            if (keycode == Input.Keys.D || keycode == Input.Keys.A) {
+                playerModel.move(Direction.STOP);
+                playerModel.setMovementVector(new Vector2(0, 0));
+            } else if (keycode == Input.Keys.SPACE) {
+                playerModel.jumpEnd();
+                playerModel.setMovementVector(new Vector2(playerModel.getMovementVector().x, 1));
+            } else if (keycode == Input.Keys.SHIFT_LEFT) {
+                playerModel.sprint();
+            }
         }
         return false;
     }

@@ -8,7 +8,6 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.view.View;
-import com.ragegame.game.utils.Constants;
 import com.ragegame.game.utils.Constants.*;
 
 public class DynamicEntity extends Entity {
