@@ -22,6 +22,7 @@ public class UtilTypes {
             put(Constants.State.JUMPING, "");
             put(Constants.State.HIT, "");
             put(Constants.State.DEAD, "");
+            put(Constants.State.ATTACKING, "");
         }};
         SPRITE(String path, Map<Constants.State, String> stateList) {
             super(path, null);

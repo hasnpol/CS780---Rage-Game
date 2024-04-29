@@ -19,10 +19,11 @@ public class Entity {
     protected float height;
     private UUID id;
     private Vector2 force;
-
     private Vector2 movementVector = new Vector2(0, 0);
-
     public boolean markedForDelete = false;
+    public boolean isAttacking = false;
+    public long attackTime = System.currentTimeMillis();
+
     public Entity(Body body, EntityType type) {
         this.body = body;
         this.force = new Vector2();
