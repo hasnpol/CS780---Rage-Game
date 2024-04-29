@@ -36,4 +36,11 @@ public class HelpMethods {
                 return null;
         }
     }
+
+//    public static UtilTypes GetEndTextureAtlas(EntityType entityType) {
+//        switch (entityType) {
+//            case BOMB:
+//                return LoadSave.EnemySprite.BOMB_SPRITE;
+//        }
+//    }
 }
