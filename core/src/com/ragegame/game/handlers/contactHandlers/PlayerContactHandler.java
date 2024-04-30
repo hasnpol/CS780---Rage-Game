@@ -7,6 +7,7 @@ import com.ragegame.game.objects.DynamicEntity.Enemy;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.StaticEntity.Bullet;
+import com.ragegame.game.objects.StaticEntity.Goal;
 import com.ragegame.game.objects.StaticEntity.Platform;
 
 import java.util.Objects;
@@ -40,6 +41,9 @@ public class PlayerContactHandler {
         if (entity instanceof Medal) {
             playerMedalContact((Medal) entity);
         }
+        if (entity instanceof Goal) {
+            playerModel.atGoal = true;
+        }
     }
 
     public void endContact(Entity entity) {
@@ -49,6 +53,10 @@ public class PlayerContactHandler {
 
         if (entity instanceof Enemy) {
             enemyEndContact();
+        }
+
+        if (entity instanceof Goal) {
+            playerModel.atGoal = false;
         }
     }
 

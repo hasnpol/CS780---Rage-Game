@@ -147,6 +147,13 @@ public class GameScreen implements Screen {
         game.batch.setColor(Color.WHITE);
         game.batch.end();
 
+        if (gameMap.didWin()) {
+            game.account.setCurrency(gameMap.playerModel.getCoins());
+            game.account.flush();
+            game.changeScreen(new GameOver(game));
+            this.dispose();
+        }
+
         if (gameMap.playerModel.isDead()) {
             game.account.setCurrency(gameMap.playerModel.getCoins());
             game.account.flush();

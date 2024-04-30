@@ -17,7 +17,7 @@ public class Constants {
     public enum State { IDLE, RUNNING, JUMPING, HIT, DEAD, ATTACKING };
 
     public enum EntityType {
-        PLAYER(null), ENEMY(null), OBSTACLE(null), RESOURCE(null), COIN(null), MEDAL(null);;
+        PLAYER(null), ENEMY(null), OBSTACLE(null), RESOURCE(null), COIN(null), MEDAL(null), GOAL(null);
         private Object subType;
         EntityType(Object subType) {this.subType = subType;}
 
