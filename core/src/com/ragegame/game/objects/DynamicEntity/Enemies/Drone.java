@@ -34,7 +34,7 @@ public class Drone extends Enemy {
         entityFixture.shape = enemyBox;
         this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "body"));
 
-        enemyBox.setAsBox(DRONE_WIDTH * Game.SCALE, .02f,
+        enemyBox.setAsBox(DRONE_WIDTH * Game.SCALE, .05f,
                 new Vector2(0, (DRONE_HEIGHT + .05f) * Game.SCALE), 0);
         entityFixture.shape = enemyBox;
 

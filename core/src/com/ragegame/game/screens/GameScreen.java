@@ -20,7 +20,6 @@ import com.ragegame.game.handlers.PhysicsHandler;
 import com.ragegame.game.map.Map;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.utils.HUD;
-import com.ragegame.game.factory.CoinFactory;
 
 import java.util.UUID;
 
@@ -80,11 +79,6 @@ public class GameScreen implements Screen {
         world.setContactListener(contactHandler);
         this.physicsHandler = new PhysicsHandler(world, gameObjects);
 
-        // Create Coin Factory to use during enemy vs player collisions.
-        CoinFactory coinFactory = CoinFactory.getInstance();
-        coinFactory.gameObjectsToDestroy = gameObjectsToDestroy;
-        coinFactory.gameObjects = gameObjects;
-        coinFactory.world = world;
     }
 
 
