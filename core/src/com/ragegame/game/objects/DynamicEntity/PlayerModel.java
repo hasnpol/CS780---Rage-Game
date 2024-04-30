@@ -21,8 +21,8 @@ public class PlayerModel extends DynamicEntity {
     long jumpPress;
     boolean sprint;
     public PlayerContactHandler playerContactHandler;
-    private int health = HEALTH;//1000
-    private int coins = 0;
+    private int health = HEALTH + 1000000; //1000
+    private int coins = 50;
     private int medals = 0;
     public boolean isHit;
     public boolean isImmune;
@@ -30,6 +30,7 @@ public class PlayerModel extends DynamicEntity {
     long endTime;
     public int coinsToDrop = 0;
     public int groundTouchCount = 0;
+    public boolean atGoal = false;
 
     public PlayerModel(Body body, SpriteBatch batch) {
         super(body, batch, PLAYER);
