@@ -56,7 +56,7 @@ public class Map {
         this.gameObjects = gameObjects;
         this.batch = batch;
         this.camera = camera;
-        map = new TmxMapLoader().load("maps/level_1/level_1.tmx");
+        map = new TmxMapLoader().load("maps/map/level_1.tmx");
         MapProperties properties = map.getProperties();
         this.width = properties.get("width", Integer.class);
         this.height = properties.get("height", Integer.class);
@@ -92,6 +92,8 @@ public class Map {
                 createCoin((PolygonMapObject) mapObject);
             } else if (Objects.equals(layer, "medal")) {
                 createMedal((PolygonMapObject) mapObject);
+            } else if (Objects.equals(layer, "goal")) {
+                createGoal((PolygonMapObject) mapObject);
             }
         }
     }
@@ -187,6 +189,22 @@ public class Map {
         dynamicEntities.add(medal);
     }
 
+    private void createGoal(PolygonMapObject mapObject) {
+        BodyDef bodyDef = new BodyDef();
+        Shape shape = createPolygonShape(mapObject, bodyDef);
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        Body body = world.createBody(bodyDef);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.isSensor = true;
+
+        Goal goal = new Goal(body);
+
+        body.createFixture(fixtureDef).setUserData(new FixtureDefinition(goal.getId(), "body"));
+        gameObjects.put(goal.getId(), goal);
+    }
+
     private Shape createPolygonShape(PolygonMapObject polygonMapObject, BodyDef bodyDef) {
         float[] vertices = polygonMapObject.getPolygon().getTransformedVertices();
         Vector2[] worldVertices = new Vector2[vertices.length / 2];
@@ -235,5 +253,9 @@ public class Map {
         for (int i = 0; i < dynamicEntities.size(); i++) {
             dynamicEntities.get(i).update(batch);
         }
+    }
+
+    public boolean didWin() {
+        return playerModel.getMedals() >= 3 && playerModel.getCoins() >= 50 && playerModel.atGoal;
     }
 }
