@@ -68,6 +68,7 @@ public class Constants {
         public static final int GUNMEN_VERTICAL_SIGHT = 2;
         public static final float GUNMEN_BULLET_SPEED = 1f;
         public static final float GUNMEN_BULLET_RADIUS = 0.10f;
+        public static final float BULLET_ANIMATION = 0.0415f;
 
         // Values for BOAR
         public static final float BOAR_WIDTH = 0.5f;
@@ -89,15 +90,16 @@ public class Constants {
         public static final float PLANE_HEIGHT = 0.32f;
         public static final float PLANE_SPEED = 0.01f; // Drone speed
         public static final float PLANE_DENSITY = 0.25f; // Drone speed
-        public static final float PLANE_AMPLITUDE = 5.0f; // Amplitude of the sinusoidal movement
-        public static final float PLANE_FREQUENCY = 1.0f; // Frequency of the sinusoidal movement
+        public static final float PLANE_AMPLITUDE = 2.5f; // Amplitude of the sinusoidal movement
+        public static final float PLANE_FREQUENCY = 2.0f; // Frequency of the sinusoidal movement
         public static final int PLANE_HORIZONTAL_SIGHT = 2;
         public static final int PLANE_VERTICAL_SIGHT = 10;
         public static final float BOMB_WIDTH = 0.375f;
         public static final float BOMB_HEIGHT = 0.1875f;
-        public static final float PLANE_BOMB_SPEED = 2f;
-        public static final long PLANE_BOMB_RATE = 2000;
-                public static final float BOMB_EXPLODE_ANIMATION = 0.0415f;
+        public static final float PLANE_BOMB_SPEED = 1f;
+        public static final long PLANE_BOMB_RATE = 1000;
+        public static final float BOMB_EXPLODE_ANIMATION = 0.0415f;
+        public static final int BOMB_DAMAGE = -100;
 //        public static final float BOMB_EXPLODE_ANIMATION = 0.0115f;
 
     }

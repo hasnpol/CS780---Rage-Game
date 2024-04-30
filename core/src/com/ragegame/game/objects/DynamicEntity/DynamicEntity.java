@@ -39,9 +39,12 @@ public class DynamicEntity extends Entity {
         view.dispose();
     }
 
-    public void update(SpriteBatch batch) {}
+
+    public void update(SpriteBatch batch) {
+
+    }
 
     public void draw(SpriteBatch batch, TextureRegion currentAnimationFrame,
-                     float x_position, float y_position, float new_scale) {}
+                     float x_position, float y_position) {}
 
 }

@@ -39,9 +39,7 @@ public class Plane extends Enemy {
 
     @Override
     public void update(SpriteBatch batch) {
-        if (isDead) {
-            return;
-        }
+        if (isDead) {return;}
         float deltaTime = Gdx.graphics.getDeltaTime();
         PlayerModel player = PlayerModel.getPlayerModel();
         Vector2 playerPosition = new Vector2(player.getBody().getPosition());
@@ -50,7 +48,6 @@ public class Plane extends Enemy {
 
         // Applied the sinusoidal up and down "bounce" movement
         float sinusoidalVelocity = PLANE_AMPLITUDE * MathUtils.sin(MathUtils.PI2 * PLANE_FREQUENCY * elapsedTime);
-        getBody().applyForceToCenter(0, sinusoidalVelocity, true);
 
         Vector2 currentVelocity = getBody().getLinearVelocity();
         getBody().setLinearVelocity(currentVelocity.x, sinusoidalVelocity);
@@ -60,35 +57,29 @@ public class Plane extends Enemy {
         dronePosition.add(pursuitMovement);
         getBody().setTransform(dronePosition, 0); // sets the angle, could be used for a gun?
 
-        playerDirection = isPlayerInRange(PLANE_HORIZONTAL_SIGHT, PLANE_VERTICAL_SIGHT, getPosition());
+        this.setDirection((pursuitMovement.x > 0)? Direction.LEFT : Direction.RIGHT);
+
+        playerDirection = isPlayerInRange(PLANE_HORIZONTAL_SIGHT*2, PLANE_VERTICAL_SIGHT, dronePosition);
         if (playerDirection != Direction.STOP) {
-           dropBomb();
+            dropBomb(playerPosition);
+        }
+    }
+
+    public void dropBomb(Vector2 playerPosition) {
+        float offset = ((playerDirection == Direction.LEFT)) ? -0.5f : 0.5f;
+        long currentTime = System.currentTimeMillis();
+        Vector2 initalPosition = getPosition().add(offset, - .5f);
+        if (currentTime > nextShot) {
+            float xPush = initalPosition.x + ((playerDirection == Direction.LEFT)? -1: 1);
+            BombFactory.getInstance().createBomb(initalPosition, new Vector2(xPush, playerPosition.y));
+            nextShot = currentTime + PLANE_BOMB_RATE;
         }
     }
 
     @Override
     public void draw(SpriteBatch batch, TextureRegion currentAnimationFrame,
-                     float x_position, float y_position, float new_scale) {
+                     float x_position, float y_position) {
         batch.draw(currentAnimationFrame, x_position-Game.SCALE, y_position-(Game.SCALE/2),
                 Game.SCALE*2, Game.SCALE);
-    }
-
-    // Method to calculate the seek behavior towards the player
-    private Vector2 seek(Vector2 target, float deltaTime) {
-        Vector2 desired = target.sub(getBody().getPosition());
-        desired.setLength(PLANE_SPEED * deltaTime);
-        return desired;
-    }
-
-    public void dropBomb() {
-        PlayerModel playerModel = PlayerModel.getPlayerModel();
-        if (playerModel != null) {
-            float offset = ((playerDirection == Direction.LEFT)) ? -0.5f : 0.5f;
-            long currentTime = System.currentTimeMillis();
-            if (currentTime > nextShot) {
-                BombFactory.getInstance().createBomb(getPosition().add(offset, - .5f), playerModel.getBody().getPosition(), PLANE_BOMB_SPEED);
-                nextShot = currentTime + PLANE_BOMB_RATE;
-            }
-        }
     }
 }

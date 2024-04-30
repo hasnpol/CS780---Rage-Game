@@ -37,9 +37,6 @@ public class MainMenu implements Screen {
     private static final int PLAY_BUTTON_HEIGHT = 120;
     private static final int PLAY_BUTTON_Y = 230;
 
-    private int screen_w;
-    private int screen_h;
-
     final RageGame game;
     Texture playButtonActive;
     Texture playButtonInactive;
@@ -82,8 +79,6 @@ public class MainMenu implements Screen {
         TextButton quitButton = new TextButton("Quit", skin);
         table.add(quitButton);
         dialog.show(stage);
-        screen_h = Game.HEIGHT;
-        screen_w = Game.WIDTH;
 
         playButton.addListener(new ActorGestureListener() {
             @Override
@@ -118,7 +113,7 @@ public class MainMenu implements Screen {
         screenViewport.apply();
         stage.act();
         stage.getBatch().begin();
-        stage.getBatch().draw(background, 0, 0, screen_w*2, screen_h*2);
+        stage.getBatch().draw(background, 0, 0, Game.WIDTH*2, Game.HEIGHT*2);
         stage.getBatch().end();
         stage.draw();
 
@@ -132,19 +127,13 @@ public class MainMenu implements Screen {
     }
 
     @Override
-    public void pause() {
-
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-
-    }
+    public void resume() {}
 
     @Override
-    public void hide() {
-
-    }
+    public void hide() {}
 
     @Override
     public void dispose() {

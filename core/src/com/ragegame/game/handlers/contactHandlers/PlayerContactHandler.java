@@ -1,5 +1,7 @@
 package com.ragegame.game.handlers.contactHandlers;
 
+import static com.ragegame.game.utils.Constants.EnemyConstants.*;
+
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.DynamicEntity.*;
 import com.ragegame.game.objects.StaticEntity.Platform;
@@ -80,7 +82,7 @@ public class PlayerContactHandler {
     }
 
     public void playerBombContact() {
-        playerModel.setHealth(-300);
+        playerModel.setHealth(BOMB_DAMAGE);
     }
 
     public void enemyEndContact() {

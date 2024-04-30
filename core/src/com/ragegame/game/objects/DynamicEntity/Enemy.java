@@ -30,7 +30,7 @@ public class Enemy extends DynamicEntity {
 
     @Override
     public void draw(SpriteBatch batch, TextureRegion currentAnimationFrame,
-                     float x_position, float y_position, float new_scale) {}
+                     float x_position, float y_position) {}
 
     public Vector2 getPosition() {
         return position;

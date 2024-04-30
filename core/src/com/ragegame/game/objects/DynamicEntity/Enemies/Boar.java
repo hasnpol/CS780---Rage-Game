@@ -38,7 +38,7 @@ public class Boar extends Enemy {
 
     @Override
     public void draw(SpriteBatch batch, TextureRegion currentAnimationFrame,
-                     float x_position, float y_position, float new_scale) {
+                     float x_position, float y_position) {
         float scale = (Game.SCALE/2);
         batch.draw(currentAnimationFrame, x_position - scale, y_position - scale,
                 Game.SCALE, Game.SCALE);

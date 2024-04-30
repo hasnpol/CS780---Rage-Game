@@ -1,6 +1,7 @@
 package com.ragegame.game.factory;
 
-import static com.ragegame.game.utils.Constants.EnemyConstants.PLANE_HEIGHT;
+import static com.ragegame.game.utils.Constants.*;
+import static com.ragegame.game.utils.Constants.EnemyConstants.*;
 import static com.ragegame.game.utils.Constants.EnemyConstants.PLANE_WIDTH;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,7 +16,6 @@ import com.ragegame.game.objects.DynamicEntity.Bullet;
 import com.ragegame.game.objects.DynamicEntity.DynamicEntity;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.DynamicEntity.Bomb;
-import com.ragegame.game.utils.Constants;
 import com.ragegame.game.utils.FixtureDefinition;
 
 import java.util.ArrayList;
@@ -38,13 +38,13 @@ public class BombFactory {
 
     private BombFactory() {}
 
-    public void createBomb(Vector2 initialPos, Vector2 destination, float speed) {
+    public void createBomb(Vector2 initialPos, Vector2 destination) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.gravityScale = .1f;
         bodyDef.position.set(initialPos);
         Body body = world.createBody(bodyDef);
-        Bomb bomb = new Bomb(body, batch, initialPos, destination, speed);
+        Bomb bomb = new Bomb(body, batch, initialPos, destination);
         gameObjects.put(bomb.getId(), bomb);
 
         ((PolygonShape) bomb.objectBox).dispose();
