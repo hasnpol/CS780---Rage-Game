@@ -6,6 +6,7 @@ import com.ragegame.game.objects.DynamicEntity.Projectiles.Bomb;
 import com.ragegame.game.objects.DynamicEntity.Projectiles.Bullet;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.DynamicEntity.*;
+import com.ragegame.game.objects.StaticEntity.Goal;
 import com.ragegame.game.objects.StaticEntity.Platform;
 
 import java.util.Objects;
@@ -20,33 +21,24 @@ public class PlayerContactHandler {
     }
 
     public void startContact(Entity entity) {
-        if (entity instanceof Platform) {
-            platformStartContact();
-        }
-        if (entity instanceof Enemy) {
-            enemyStartContact((Enemy) entity);
-        }
-        if (entity instanceof Bullet) {
-            playerBulletContact();
-        }
-        if (entity instanceof Coin) {
-            coinStartContact((Coin) entity);
-        }
-        if (entity instanceof Medal) {
-            playerMedalContact((Medal) entity);
-        }
-        if (entity instanceof Bomb) {
-            playerBombContact();
+        if (entity instanceof Platform) platformStartContact();
+        if (entity instanceof Enemy) enemyStartContact((Enemy) entity);
+        if (entity instanceof Bullet) playerBulletContact();
+        if (entity instanceof Coin) coinStartContact((Coin) entity);
+        if (entity instanceof Medal) playerMedalContact((Medal) entity);
+        if (entity instanceof Bomb) playerBombContact();
+
+        if (entity instanceof Goal) {
+            playerModel.atGoal = true;
         }
     }
 
     public void endContact(Entity entity) {
-        if (entity instanceof Platform) {
-            platformEndContact();
-        }
+        if (entity instanceof Platform) platformEndContact();
+        if (entity instanceof Enemy) enemyEndContact();
 
-        if (entity instanceof Enemy) {
-            enemyEndContact();
+        if (entity instanceof Goal) {
+            playerModel.atGoal = false;
         }
     }
 

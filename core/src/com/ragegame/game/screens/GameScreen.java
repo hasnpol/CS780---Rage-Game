@@ -109,7 +109,7 @@ public class GameScreen implements Screen {
 
 		// Draw the background
         game.batch.begin();
-        this.backgroundHandler.render(dt, game.batch, RageGame.V_Width, RageGame.V_Height, gameMap.getPPM());
+        this.backgroundHandler.render(dt, game.batch, RageGame.V_Width + 200, RageGame.V_Height + 200, gameMap.getPPM());
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.end(); // doing this so that the background is drawn before gameMap don't change this
 
@@ -142,10 +142,17 @@ public class GameScreen implements Screen {
             game.batch.setColor(Color.RED);
         }
 
-        game.batch.draw(blank, 20, 190, (RageGame.V_Width *
-                ((float) gameMap.playerModel.getHealth() / 1000))/10, 5);
+        game.batch.draw(blank, 20, 390, (RageGame.V_Width *
+                ((float) gameMap.playerModel.getHealth() / 1000))/10, 10);
         game.batch.setColor(Color.WHITE);
         game.batch.end();
+
+        if (gameMap.didWin()) {
+            game.account.setCurrency(gameMap.playerModel.getCoins());
+            game.account.flush();
+            game.changeScreen(new GameOver(game));
+            this.dispose();
+        }
 
         if (gameMap.playerModel.isDead()) {
             game.account.setCurrency(gameMap.playerModel.getCoins());
