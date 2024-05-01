@@ -22,26 +22,26 @@ public class HelpMethods {
                     default:
                         return LoadSave.EnemySprite.SOLDIER_SPRITE;
                 }
-            case BULLET:
-                return LoadSave.EnemySprite.BULLET;
-            case BOMB:
-                return LoadSave.EnemySprite.BOMB_SPRITE;
             case RESOURCE:
                 switch ((ResourceConstants.ResType) entityType.getSubType()) {
                     case COIN:
-                        return LoadSave.COIN_SPRITE;
+                        return LoadSave.ResourceSprite.COIN_SPRITE;
+                    case MEDAL:
+                        return LoadSave.ResourceSprite.MEDAL_SPRITE;
                     default:
-                        return LoadSave.COIN_SPRITE;
+                        return null;
+                }
+            case PROJECTILE:
+                switch ((EnemyConstants.ProjectileType) entityType.getSubType()) {
+                    case BOMB:
+                        return LoadSave.EnemySprite.BOMB_SPRITE;
+                    case BULLET:
+                        return LoadSave.EnemySprite.BULLET;
+                    default:
+                        return null;
                 }
             default:
                 return null;
         }
     }
-
-//    public static UtilTypes GetEndTextureAtlas(EntityType entityType) {
-//        switch (entityType) {
-//            case BOMB:
-//                return LoadSave.EnemySprite.BOMB_SPRITE;
-//        }
-//    }
 }

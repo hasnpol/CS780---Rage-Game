@@ -2,8 +2,8 @@ package com.ragegame.game.objects.view;
 
 import static com.ragegame.game.utils.Constants.*;
 import static com.ragegame.game.utils.Constants.EnemyConstants.*;
+import static com.ragegame.game.utils.Constants.ResourceConstants.*;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,6 +12,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.ragegame.game.objects.DynamicEntity.*;
 import com.ragegame.game.objects.DynamicEntity.Enemies.Plane;
+import com.ragegame.game.objects.DynamicEntity.Projectiles.Bomb;
+import com.ragegame.game.objects.DynamicEntity.Projectiles.Bullet;
 import com.ragegame.game.utils.HelpMethods;
 import com.ragegame.game.utils.UtilTypes;
 
@@ -68,6 +70,12 @@ public class View {
             }
         }
 
+        if (model instanceof Bullet) {
+            if (model.getBody().getGravityScale() != 0) {
+                int x = 0;
+            }
+        }
+
         // FIXME when this is removed, and a coin is collected, enemies will fire coins?????
         if (model instanceof Coin) {
             Coin coin;
@@ -90,11 +98,11 @@ public class View {
         } else if (model instanceof Bullet) {
             int bullet_time = (int) (stateTime / BULLET_ANIMATION) % 6;
             currentAnimationFrame = (TextureRegion) currentAnimation.getKeyFrame(bullet_time, true);
+        } else if (model instanceof Medal) {
+            int medal_time = (int) (stateTime / MEDAL_ANIMATION) % 20;
+            currentAnimationFrame = (TextureRegion) currentAnimation.getKeyFrame(medal_time, true);
         } else {
             currentAnimationFrame = (TextureRegion) currentAnimation.getKeyFrame(stateTime, true);
-        }
-        if (model instanceof Plane) {
-            int x = 0;
         }
         if (currentAnimationFrame.isFlipX() != shouldFlip) {// Flip horizontally without flipping vertically
             currentAnimationFrame.flip(true, false);

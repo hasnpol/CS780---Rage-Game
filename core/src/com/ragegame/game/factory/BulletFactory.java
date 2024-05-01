@@ -5,13 +5,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.ragegame.game.objects.DynamicEntity.DynamicEntity;
 import com.ragegame.game.objects.Entity;
-import com.ragegame.game.objects.DynamicEntity.Bullet;
-import com.ragegame.game.utils.FixtureDefinition;
+import com.ragegame.game.objects.DynamicEntity.Projectiles.Bullet;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -39,10 +37,11 @@ public class BulletFactory {
         bodyDef.gravityScale = 0;
         bodyDef.position.set(initialPos);
         Body body = world.createBody(bodyDef);
+        body.setGravityScale(0);
         Bullet bullet = new Bullet(body, batch, initialPos, destination);
         gameObjects.put(bullet.getId(), bullet);
 
-        ((CircleShape) bullet.objectBox).dispose();
         dynamicEntities.add(bullet);
+        ((CircleShape) bullet.objectBox).dispose();
     }
 }

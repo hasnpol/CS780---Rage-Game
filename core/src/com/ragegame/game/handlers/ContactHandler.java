@@ -1,7 +1,6 @@
 package com.ragegame.game.handlers;
 
 import static com.ragegame.game.utils.Constants.*;
-import static com.ragegame.game.utils.Constants.EnemyConstants.*;
 
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -10,11 +9,11 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.ragegame.game.objects.DynamicEntity.Bomb;
+import com.ragegame.game.objects.DynamicEntity.Projectiles.Bomb;
 import com.ragegame.game.objects.DynamicEntity.Enemies.Plane;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.DynamicEntity.PlayerModel;
-import com.ragegame.game.objects.DynamicEntity.Bullet;
+import com.ragegame.game.objects.DynamicEntity.Projectiles.Bullet;
 import com.ragegame.game.objects.StaticEntity.FakePlatform;
 import com.ragegame.game.objects.StaticEntity.HiddenPlatform;
 import com.ragegame.game.utils.FixtureDefinition;

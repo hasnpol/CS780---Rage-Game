@@ -1,6 +1,6 @@
-package com.ragegame.game.objects.DynamicEntity;
+package com.ragegame.game.objects.DynamicEntity.Projectiles;
 
-import static com.ragegame.game.utils.Constants.EnemyConstants.*;;
+import static com.ragegame.game.utils.Constants.EnemyConstants.*;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -10,12 +10,14 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import static com.ragegame.game.utils.Constants.*;
+
+import com.ragegame.game.objects.DynamicEntity.Projectile;
 import com.ragegame.game.utils.FixtureDefinition;
 
-public class Bomb extends DynamicEntity {
+public class Bomb extends Projectile {
 
     public Bomb(Body body, SpriteBatch batch, Vector2 initialPos, Vector2 destination) {
-        super(body, batch, EntityType.BOMB);
+        super(body, batch, ProjectileType.BOMB);
         this.objectBox = (PolygonShape) new PolygonShape();
         ((PolygonShape) this.objectBox).setAsBox(BOMB_WIDTH * Game.SCALE, BOMB_HEIGHT * Game.SCALE);
         entityFixture.density = 0;
@@ -24,14 +26,9 @@ public class Bomb extends DynamicEntity {
         this.getBody().setLinearVelocity(getVelocity(initialPos, destination, PLANE_BOMB_SPEED));
     }
 
-    public Vector2 getVelocity(Vector2 initial, Vector2 destination, float speed) {
-        return new Vector2((destination.x - initial.x) * speed, (destination.y - initial.y) * speed);
-    }
-
     @Override
     public void update(SpriteBatch batch) {
         this.setDirection((this.getBody().getLinearVelocity().x > 0)? Direction.LEFT : Direction.RIGHT);
-        this.getBody().applyForceToCenter(0, -4.90f, true);
     }
 
     @Override

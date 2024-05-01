@@ -74,12 +74,20 @@ public class LoadSave {
         );
     }
 
-    public static final COLLECTABLE COIN_SPRITE = new COLLECTABLE("sprites/coin_move.txt",
-            new ArrayList<String>() {{
-                add("coin");
-                add("coin_shiny");
-            }}
-    );
+    public static class ResourceSprite {
+        public static final COLLECTABLE COIN_SPRITE = new COLLECTABLE("sprites/coin_move.txt",
+                new ArrayList<String>() {{
+                    add("coin");
+                    add("coin_shiny");
+                }}
+        );
+
+        public static final COLLECTABLE MEDAL_SPRITE = new COLLECTABLE("sprites/textureatlas_medal.txt",
+                new ArrayList<String>() {{
+                    add("medal");
+                }}
+        );
+    }
 
     public static final String[] SNIPER_SPRITE = {"sprites/textureatlas_boar.txt",
             "boar_right_idle", "boar_left_idle"};

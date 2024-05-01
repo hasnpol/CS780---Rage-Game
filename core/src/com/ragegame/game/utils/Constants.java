@@ -12,12 +12,11 @@ public class Constants {
         RIGHT(0), LEFT(1), STOP(2);
         private final int num;
         Direction(int code) {this.num = code;}
-        public int getNum() {return this.num;}
     }
     public enum State { IDLE, RUNNING, JUMPING, HIT, DEAD, ATTACKING };
 
     public enum EntityType {
-        PLAYER(null), ENEMY(null), OBSTACLE(null), RESOURCE(null), MEDAL(null), BULLET(null), BOMB(null);
+        PLAYER(null), ENEMY(null), OBSTACLE(null), RESOURCE(null), PROJECTILE(null), MEDAL(null);
         private Object subType;
         EntityType(Object subType) {this.subType = subType;}
 
@@ -26,10 +25,6 @@ public class Constants {
             return this;
         }
         public Object getSubType() {return subType;}
-        public boolean isSubType(Object type) {
-            return (this.subType == null && this == type) // This SHOULD only happen in instance of Player type
-                    || (this.subType != null && this.subType == type);
-        }
         @Override
         public String toString() {
             return this.name()+": "+this.getSubType();
@@ -53,11 +48,15 @@ public class Constants {
         public enum ResType {COIN, MEDAL}
         public static final float COIN_RADIUS = .2f;
         public static final float COIN_DENSITY = 0;
+
+        public static final float MEDAL_RADIUS = 0.5f;
+        public static final float MEDAL_ANIMATION = 0.2f;
     }
 
     public static class EnemyConstants {
         // Enum Enemy Type
-        public enum EnemyType {SOLDIER, BOAR, DRONE, PLANE, BULLET}
+        public enum EnemyType {SOLDIER, BOAR, DRONE, PLANE}
+        public enum ProjectileType {BULLET, BOMB}
 
         // Values for SOLDIER
         public static final float SOLDIER_WIDTH = 0.18f;
