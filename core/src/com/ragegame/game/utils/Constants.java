@@ -12,12 +12,11 @@ public class Constants {
         RIGHT(0), LEFT(1), STOP(2);
         private final int num;
         Direction(int code) {this.num = code;}
-        public int getNum() {return this.num;}
     }
     public enum State { IDLE, RUNNING, JUMPING, HIT, DEAD, ATTACKING };
 
     public enum EntityType {
-        PLAYER(null), ENEMY(null), OBSTACLE(null), RESOURCE(null), COIN(null), MEDAL(null), BULLET(null), GOAL(null);
+        PLAYER(null), ENEMY(null), OBSTACLE(null), RESOURCE(null), PROJECTILE(null), MEDAL(null), GOAL(null);
         private Object subType;
         EntityType(Object subType) {this.subType = subType;}
 
@@ -26,10 +25,6 @@ public class Constants {
             return this;
         }
         public Object getSubType() {return subType;}
-        public boolean isSubType(Object type) {
-            return (this.subType == null && this == type) // This SHOULD only happen in instance of Player type
-                    || (this.subType != null && this.subType == type);
-        }
         @Override
         public String toString() {
             return this.name()+": "+this.getSubType();
@@ -53,17 +48,26 @@ public class Constants {
         public enum ResType {COIN, MEDAL}
         public static final float COIN_RADIUS = .2f;
         public static final float COIN_DENSITY = 0;
+
+        public static final float MEDAL_RADIUS = 0.5f;
+        public static final float MEDAL_ANIMATION = 0.2f;
     }
 
     public static class EnemyConstants {
         // Enum Enemy Type
         public enum EnemyType {SOLDIER, BOAR, DRONE, PLANE}
+        public enum ProjectileType {BULLET, BOMB}
 
         // Values for SOLDIER
         public static final float SOLDIER_WIDTH = 0.18f;
         public static final float SOLDIER_HEIGHT = 0.45f;
         public static final float SOLDIER_DENSITY = 2f;
         public static final float SOLDIER_FRICTION = 1;
+        public static final int GUNMEN_HORIZONTAL_SIGHT = 7;
+        public static final int GUNMEN_VERTICAL_SIGHT = 2;
+        public static final float GUNMEN_BULLET_SPEED = 1f;
+        public static final float GUNMEN_BULLET_RADIUS = 0.10f;
+        public static final float BULLET_ANIMATION = 0.0415f;
 
         // Values for BOAR
         public static final float BOAR_WIDTH = 0.5f;
@@ -85,13 +89,23 @@ public class Constants {
         public static final float PLANE_HEIGHT = 0.32f;
         public static final float PLANE_SPEED = 0.01f; // Drone speed
         public static final float PLANE_DENSITY = 0.25f; // Drone speed
-        public static final float PLANE_AMPLITUDE = 5.0f; // Amplitude of the sinusoidal movement
-        public static final float PLANE_FREQUENCY = 1.0f; // Frequency of the sinusoidal movement
+        public static final float PLANE_AMPLITUDE = 2.5f; // Amplitude of the sinusoidal movement
+        public static final float PLANE_FREQUENCY = 2.0f; // Frequency of the sinusoidal movement
+        public static final int PLANE_HORIZONTAL_SIGHT = 2;
+        public static final int PLANE_VERTICAL_SIGHT = 10;
+        public static final float BOMB_WIDTH = 0.375f;
+        public static final float BOMB_HEIGHT = 0.1875f;
+        public static final float PLANE_BOMB_SPEED = 1f;
+        public static final long PLANE_BOMB_RATE = 1000;
+        public static final float BOMB_EXPLODE_ANIMATION = 0.0415f;
+        public static final int BOMB_DAMAGE = -100;
+//        public static final float BOMB_EXPLODE_ANIMATION = 0.0115f;
+
     }
 
     public static class Game {
-        public static final int HEIGHT = 800;
-        public static final int WIDTH = 1000;
+        public static final int HEIGHT = 1000;
+        public static final int WIDTH = 2000;
         public static final float SCALE = 1;
     }
 }

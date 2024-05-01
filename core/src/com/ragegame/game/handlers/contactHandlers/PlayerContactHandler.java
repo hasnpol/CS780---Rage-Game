@@ -1,13 +1,12 @@
 package com.ragegame.game.handlers.contactHandlers;
 
-import com.ragegame.game.objects.DynamicEntity.Coin;
-import com.ragegame.game.objects.DynamicEntity.Medal;
+import static com.ragegame.game.utils.Constants.EnemyConstants.*;
 
-import com.ragegame.game.objects.DynamicEntity.Enemy;
-import com.ragegame.game.objects.DynamicEntity.PlayerModel;
+import com.ragegame.game.objects.DynamicEntity.Projectiles.Bomb;
+import com.ragegame.game.objects.DynamicEntity.Projectiles.Bullet;
 import com.ragegame.game.objects.Entity;
+import com.ragegame.game.objects.DynamicEntity.*;
 import com.ragegame.game.objects.StaticEntity.Goal;
-import com.ragegame.game.objects.DynamicEntity.Bullet;
 import com.ragegame.game.objects.StaticEntity.Platform;
 
 import java.util.Objects;
@@ -22,38 +21,21 @@ public class PlayerContactHandler {
     }
 
     public void startContact(Entity entity) {
+        if (entity instanceof Platform) platformStartContact();
+        if (entity instanceof Enemy) enemyStartContact((Enemy) entity);
+        if (entity instanceof Bullet) playerBulletContact();
+        if (entity instanceof Coin) coinStartContact((Coin) entity);
+        if (entity instanceof Medal) playerMedalContact((Medal) entity);
+        if (entity instanceof Bomb) playerBombContact();
 
-
-        if (entity instanceof Platform) {
-            platformStartContact();
-        }
-
-        if (entity instanceof Enemy) {
-            enemyStartContact((Enemy) entity);
-        }
-
-        if (entity instanceof Bullet) {
-            playerBulletContact();
-        }
-        if (entity instanceof Coin) {
-            coinStartContact((Coin) entity);
-        }
-        if (entity instanceof Medal) {
-            playerMedalContact((Medal) entity);
-        }
         if (entity instanceof Goal) {
             playerModel.atGoal = true;
         }
     }
 
     public void endContact(Entity entity) {
-        if (entity instanceof Platform) {
-            platformEndContact();
-        }
-
-        if (entity instanceof Enemy) {
-            enemyEndContact();
-        }
+        if (entity instanceof Platform) platformEndContact();
+        if (entity instanceof Enemy) enemyEndContact();
 
         if (entity instanceof Goal) {
             playerModel.atGoal = false;
@@ -83,15 +65,17 @@ public class PlayerContactHandler {
     }
 
     public void playerBulletContact() {
-        playerModel.setCoins((int) (-playerModel.getCoins() * .1));
         playerModel.setHealth(-100);
-        playerModel.getBody().getPosition().y = -10;
     }
 
     public void playerMedalContact(Medal collectable) {
         playerModel.setMedal(1);
         playerModel.voidRestoreHealth();
         collectable.setCollected();
+    }
+
+    public void playerBombContact() {
+        playerModel.setHealth(BOMB_DAMAGE);
     }
 
     public void enemyEndContact() {

@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.ragegame.game.RageGame;
+import com.ragegame.game.factory.BombFactory;
 import com.ragegame.game.factory.BulletFactory;
 import com.ragegame.game.handlers.BackgroundHandler;
 import com.ragegame.game.handlers.CameraHandler;
@@ -19,6 +20,7 @@ import com.ragegame.game.handlers.InputHandler;
 import com.ragegame.game.handlers.PhysicsHandler;
 import com.ragegame.game.map.Map;
 import com.ragegame.game.objects.Entity;
+import com.ragegame.game.utils.Constants;
 import com.ragegame.game.utils.HUD;
 
 import java.util.UUID;
@@ -45,8 +47,8 @@ public class GameScreen implements Screen {
         this.game = game;
 
         // Init Camera
-        this.screenWidth = Gdx.graphics.getWidth();
-        this.screenHeight =  Gdx.graphics.getHeight();
+        this.screenWidth = Constants.Game.WIDTH;
+        this.screenHeight =  Constants.Game.HEIGHT;
         this.camera = new OrthographicCamera(15, 15 * ((float) screenHeight / screenWidth));
         this.hud = new HUD(game.batch);
         this.cameraHandler = new CameraHandler(camera);
@@ -72,6 +74,11 @@ public class GameScreen implements Screen {
         bulletFactory.gameObjects = gameObjects;
         bulletFactory.world = world;
 
+        BombFactory bombFactory = BombFactory.getInstance();
+        bombFactory.gameObjectsToDestroy = gameObjectsToDestroy;
+        bombFactory.gameObjects = gameObjects;
+        bombFactory.world = world;
+
         // Handle InputProcessor and Contact Listener and Physics Handler
         InputHandler inputHandler = new InputHandler(gameMap.playerModel);
         Gdx.input.setInputProcessor(inputHandler);
@@ -96,8 +103,7 @@ public class GameScreen implements Screen {
 		ScreenUtils.clear(0, 0, 0, 1);
 
 		// Handle camera logic so that camera follows player within gameMap bounds
-        if (!gameMap.playerModel.isDead())
-        {
+        if (!gameMap.playerModel.isDead()) {
             this.cameraHandler.snapToPlayer(gameMap.playerModel.getBody().getPosition(), gameMap.getWidth(), gameMap.getHeight());
         }
 

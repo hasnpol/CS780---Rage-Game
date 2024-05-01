@@ -1,6 +1,9 @@
 
 package com.ragegame.game.utils;
 
+import static com.ragegame.game.utils.Constants.EntityType.ENEMY;
+
+import com.ragegame.game.objects.DynamicEntity.DynamicEntity;
 import com.ragegame.game.utils.Constants.*;
 
 public class HelpMethods {
@@ -22,9 +25,20 @@ public class HelpMethods {
             case RESOURCE:
                 switch ((ResourceConstants.ResType) entityType.getSubType()) {
                     case COIN:
-                        return LoadSave.COIN_SPRITE;
+                        return LoadSave.ResourceSprite.COIN_SPRITE;
+                    case MEDAL:
+                        return LoadSave.ResourceSprite.MEDAL_SPRITE;
                     default:
-                        return LoadSave.COIN_SPRITE;
+                        return null;
+                }
+            case PROJECTILE:
+                switch ((EnemyConstants.ProjectileType) entityType.getSubType()) {
+                    case BOMB:
+                        return LoadSave.EnemySprite.BOMB_SPRITE;
+                    case BULLET:
+                        return LoadSave.EnemySprite.BULLET;
+                    default:
+                        return null;
                 }
             default:
                 return null;

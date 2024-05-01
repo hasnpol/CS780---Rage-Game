@@ -12,6 +12,7 @@ import static com.ragegame.game.utils.Constants.EntityType.*;
 
 public class Enemy extends DynamicEntity {
     public PolygonShape enemyBox;
+    public Direction playerDirection;
 
     private Vector2 position;
     private int health = 100;
@@ -22,24 +23,17 @@ public class Enemy extends DynamicEntity {
 
     public Enemy(Body body, SpriteBatch batch, EnemyConstants.EnemyType enemyType) {
         super(body, batch, ENEMY.SubType(enemyType));
+        playerDirection = Direction.STOP;
         this.enemyBox = new PolygonShape();
         this.position = body.getPosition();
     }
 
     @Override
     public void draw(SpriteBatch batch, TextureRegion currentAnimationFrame,
-                     float x_position, float y_position, float new_scale) {}
+                     float x_position, float y_position) {}
 
     public Vector2 getPosition() {
         return position;
-    }
-
-    public void updatePosition(float dt) {
-        Vector2 posChange = this.movementVector.cpy().scl(speed * dt);
-        this.position.add(posChange);
-        if (this.type == Constants.EntityType.ENEMY && this.type.getSubType() == Constants.EnemyConstants.EnemyType.DRONE) {
-            System.out.println("Could set direction here?: " + ((this.getDirection().getNum() == 1)? "Left": "right"));
-        }
     }
 
     public Vector2 getMovementVector() {
@@ -56,18 +50,18 @@ public class Enemy extends DynamicEntity {
         this.markedForDelete = true;
     }
 
-    public static int isPlayerInRange(int horizontal, int vertical, Vector2 position) {
+    public static Direction isPlayerInRange(int horizontal, int vertical, Vector2 position) {
         PlayerModel playerModel = PlayerModel.getPlayerModel();
         if (playerModel != null) {
             if (Math.abs(playerModel.getBody().getPosition().x - position.x) < horizontal && Math.abs(playerModel.getBody().getPosition().y - position.y) < vertical) {
                 if (playerModel.getBody().getPosition().x > position.x) {
-                    return 6;
+                    return Direction.RIGHT;
                 } else {
-                    return 4;
+                    return Direction.LEFT;
                 }
             }
         }
-        return 0;
+        return Direction.STOP;
     }
 
     public void update(float dt) {

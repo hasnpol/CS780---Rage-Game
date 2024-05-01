@@ -63,10 +63,9 @@ public class PlayerModel extends DynamicEntity {
 
     @Override
     public void draw(SpriteBatch batch, TextureRegion currentAnimationFrame,
-                     float x_position, float y_position, float new_scale) {
-        float scale = (Game.SCALE/2) * new_scale;
-        batch.draw(currentAnimationFrame, x_position - scale, y_position - scale,
-                Game.SCALE * new_scale, Game.SCALE * new_scale);
+                     float x_position, float y_position) {
+        float scale = (Game.SCALE/2);
+        batch.draw(currentAnimationFrame, x_position - scale, y_position - scale, Game.SCALE, Game.SCALE);
     }
 
     public void setPlayerContactHandler() {
@@ -80,7 +79,7 @@ public class PlayerModel extends DynamicEntity {
     // Look at your numpad for values for directions.
     // This is called numpad notation btw and is common in fighting game discourse
     public void move(Direction direction) {
-        if (isDead()) return;
+        if (this.isDead()) return;
         stop = direction == Direction.STOP;
         switch (direction) {
             case RIGHT:
@@ -101,12 +100,10 @@ public class PlayerModel extends DynamicEntity {
     }
 
     public void jumpStart() {
-        if (isDead()) return;
         jumpPress = System.currentTimeMillis();
     }
 
     public void jumpEnd() {
-        if (isDead()) return;
         if (grounded) {
             getBody().applyLinearImpulse(new Vector2(0,  Math.min(8.1f, (System.currentTimeMillis() - jumpPress) * 0.01f)),
                     getBody().getPosition(), true);
@@ -121,7 +118,8 @@ public class PlayerModel extends DynamicEntity {
     public void update(SpriteBatch batch) {
         playerModel.setGrounded(playerModel.groundTouchCount > 0);
 
-        if (playerModel.isDead()) {
+        Vector2 curPosition = playerModel.getBody().getPosition();
+        if ((curPosition.x < -0.5 || curPosition.y < 0) || this.isDead()) {
             playerModel.kill();
             return;
         }
@@ -157,11 +155,14 @@ public class PlayerModel extends DynamicEntity {
     public void setGrounded(boolean grounded) {
         DRAG = ((grounded)) ? 6f : 0.75f;
         this.grounded = grounded;
+        if (!grounded) {
+            this.state = State.JUMPING;
+        } else {
+            handleStateChange();
+        }
     }
 
-    public int getHealth() {
-        return this.health;
-    }
+    public int getHealth() {return this.health;}
 
     public void voidRestoreHealth() {
         this.health = 1000;
@@ -172,10 +173,7 @@ public class PlayerModel extends DynamicEntity {
            negative value for decrementing health
         */
         this.health += value;
-    }
-
-    public boolean isDead() {
-        return getHealth() <= 0 || getBody().getPosition().y < 0;
+        if (this.health <= 0) this.kill();
     }
 
     public int getCoins() {
@@ -195,6 +193,7 @@ public class PlayerModel extends DynamicEntity {
     }
 
     public void kill() {
+        this.state = State.DEAD; // Make sure the player is dead
         this.markedForDelete = true;
     }
 

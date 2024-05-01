@@ -1,0 +1,180 @@
+spritesheet_bomb.png
+size: 1584, 133
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bomb
+  rotate: false
+  xy: 0, 0
+  size: 76, 58
+  orig: 76, 58
+  offset: 0, 0
+  index: 0
+explode
+  rotate: false
+  xy: 0, 58
+  size: 66, 75
+  orig: 66, 75
+  offset: 0, 0
+  index: 0
+explode
+  rotate: false
+  xy: 66, 58
+  size: 66, 75
+  orig: 66, 75
+  offset: 0, 0
+  index: 1
+explode
+  rotate: false
+  xy: 132, 58
+  size: 66, 75
+  orig: 66, 75
+  offset: 0, 0
+  index: 2
+explode
+  rotate: false
+  xy: 198, 58
+  size: 66, 75
+  orig: 66, 75
+  offset: 0, 0
+  index: 3
+explode
+  rotate: false
+  xy: 264, 58
+  size: 66, 75
+  orig: 66, 75
+  offset: 0, 0
+  index: 4
+explode
+  rotate: false
+  xy: 330, 58
+  size: 66, 75
+  orig: 66, 75
+  offset: 0, 0
+  index: 5
+explode
+  rotate: false
+  xy: 396, 58
+  size: 66, 75
+  orig: 66, 75
+  offset: 0, 0
+  index: 6
+explode
+  rotate: false
+  xy: 462, 58
+  size: 66, 75
+  orig: 66, 75
+  offset: 0, 0
+  index: 7
+explode
+  rotate: false
+  xy: 528, 58
+  size: 66, 75
+  orig: 66, 75
+  offset: 0, 0
+  index: 8
+explode
+  rotate: false
+  xy: 594, 58
+  size: 66, 75
+  orig: 66, 75
+  offset: 0, 0
+  index: 9
+explode
+  rotate: false
+  xy: 660, 58
+  size: 66, 75
+  orig: 66, 75
+  offset: 0, 0
+  index: 10
+explode
+  rotate: false
+  xy: 726, 58
+  size: 66, 75
+  orig: 66, 75
+  offset: 0, 0
+  index: 11
+explode
+  rotate: false
+  xy: 792, 58
+  size: 66, 75
+  orig: 66, 75
+  offset: 0, 0
+  index: 12
+explode
+  rotate: false
+  xy: 858, 58
+  size: 66, 75
+  orig: 66, 75
+  offset: 0, 0
+  index: 13
+explode
+  rotate: false
+  xy: 924, 58
+  size: 66, 75
+  orig: 66, 75
+  offset: 0, 0
+  index: 14
+explode
+  rotate: false
+  xy: 990, 58
+  size: 66, 75
+  orig: 66, 75
+  offset: 0, 0
+  index: 15
+explode
+  rotate: false
+  xy: 1056, 58
+  size: 66, 75
+  orig: 66, 75
+  offset: 0, 0
+  index: 16
+explode
+  rotate: false
+  xy: 1122, 58
+  size: 66, 75
+  orig: 66, 75
+  offset: 0, 0
+  index: 17
+explode
+  rotate: false
+  xy: 1188, 58
+  size: 66, 75
+  orig: 66, 75
+  offset: 0, 0
+  index: 18
+explode
+  rotate: false
+  xy: 1254, 58
+  size: 66, 75
+  orig: 66, 75
+  offset: 0, 0
+  index: 19
+explode
+  rotate: false
+  xy: 1320, 58
+  size: 66, 75
+  orig: 66, 75
+  offset: 0, 0
+  index: 20
+explode
+  rotate: false
+  xy: 1386, 58
+  size: 66, 75
+  orig: 66, 75
+  offset: 0, 0
+  index: 21
+explode
+  rotate: false
+  xy: 1452, 58
+  size: 66, 75
+  orig: 66, 75
+  offset: 0, 0
+  index: 22
+explode
+  rotate: false
+  xy: 1518, 58
+  size: 66, 75
+  orig: 66, 75
+  offset: 0, 0
+  index: 23

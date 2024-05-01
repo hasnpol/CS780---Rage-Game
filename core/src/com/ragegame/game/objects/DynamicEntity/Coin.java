@@ -25,7 +25,7 @@ public class Coin extends Collectable {
 
     @Override
     public void draw(SpriteBatch batch, TextureRegion currentAnimationFrame,
-                     float x_position, float y_position, float new_scale) {
+                     float x_position, float y_position) {
         float scale = (Game.SCALE/4);
         batch.draw(currentAnimationFrame, x_position - scale, y_position - scale,
                 Game.SCALE/2, Game.SCALE/2);

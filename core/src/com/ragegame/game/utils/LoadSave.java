@@ -51,6 +51,20 @@ public class LoadSave {
                     put(State.ATTACKING, "dropping");
                 }}
         );
+
+        public static final SPRITE BOMB_SPRITE = new SPRITE("sprites/textureatlas_bomb.txt",
+                new HashMap<State, String>() {{
+                    put(State.IDLE, "bomb");
+                    put(State.ATTACKING, "explode");
+                }}
+        );
+
+        public static final SPRITE BULLET = new SPRITE("sprites/textureatlas_bullet.txt",
+                new HashMap<State, String>() {{
+                    put(State.IDLE, "bullet");
+                }}
+        );
+
         public static final SPRITE SOLDIER_SPRITE = new SPRITE("sprites/enemy_walk.txt",
                 new HashMap<State, String>() {{
                     put(State.IDLE, "enemy_left_idle");
@@ -60,12 +74,20 @@ public class LoadSave {
         );
     }
 
-    public static final COLLECTABLE COIN_SPRITE = new COLLECTABLE("sprites/coin_move.txt",
-            new ArrayList<String>() {{
-                add("coin");
-                add("coin_shiny");
-            }}
-    );
+    public static class ResourceSprite {
+        public static final COLLECTABLE COIN_SPRITE = new COLLECTABLE("sprites/coin_move.txt",
+                new ArrayList<String>() {{
+                    add("coin");
+                    add("coin_shiny");
+                }}
+        );
+
+        public static final COLLECTABLE MEDAL_SPRITE = new COLLECTABLE("sprites/textureatlas_medal.txt",
+                new ArrayList<String>() {{
+                    add("medal");
+                }}
+        );
+    }
 
     public static final String[] SNIPER_SPRITE = {"sprites/textureatlas_boar.txt",
             "boar_right_idle", "boar_left_idle"};

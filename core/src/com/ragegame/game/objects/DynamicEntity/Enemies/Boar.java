@@ -19,18 +19,14 @@ public class Boar extends Enemy {
     int charging;
     long chargeFinishTime;
 
-    int playerDirection;
-
     public Boar(Body body, SpriteBatch batch) {
         super(body, batch, BOAR);
         charging = 0;
-        playerDirection = 0;
         enemyBox.setAsBox(BOAR_WIDTH * Game.SCALE, BOAR_HEIGHT * Game.SCALE);
         entityFixture.density = BOAR_DENSITY;
         entityFixture.friction = BOAR_FRICTION;
         entityFixture.restitution = .1f;
         entityFixture.shape = enemyBox;
-
         this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "body"));
 
         enemyBox.setAsBox(BOAR_WIDTH * Game.SCALE, .05f,
@@ -38,12 +34,11 @@ public class Boar extends Enemy {
         entityFixture.shape = enemyBox;
 
         this.getBody().createFixture(entityFixture).setUserData(new FixtureDefinition(this.getId(), "head"));
-
     }
 
     @Override
     public void draw(SpriteBatch batch, TextureRegion currentAnimationFrame,
-                     float x_position, float y_position, float new_scale) {
+                     float x_position, float y_position) {
         float scale = (Game.SCALE/2);
         batch.draw(currentAnimationFrame, x_position - scale, y_position - scale,
                 Game.SCALE, Game.SCALE);
@@ -53,7 +48,7 @@ public class Boar extends Enemy {
     public void update(SpriteBatch batch) {
         if (charging == 0) {
             playerDirection = Enemy.isPlayerInRange(BOAR_HORIZONTALSIGHT, BOAR_VERTICALSIGHT, getPosition());
-            if (playerDirection != 0) {
+            if (playerDirection != Direction.STOP) {
                 chargeFinishTime = System.currentTimeMillis() + BOAR_CHARGETIME;
                 charging = 1;
             }
@@ -64,7 +59,7 @@ public class Boar extends Enemy {
 
     public void charge() {
         if (charging == 1 && chargeFinishTime < System.currentTimeMillis()) {
-            Vector2 chargeVector = new Vector2((playerDirection == 6)?
+            Vector2 chargeVector = new Vector2((playerDirection == Direction.RIGHT)?
                     BOAR_CHARGESPEED: -BOAR_CHARGESPEED, 0);
             setMovementVector(chargeVector);
             getBody().setLinearVelocity(chargeVector);
