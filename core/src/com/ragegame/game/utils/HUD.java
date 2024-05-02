@@ -48,18 +48,18 @@ public class HUD {
     public void addCoins(int value){
         int length = String.valueOf(coins).length();
         if (length == 1) {
-            coinsLabel.setText(String.format("Coins: %01d", value));
+            coinsLabel.setText(String.format("Coins: %01d/50", value));
         } else if (length == 2) {
-            coinsLabel.setText(String.format("Coins: %02d", value));
+            coinsLabel.setText(String.format("Coins: %02d/50", value));
         } else if (length == 3) {
-            coinsLabel.setText(String.format("Coins: %03d", value));
+            coinsLabel.setText(String.format("Coins: %03d/50", value));
         } else if (length == 4) {
-            coinsLabel.setText(String.format("Coins: %04d", value));
+            coinsLabel.setText(String.format("Coins: %04d/50", value));
         }
     }
 
     public void addMedals(int value){
-            medalsLabel.setText(String.format("Medals: %01d", value));
+            medalsLabel.setText(String.format("Medals: %01d/3", value));
     }
 
     public void dispose() { stage.dispose(); }
