@@ -37,7 +37,7 @@ public class Constants {
         public static final float DENSITY = 2.5f;
         public static final float FRICTION = 1;
         public static final float RESTITUTION = 0.1f;
-        public static final int HEALTH = 1000;
+        public static final int HEALTH = 5000;
         public static final float MAXSPEED = 8f;
         public static float speed = 120F;
     }

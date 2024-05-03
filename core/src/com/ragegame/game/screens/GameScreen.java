@@ -1,5 +1,7 @@
 package com.ragegame.game.screens;
 
+import static com.ragegame.game.utils.Constants.PlayerConstants.HEALTH;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -49,7 +51,7 @@ public class GameScreen implements Screen {
         // Init Camera
         this.screenWidth = Constants.Game.WIDTH;
         this.screenHeight =  Constants.Game.HEIGHT;
-        this.camera = new OrthographicCamera(15, 15 * ((float) screenHeight / screenWidth));
+        this.camera = new OrthographicCamera(20, 20 * ((float) screenHeight / screenWidth));
         this.hud = new HUD(game.batch);
         this.cameraHandler = new CameraHandler(camera);
 
@@ -114,7 +116,7 @@ public class GameScreen implements Screen {
         game.batch.end(); // doing this so that the background is drawn before gameMap don't change this
 
 		// Draw the tiled gameMap
-		game.batch.begin();
+        game.batch.begin();
 		this.gameMap.render(dt);
 		game.batch.end();
 
@@ -124,7 +126,7 @@ public class GameScreen implements Screen {
 		this.physicsHandler.applyForces();
 		this.physicsHandler.doPhysicsStep(dt);
         deleteMarkedObjects();
-		debugRenderer.render(world, camera.combined);
+		// debugRenderer.render(world, camera.combined);
 
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
@@ -134,19 +136,21 @@ public class GameScreen implements Screen {
 
         game.batch.begin();
         //Draw health
-        if (gameMap.playerModel.getHealth() > 600f) {
+        if (gameMap.playerModel.getHealth() > HEALTH * 0.50) {
             game.batch.setColor(Color.GREEN);
-        }else if (gameMap.playerModel.getHealth() > 200f){
+        }else if (gameMap.playerModel.getHealth() > HEALTH * 0.25){
             game.batch.setColor(Color.ORANGE);
         }else {
             game.batch.setColor(Color.RED);
         }
 
-        game.batch.draw(blank, 20, 390, (RageGame.V_Width *
-                ((float) gameMap.playerModel.getHealth() / 1000))/10, 10);
+        // Health Bar
+        game.batch.draw(blank, 20, 380, (RageGame.V_Width *
+                ((float) gameMap.playerModel.getHealth() / HEALTH))/5, 10);
         game.batch.setColor(Color.WHITE);
         game.batch.end();
 
+        // Check if we win
         if (gameMap.didWin()) {
             game.account.setCurrency(gameMap.playerModel.getCoins());
             game.account.flush();
@@ -154,6 +158,7 @@ public class GameScreen implements Screen {
             this.dispose();
         }
 
+        // Check if we died
         if (gameMap.playerModel.isDead()) {
             game.account.setCurrency(gameMap.playerModel.getCoins());
             game.account.flush();
