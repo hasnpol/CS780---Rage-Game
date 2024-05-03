@@ -39,7 +39,7 @@ public class Plane extends Enemy {
 
     @Override
     public void update(SpriteBatch batch) {
-        if (isDead) {return;}
+        if (isDead()) return;
         float deltaTime = Gdx.graphics.getDeltaTime();
         PlayerModel player = PlayerModel.getPlayerModel();
         Vector2 playerPosition = new Vector2(player.getBody().getPosition());
@@ -77,9 +77,9 @@ public class Plane extends Enemy {
     }
 
     @Override
-    public void draw(SpriteBatch batch, TextureRegion currentAnimationFrame,
+    public void draw(SpriteBatch batch, TextureRegion curAnimationFrame,
                      float x_position, float y_position) {
-        batch.draw(currentAnimationFrame, x_position-Game.SCALE, y_position-(Game.SCALE/2),
+        batch.draw(curAnimationFrame, x_position-Game.SCALE, y_position-(Game.SCALE/2),
                 Game.SCALE*2, Game.SCALE);
     }
 }

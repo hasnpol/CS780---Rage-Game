@@ -62,10 +62,10 @@ public class PlayerModel extends DynamicEntity {
     }
 
     @Override
-    public void draw(SpriteBatch batch, TextureRegion currentAnimationFrame,
+    public void draw(SpriteBatch batch, TextureRegion curAnimationFrame,
                      float x_position, float y_position) {
         float scale = (Game.SCALE/2);
-        batch.draw(currentAnimationFrame, x_position - scale, y_position - scale, Game.SCALE, Game.SCALE);
+        batch.draw(curAnimationFrame, x_position - scale, y_position - scale, Game.SCALE, Game.SCALE);
     }
 
     public void setPlayerContactHandler() {

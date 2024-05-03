@@ -4,6 +4,7 @@ import static com.ragegame.game.utils.Constants.EnemyConstants.*;
 
 import com.ragegame.game.objects.DynamicEntity.Projectiles.Bomb;
 import com.ragegame.game.objects.DynamicEntity.Projectiles.Bullet;
+import com.ragegame.game.objects.DynamicEntity.Resources.Coin;
 import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.DynamicEntity.*;
 import com.ragegame.game.objects.StaticEntity.Goal;

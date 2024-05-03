@@ -13,13 +13,10 @@ import static com.ragegame.game.utils.Constants.EntityType.*;
 public class Enemy extends DynamicEntity {
     public PolygonShape enemyBox;
     public Direction playerDirection;
-
     private Vector2 position;
     private int health = 100;
     private float speed = 120F;
     private Vector2 movementVector = new Vector2(0, 0);
-    private int enemyState;
-    public boolean isDead;
 
     public Enemy(Body body, SpriteBatch batch, EnemyConstants.EnemyType enemyType) {
         super(body, batch, ENEMY.SubType(enemyType));
@@ -27,10 +24,6 @@ public class Enemy extends DynamicEntity {
         this.enemyBox = new PolygonShape();
         this.position = body.getPosition();
     }
-
-    @Override
-    public void draw(SpriteBatch batch, TextureRegion currentAnimationFrame,
-                     float x_position, float y_position) {}
 
     public Vector2 getPosition() {
         return position;
@@ -46,8 +39,17 @@ public class Enemy extends DynamicEntity {
     }
 
     public void kill() {
-        this.isDead = true;
+        this.state = State.DEAD; // Make sure the player is dead
         this.markedForDelete = true;
+    }
+
+    // Method to calculate the seek behavior towards the player
+    // Also points enemy in player direction
+    public Vector2 seek(Vector2 target, Vector2 curPosition, float speed, float deltaTime) {
+        this.setDirection((target.x > curPosition.x)? Direction.LEFT : Direction.RIGHT);
+        Vector2 desired = target.sub(getBody().getPosition());
+        desired.setLength(speed * deltaTime);
+        return desired;
     }
 
     public static Direction isPlayerInRange(int horizontal, int vertical, Vector2 position) {

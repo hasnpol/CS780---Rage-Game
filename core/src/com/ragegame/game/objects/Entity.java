@@ -20,7 +20,6 @@ public class Entity {
     protected float height;
     private UUID id;
     private Vector2 force;
-    private Vector2 movementVector = new Vector2(0, 0);
     public boolean markedForDelete = false;
     public long attackTime = System.currentTimeMillis();
 
@@ -31,9 +30,6 @@ public class Entity {
         this.type = type;
         this.state = State.IDLE;
     }
-    public void setForce(Vector2 forceVector) {
-        this.force = forceVector;
-    }
     public UUID getId() {
         return this.id;
     }
@@ -43,20 +39,9 @@ public class Entity {
     public void applyForces() {
         this.body.applyForceToCenter(this.force, true);
     }
-
-    public Vector2 getMovementVector() {return movementVector;}
-    public void setMovementVector(Vector2 movementVector) {
-        this.movementVector = movementVector;
-        handleStateChange();
+    public void setForce(Vector2 forceVector) {
+        this.force = forceVector;
     }
-
-    public void handleStateChange() {
-        if (this.movementVector.x != 0) {this.state = State.RUNNING;}
-        else {this.state = State.IDLE;}
-    }
-
-    public boolean isDead() {return this.state == State.DEAD;}
-    public boolean isAttacking() {return this.state == State.ATTACKING;}
 
     public boolean needsDeletion() {
         return this.markedForDelete;

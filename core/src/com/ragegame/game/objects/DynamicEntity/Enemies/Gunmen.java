@@ -44,29 +44,30 @@ public class Gunmen extends Enemy {
 
     @Override
     public  void update(SpriteBatch batch) {
-        if (isDead) {return;}
+        if (isDead()) return;
+        PlayerModel player = PlayerModel.getPlayerModel();
+        Vector2 playerPosition = new Vector2(player.getBody().getPosition());
         this.playerDirection = isPlayerInRange(GUNMEN_HORIZONTAL_SIGHT, GUNMEN_VERTICAL_SIGHT, getPosition());
-        if (playerDirection != Direction.STOP) {shoot();}
+        if (playerDirection != Direction.STOP) {
+            setDirection((playerDirection == Direction.RIGHT)? Direction.LEFT : Direction.RIGHT);
+            shoot(playerPosition);
+        }
     }
 
     @Override
-    public void draw(SpriteBatch batch, TextureRegion currentAnimationFrame,
+    public void draw(SpriteBatch batch, TextureRegion curAnimationFrame,
                      float x_position, float y_position) {
         float scale = (Game.SCALE/2);
-        batch.draw(currentAnimationFrame, x_position - scale, y_position - scale,
+        batch.draw(curAnimationFrame, x_position - scale, y_position - scale,
                 Game.SCALE, Game.SCALE);
     }
 
-    public void shoot() {
-        PlayerModel playerModel = PlayerModel.getPlayerModel();
-        if (playerModel != null) {
-            float offset = ((playerDirection == Direction.LEFT)) ? -0.5f : 0.5f;
-            long currentTime = System.currentTimeMillis();
-            if (currentTime > nextShot) {
-                BulletFactory.getInstance().createBullet(getPosition().add(offset, 0),
-                        playerModel.getBody().getPosition());
-                nextShot = currentTime + SHOTRATE;
-            }
+    public void shoot(Vector2 playerPosition) {
+        float offset = ((playerDirection == Direction.LEFT)) ? -0.5f : 0.5f;
+        long currentTime = System.currentTimeMillis();
+        if (currentTime > nextShot) {
+            BulletFactory.getInstance().createBullet(getPosition().add(offset, 0), playerPosition);
+            nextShot = currentTime + SHOTRATE;
         }
     }
 }

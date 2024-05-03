@@ -15,7 +15,6 @@ import com.ragegame.game.utils.FixtureDefinition;
 public class Medal extends Collectable {
     public Medal(Body body, SpriteBatch batch) {
         super(body, batch, RESOURCE.SubType(MEDAL));
-
         this.collectableCircle.setRadius(MEDAL_RADIUS);
         entityFixture.density = COIN_DENSITY;
         entityFixture.isSensor = true;
@@ -24,10 +23,10 @@ public class Medal extends Collectable {
     }
 
     @Override
-    public void draw(SpriteBatch batch, TextureRegion currentAnimationFrame,
+    public void draw(SpriteBatch batch, TextureRegion curAnimationFrame,
                      float x_position, float y_position) {
         float scale = (Constants.Game.SCALE/2);
-        batch.draw(currentAnimationFrame, x_position - scale, y_position - scale,
+        batch.draw(curAnimationFrame, x_position - scale, y_position - scale,
                 Constants.Game.SCALE, Constants.Game.SCALE);
     }
 }
