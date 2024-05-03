@@ -98,7 +98,7 @@ public class Constants {
         public static final float PLANE_BOMB_SPEED = 1f;
         public static final long PLANE_BOMB_RATE = 1000;
         public static final float BOMB_EXPLODE_ANIMATION = 0.0415f;
-        public static final int BOMB_DAMAGE = -100;
+        public static final int BOMB_DAMAGE = -300;
 //        public static final float BOMB_EXPLODE_ANIMATION = 0.0115f;
 
     }

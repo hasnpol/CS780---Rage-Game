@@ -51,23 +51,16 @@ public class Drone extends Enemy {
         Vector2 currentVelocity = getBody().getLinearVelocity();
         getBody().setLinearVelocity(currentVelocity);
 
-        Vector2 pursuitMovement = seek(playerPosition, deltaTime);
+        Vector2 pursuitMovement = seek(playerPosition, dronePosition, DRONE_SPEED, deltaTime);
         dronePosition.add(pursuitMovement);
         getBody().setTransform(dronePosition, 0); // sets the angle, could be used for a gun?
     }
 
     @Override
-    public void draw(SpriteBatch batch, TextureRegion currentAnimationFrame,
+    public void draw(SpriteBatch batch, TextureRegion curAnimationFrame,
                      float x_position, float y_position) {
         float scale = (Game.SCALE/2);
-        batch.draw(currentAnimationFrame, x_position - scale, y_position - scale,
+        batch.draw(curAnimationFrame, x_position - scale, y_position - scale,
                 Game.SCALE, Game.SCALE);
-    }
-
-    // Method to calculate the seek behavior towards the player
-    private Vector2 seek(Vector2 target, float deltaTime) {
-        Vector2 desired = target.sub(getBody().getPosition());
-        desired.setLength(DRONE_SPEED * deltaTime);
-        return desired;
     }
 }

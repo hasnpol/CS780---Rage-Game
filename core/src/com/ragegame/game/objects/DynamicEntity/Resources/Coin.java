@@ -1,8 +1,9 @@
-package com.ragegame.game.objects.DynamicEntity;
+package com.ragegame.game.objects.DynamicEntity.Resources;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.ragegame.game.objects.DynamicEntity.Collectable;
 import com.ragegame.game.utils.Constants.*;
 
 import static com.ragegame.game.utils.Constants.EntityType.*;
@@ -24,10 +25,10 @@ public class Coin extends Collectable {
     }
 
     @Override
-    public void draw(SpriteBatch batch, TextureRegion currentAnimationFrame,
+    public void draw(SpriteBatch batch, TextureRegion curAnimationFrame,
                      float x_position, float y_position) {
         float scale = (Game.SCALE/4);
-        batch.draw(currentAnimationFrame, x_position - scale, y_position - scale,
+        batch.draw(curAnimationFrame, x_position - scale, y_position - scale,
                 Game.SCALE/2, Game.SCALE/2);
     }
 }

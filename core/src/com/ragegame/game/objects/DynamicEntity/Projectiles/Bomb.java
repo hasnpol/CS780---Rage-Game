@@ -32,16 +32,16 @@ public class Bomb extends Projectile {
     }
 
     @Override
-    public void draw(SpriteBatch batch, TextureRegion currentAnimationFrame,
+    public void draw(SpriteBatch batch, TextureRegion curAnimationFrame,
                      float x_position, float y_position) {
         if (!markedForDelete) {
             if (this.isAttacking()) {
                 float scale = (Game.SCALE*2);
-                batch.draw(currentAnimationFrame, x_position - (scale/2), y_position - (scale/4),
+                batch.draw(curAnimationFrame, x_position - (scale/2), y_position - (scale/4),
                         scale, scale);
             } else {
                 float scale = (Game.SCALE/3);
-                batch.draw(currentAnimationFrame, x_position - scale, y_position - (scale),
+                batch.draw(curAnimationFrame, x_position - scale, y_position - (scale),
                         scale * 2, scale*2);
             }
         }

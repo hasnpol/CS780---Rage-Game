@@ -16,7 +16,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 
 import com.ragegame.game.factory.BombFactory;
 import com.ragegame.game.factory.BulletFactory;
-import com.ragegame.game.objects.DynamicEntity.Coin;
+import com.ragegame.game.objects.DynamicEntity.Resources.Coin;
 import com.ragegame.game.objects.DynamicEntity.DynamicEntity;
 import com.ragegame.game.objects.DynamicEntity.Enemies.Drone;
 
@@ -28,7 +28,6 @@ import com.ragegame.game.objects.StaticEntity.FakePlatform;
 import com.ragegame.game.objects.StaticEntity.HiddenPlatform;
 import com.ragegame.game.objects.StaticEntity.Platform;
 
-import com.ragegame.game.objects.Entity;
 import com.ragegame.game.objects.StaticEntity.*;
 import com.ragegame.game.objects.DynamicEntity.*;
 import com.ragegame.game.objects.DynamicEntity.Enemies.*;

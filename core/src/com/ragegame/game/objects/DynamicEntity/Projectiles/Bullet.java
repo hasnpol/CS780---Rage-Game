@@ -32,11 +32,11 @@ public class Bullet extends Projectile {
     }
 
     @Override
-    public void draw(SpriteBatch batch, TextureRegion currentAnimationFrame,
+    public void draw(SpriteBatch batch, TextureRegion curAnimationFrame,
                      float x_position, float y_position) {
         float scale = (Game.SCALE/4);
         if (! markedForDelete) {
-            batch.draw(currentAnimationFrame, x_position - scale, y_position - scale,
+            batch.draw(curAnimationFrame, x_position - scale, y_position - scale,
                     Game.SCALE/2, Game.SCALE/2);
         }
     }

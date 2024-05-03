@@ -11,9 +11,9 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.ragegame.game.objects.DynamicEntity.*;
-import com.ragegame.game.objects.DynamicEntity.Enemies.Plane;
 import com.ragegame.game.objects.DynamicEntity.Projectiles.Bomb;
 import com.ragegame.game.objects.DynamicEntity.Projectiles.Bullet;
+import com.ragegame.game.objects.DynamicEntity.Resources.Coin;
 import com.ragegame.game.utils.HelpMethods;
 import com.ragegame.game.utils.UtilTypes;
 
@@ -45,42 +45,17 @@ public class View {
     }
 
     public void render(float dt) {
-        boolean isPlayerModel = false;
         boolean shouldFlip = model.getDirection() == Direction.LEFT; // 1 indicates left direction
 
-        if (model instanceof PlayerModel) {
-            isPlayerModel = true;
-            PlayerModel playerModel;
-            playerModel = (PlayerModel) model;
-            if (playerModel.isDead()) {return;}
-        }
-
-        if (model instanceof Enemy) {
-            Enemy enemy;
-            enemy = (Enemy) model;
-            if (enemy.isDead) {return;}
-        }
+        if (model instanceof PlayerModel && ((PlayerModel) model).isDead()) return;
+        if (model instanceof Enemy && ((Enemy) model).isDead()) return;
+        if (model instanceof Collectable && ((Collectable) model).isCollected) return;
 
         if (model instanceof Bomb && model.isAttacking()) {
-            Bomb bomb;
-            bomb = (Bomb) model;
-            if ((System.currentTimeMillis() - bomb.attackTime) > 200)
-            {
+            Bomb bomb = (Bomb) model;
+            if ((System.currentTimeMillis() - bomb.attackTime) > 200) {
                 bomb.markedForDelete = true;
             }
-        }
-
-        if (model instanceof Bullet) {
-            if (model.getBody().getGravityScale() != 0) {
-                int x = 0;
-            }
-        }
-
-        // FIXME when this is removed, and a coin is collected, enemies will fire coins?????
-        if (model instanceof Coin) {
-            Coin coin;
-            coin = (Coin) model;
-            if (coin.isCollected) {return;}
         }
 
         // TODO ADD LOGIC TO RENDER DEATH ANIMATION AND THEN HAVE PLAYER DISAPPEAR
